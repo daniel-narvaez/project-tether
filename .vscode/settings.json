@@ -67,5 +67,7 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "project-tether.slnx"
+    "dotnet.defaultSolution": "project-tether.slnx",
+    "editor.tabSize": 2,
+    "workbench.editor.tabSizing": "fixed"
 }
