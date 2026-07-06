@@ -155,13 +155,13 @@ MonoBehaviour:
   Stamina: 10
   Strength: 10
   Defense: 10
-  Magic: 10
-  Resistance: 10
+  Magic: 5
+  Resistance: 5
   Precision: 10
   Finesse: 10
   Speed: 10
   Luck: 10
-  isBlocking: 1
+  isBlocking: 0
 --- !u!65 &600219610
 BoxCollider:
   m_ObjectHideFlags: 0

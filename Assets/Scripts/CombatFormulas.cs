@@ -42,6 +42,46 @@ public static class CombatFormulas
     Debug.Log($"{attacker.name} dealt {Mathf.Ceil(damage)} damage to {defender.name}. {defender.name} has {defenderStats.Health} HP remaining.");
   }
 
+  public static void MagicalDamage(GameObject attacker, GameObject defender)
+  {
+    UnitStats attackerStats = attacker.GetComponent<UnitStats>();
+    UnitStats defenderStats = defender.GetComponent<UnitStats>();
+    bool crit = Crit(attacker, defender);
+    bool miss = Miss(attacker, defender);
+
+    if (attackerStats == null || defenderStats == null)
+      {
+        Debug.LogError("Missing UnitStats");
+          return;
+      }
+    
+    //Actual Damage
+    float damage = attackerStats.Magic*(166f / (166f + defenderStats.Resistance)) * Random.Range(0.9f, 1.1f); //Round up
+    //float damage = Mathf.Floor(attackerStats.Magic*(166f / (166f + defenderStats.Resistance))* Random.Range(0.9f, 1.1f) ); //Round down
+    
+    if(miss == true)
+    {
+      damage = 0f;
+      Debug.Log($"{attacker.name} missed!");
+    }
+    else if(crit == true)
+    {
+      damage = damage * 2f;
+      Debug.Log($"{attacker.name} CRIT!");
+    }
+    
+    if(defenderStats.isBlocking == true)
+    {
+      damage = Mathf.Floor(damage * 0.5f);
+      Debug.Log($"{defender.name} was blocking!");
+    }
+
+    //return Mathf.Ceil(damage);
+    defenderStats.Health -= Mathf.Ceil(damage);
+
+    Debug.Log($"{attacker.name} dealt {Mathf.Ceil(damage)} damage to {defender.name}. {defender.name} has {defenderStats.Health} HP remaining.");
+  }
+
   public static bool Crit(GameObject attacker, GameObject defender)
   {
     UnitStats attackerStats = attacker.GetComponent<UnitStats>();

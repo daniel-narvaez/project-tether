@@ -9,7 +9,7 @@ public class CombatSim : MonoBehaviour
 
   void Start()
   {
-    Debug.Log("1 for player attacking, 2 for enemy attacking");
+    Debug.Log("1 for player physical attacking, 2 for enemy physical attacking, 3 for player magic attacking, 4 for enemy magic attacking");
   }
   
   void Update()
@@ -18,42 +18,35 @@ public class CombatSim : MonoBehaviour
       {
         Attacker = Player;
         Defender = Enemy;
-        Fight();
+        PhysicalFight();
       }
     if (Input.GetKeyDown(KeyCode.Alpha2))
       {
         Attacker = Enemy;
         Defender = Player;
-        Fight();
+        PhysicalFight();
+      }
+    if (Input.GetKeyDown(KeyCode.Alpha3))
+      {
+        Attacker = Player;
+        Defender = Enemy;
+        MagicFight();
+      }
+    if (Input.GetKeyDown(KeyCode.Alpha4))
+      {
+        Attacker = Enemy;
+        Defender = Player;
+        MagicFight();
       }
   }
 
-  public void Fight()
+  public void PhysicalFight()
   {
-    //UnitStats defenderStats = Defender.GetComponent<UnitStats>();
     CombatFormulas.PhysicalDamage(Attacker, Defender);
+  }
 
-    //float damage = CombatFormulas.PhysicalDamage(Attacker, Defender);
-    // bool crit = CombatFormulas.Crit(Attacker, Defender);
-    // bool miss = CombatFormulas.Miss(Attacker, Defender);
-
-    // if(miss == true)
-    // {
-    //   Debug.Log($"{Attacker.name} missed!");
-    // }
-    // else if(crit == true)
-    // {
-    //   Debug.Log($"{Attacker.name} CRIT!");
-    // }
-    
-    // if(defenderStats.isBlocking == true)
-    // {
-    //   Debug.Log($"{Defender.name} was blocking!");
-    // }
-
-    // defenderStats.Health -= damage;
-
-    // Debug.Log($"{Attacker.name} dealt {damage} damage to {Defender.name}. {Defender.name} has {defenderStats.Health} HP remaining.");
-    // Debug.Log("1 for player attacking, 2 for enemy attacking");
+  public void MagicFight()
+  {
+    CombatFormulas.MagicalDamage(Attacker, Defender);
   }
 }
