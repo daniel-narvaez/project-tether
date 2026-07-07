@@ -16,4 +16,6 @@ MonoBehaviour:
   itemName: Example
   description: 'This is an example of an item. '
   category: 0
+  rarity: 0
   icon: {fileID: 0}
+  price: 0
