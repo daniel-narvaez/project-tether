@@ -1,11 +1,7 @@
-namespace Consystently.UI
+using UnityEngine;
+
+public class Button_IE : MonoBehaviour
 {
-  using UnityEngine;
-  
-  public class Panel : MonoBehaviour
-  {
-    [SerializeField] private GameObject parentMenu;
-    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,5 +13,4 @@ namespace Consystently.UI
     {
         
     }
-  }
 }
