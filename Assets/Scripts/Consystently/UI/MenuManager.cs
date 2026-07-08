@@ -4,25 +4,20 @@ namespace Consystently.UI
   using System.Collections.Generic;
   using Essentials;
 
-  public interface IMenuHandler 
-  {
-    protected void OpenMenu(GameMenu gameMenu);
-    protected void CloseActiveMenu();
-  }
-
+  [RequireComponent(typeof(InterfaceFunctions))]
   public class MenuManager : Manager<MenuManager>
   {
     // Only one Menu shall be active at a time.
-    public GameMenu ActiveMenu;
+    public GameMenu ActiveMenu { get; protected set; }
 
     // All Menu Objects shall be added to this Hash Set.
-    public HashSet<GameMenu> Menus { get; protected set; } = new HashSet<GameMenu>();
+    public HashSet<GameMenu> MenuSet { get; protected set; } = new HashSet<GameMenu>();
 
     public void AddMenuToSet (GameMenu menu)
     {
-      if (!Menus.Contains(menu))
+      if (!MenuSet.Contains(menu))
       {
-        Menus.Add(menu);
+        MenuSet.Add(menu);
         Debug.Log ($"{menu.Name} has been added to the Menu Manager's hash set.");
       }
       else
@@ -31,9 +26,9 @@ namespace Consystently.UI
 
     public void RemoveMenuFromSet (GameMenu menu)
     {
-      if (Menus.Contains(menu))
+      if (MenuSet.Contains(menu))
       {
-        Menus.Remove(menu);
+        MenuSet.Remove(menu);
         Debug.Log ($"{menu.Name} has been removed the Menu Manager's hash set.");
       }
       else
@@ -42,18 +37,14 @@ namespace Consystently.UI
 
     public void OpenMenu (GameMenu gameMenu)
     {
-      if (!Menus.Contains(gameMenu))
-      {
-        Debug.LogWarning($"{gameMenu.Name} was not found in the Menu Manager's hash set!");
-        return;
-      }
-
       if (ActiveMenu != gameMenu)
       {
-        Debug.Log($"Closing {ActiveMenu.Name}, opening {gameMenu.Name}...");
-        CloseActiveMenu();
-        gameMenu.gameObject.SetActive(true);
-        ActiveMenu = gameMenu;
+        Debug.Log($"Opening {gameMenu.Name}...");
+        if(gameMenu.Open())
+        {
+          CloseActiveMenu();
+          ActiveMenu = gameMenu;
+        }
       }
     }
 
@@ -62,8 +53,8 @@ namespace Consystently.UI
       if (ActiveMenu)
       {
         Debug.Log($"Closing {ActiveMenu.Name}...");
-        ActiveMenu.gameObject.SetActive(false);
-        ActiveMenu = null;
+        if(ActiveMenu.Close())
+          ActiveMenu = null;
       }
     }
   }

@@ -16,6 +16,8 @@ namespace Consystently.UI
     {
       BackgroundImage ??= GetComponentInChildren<Image>();
       ButtonComp ??= GetComponent<Button>();
+
+      ButtonComp.interactable = ButtonComp.onClick.GetPersistentEventCount() > 0;
     }
   }
 }
