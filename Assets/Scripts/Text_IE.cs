@@ -6,12 +6,12 @@ namespace Consystently.UI
   [RequireComponent(typeof(TextMeshProUGUI))]
   public class Text_IE : InterfaceElement
   {
-    [SerializeField] protected TextMeshProUGUI textMesh;
-    public TextMeshProUGUI TextMesh => textMesh;
+    [Header("Text")]
+    public TextMeshProUGUI TextMeshComp { get; private set;}
 
     protected void Awake()
     {
-      textMesh ??= GetComponent<TextMeshProUGUI>();
+      TextMeshComp ??= GetComponent<TextMeshProUGUI>();
     }
   }
 }

@@ -1,16 +1,21 @@
-using UnityEngine;
+namespace Consystently.UI
+{ 
+  using UnityEngine;
+  using UnityEngine.UI;
 
-public class Button_IE : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+  [RequireComponent(typeof(Image))]  
+  [RequireComponent(typeof(Button))]
+  public class Button_IE : InterfaceElement
+  {
+    [Header("Button")]
 
-    // Update is called once per frame
-    void Update()
+    public Image BackgroundImage { get; protected set; }
+    public Button ButtonComp { get; protected set; }
+
+    protected virtual void Awake()
     {
-        
+      BackgroundImage ??= GetComponentInChildren<Image>();
+      ButtonComp ??= GetComponent<Button>();
     }
+  }
 }

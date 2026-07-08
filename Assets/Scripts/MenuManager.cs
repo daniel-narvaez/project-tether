@@ -1,10 +1,14 @@
 namespace Consystently.UI
 {
   using UnityEngine;
-  using System;
   using System.Collections.Generic;
   using Essentials;
-  using UnityEditor;
+
+  public interface IMenuHandler 
+  {
+    protected void OpenMenu(GameMenu gameMenu);
+    protected void CloseActiveMenu();
+  }
 
   public class MenuManager : Manager<MenuManager>
   {
@@ -36,18 +40,20 @@ namespace Consystently.UI
         Debug.LogWarning($"Remove failed. {menu.Name} was not found in the Menu Manager's hash set!");
     }
 
-    public void OpenMenu (GameMenu newMenu)
+    public void OpenMenu (GameMenu gameMenu)
     {
-      if (!Menus.Contains(newMenu))
+      if (!Menus.Contains(gameMenu))
       {
-        Debug.LogWarning($"{newMenu.Name} was not found in the Menu Manager's hash set!");
+        Debug.LogWarning($"{gameMenu.Name} was not found in the Menu Manager's hash set!");
         return;
       }
 
-      if (ActiveMenu != newMenu)
+      if (ActiveMenu != gameMenu)
       {
-        Debug.Log($"Closing {ActiveMenu.Name}, opening {newMenu.Name}...");
-        ActiveMenu = newMenu;
+        Debug.Log($"Closing {ActiveMenu.Name}, opening {gameMenu.Name}...");
+        CloseActiveMenu();
+        gameMenu.gameObject.SetActive(true);
+        ActiveMenu = gameMenu;
       }
     }
 
@@ -56,6 +62,8 @@ namespace Consystently.UI
       if (ActiveMenu)
       {
         Debug.Log($"Closing {ActiveMenu.Name}...");
+        ActiveMenu.gameObject.SetActive(false);
+        ActiveMenu = null;
       }
     }
   }

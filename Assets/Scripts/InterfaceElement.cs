@@ -12,9 +12,9 @@ namespace Consystently.UI
     /// <summary>
     /// The higher the Z-Index, the further the element is to the foreground. Cannot be 0, which is reserved for the
     /// </summary>
-    [Range(1, 99)]
-    [SerializeField] protected int zIndex;
-    public int ZIndex => zIndex;
+    // [Range(1, 99)]
+    // [SerializeField] protected int zIndex;
+    // public int ZIndex => zIndex;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

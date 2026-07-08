@@ -2,10 +2,12 @@ namespace Consystently.UI
 {
   using System.Collections.Generic;
   using UnityEngine;
-  
-  public class Panel_IE : InterfaceElement
+
+  public class Panel : MonoBehaviour
   {
     [Header("Panel")]
+    [SerializeField] protected string panelName;
+    public string Name => panelName;
     [SerializeField] protected GameMenu rootMenu;
     public GameMenu RootMenu => rootMenu;
 

@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace Consystently.UI
 {
+  public interface IPanelHandler
+  {
+    protected void OpenPanel(Panel newPanel);
+    protected void ClosePanel(Panel panel);
+  }
+
   public class GameMenu : MonoBehaviour
   {
     [SerializeField] protected string menuName;
@@ -10,17 +16,16 @@ namespace Consystently.UI
 
     [SerializeField] protected Text_IE nameDisplayText;
 
-    // Only one Panel shall be active at a time.
-    public Panel_IE ActivePanel;
+    public HashSet<Panel> PanelSet = new HashSet<Panel>();
 
-    public HashSet<Panel_IE> Panels = new HashSet<Panel_IE>();
+    public Stack<Panel> PanelStack = new Stack<Panel>();
 
     protected const int zIndex = 0;
 
     protected virtual void Start()
     {
       if(nameDisplayText)
-        nameDisplayText.TextMesh.text = menuName;
+        nameDisplayText.TextMeshComp.text = menuName;
 
       MenuManager.Instance.AddMenuToSet(this);
     }
@@ -30,26 +35,49 @@ namespace Consystently.UI
       MenuManager.Instance.RemoveMenuFromSet(this);
     }
 
-    public void AddPanelToSet (Panel_IE panel)
+    public void AddPanelToSet (Panel panel)
     {
-      if (!Panels.Contains(panel))
+      if (!PanelSet.Contains(panel))
       {
-        Panels.Add(panel);
+        PanelSet.Add(panel);
         Debug.Log ($"{panel.Name} has been added to the Parent Game Menu's hash set.");
       }
       else
         Debug.LogWarning($"Add failed. {panel.Name} is already present in the Parent Game Menu's hash set!");
     }
 
-    public void RemovePanelFromSet (Panel_IE panel)
+    public void RemovePanelFromSet (Panel panel)
     {
-      if (Panels.Contains(panel))
+      if (PanelSet.Contains(panel))
       {
-        Panels.Remove(panel);
+        PanelSet.Remove(panel);
         Debug.Log ($"{panel.Name} has been removed the Parent Game Menu's hash set.");
       }
       else
         Debug.LogWarning($"Remove failed. {panel.Name} was not found in the Parent Game Menu's hash set!");
+    }
+    public void OpenPanel (Panel newPanel)
+    {
+      if (!PanelSet.Contains(newPanel))
+      {
+        Debug.LogWarning($"{newPanel.Name} was not found in the Game Menu's hash set!");
+        return;
+      }
+
+      if (!newPanel.gameObject.activeInHierarchy)
+      {
+        Debug.Log($"Opening {newPanel.Name}...");
+        newPanel.gameObject.SetActive(true);
+      }
+    }
+
+    public void ClosePanel (Panel panel)
+    {
+      if (panel.gameObject.activeInHierarchy)
+      {
+        Debug.Log($"Closing {panel.Name}...");
+        panel.gameObject.SetActive(false);
+      }
     }
   }
 }
