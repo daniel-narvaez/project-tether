@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class UnitStats : MonoBehaviour
 {
+  public bool isBlocking;
   public float Health;
   public float Stamina;
   public float Strength;
@@ -12,5 +13,26 @@ public class UnitStats : MonoBehaviour
   public float Finesse;
   public float Speed;
   public float Luck;
-  public bool isBlocking;
+
+  public enum damageCategory
+  {
+    Physical,
+    Elemental
+  };
+  public enum damageType
+  {
+    Bludgeoning,
+    Slashing,
+    Piercing,
+    Blast,
+    Water,
+    Earth,
+    Wind,
+    Fire,
+  };
+
+  public damageCategory[] damageCategoriesDealt;
+  public damageType[] damageTypesDealt;
+  public damageType[] activeVulnerabilties;
+  public damageType[] activeTolerances;
 }

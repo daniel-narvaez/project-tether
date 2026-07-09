@@ -15,38 +15,49 @@ public class CombatSim : MonoBehaviour
   void Update()
   {
     if (Input.GetKeyDown(KeyCode.Alpha1))
-      {
-        Attacker = Player;
-        Defender = Enemy;
-        PhysicalFight();
-      }
+    {
+      Attacker = Player;
+      Defender = Enemy;
+      UnitStats attackerStats = Attacker.GetComponent<UnitStats>();
+      UnitStats defenderStats = Defender.GetComponent<UnitStats>();
+      attackerStats.damageCategoriesDealt[0] = UnitStats.damageCategory.Physical; //Change damage types between physical and elemental
+      attackerStats.damageTypesDealt[0] = UnitStats.damageType.Slashing; //How to change the type of an attack
+      Fight();
+    }
     if (Input.GetKeyDown(KeyCode.Alpha2))
-      {
-        Attacker = Enemy;
-        Defender = Player;
-        PhysicalFight();
-      }
+    {
+      Attacker = Enemy;
+      Defender = Player;
+      UnitStats attackerStats = Attacker.GetComponent<UnitStats>();
+      UnitStats defenderStats = Defender.GetComponent<UnitStats>();
+      attackerStats.damageCategoriesDealt[0] = UnitStats.damageCategory.Physical;
+      attackerStats.damageTypesDealt[0] = UnitStats.damageType.Water;
+      Fight();
+    }
     if (Input.GetKeyDown(KeyCode.Alpha3))
-      {
-        Attacker = Player;
-        Defender = Enemy;
-        MagicFight();
-      }
+    {
+      Attacker = Player;
+      Defender = Enemy;
+      UnitStats attackerStats = Attacker.GetComponent<UnitStats>();
+      UnitStats defenderStats = Defender.GetComponent<UnitStats>();
+      attackerStats.damageCategoriesDealt[0] = UnitStats.damageCategory.Elemental;
+      attackerStats.damageTypesDealt[0] = UnitStats.damageType.Fire;
+      Fight();
+    }
     if (Input.GetKeyDown(KeyCode.Alpha4))
-      {
-        Attacker = Enemy;
-        Defender = Player;
-        MagicFight();
-      }
+    {
+      Attacker = Enemy;
+      Defender = Player;
+      UnitStats attackerStats = Attacker.GetComponent<UnitStats>();
+      UnitStats defenderStats = Defender.GetComponent<UnitStats>();
+      attackerStats.damageCategoriesDealt[0] = UnitStats.damageCategory.Elemental;
+      attackerStats.damageTypesDealt[0] = UnitStats.damageType.Piercing;
+      Fight();
+    }
   }
 
-  public void PhysicalFight()
+  public void Fight()
   {
-    CombatFormulas.PhysicalDamage(Attacker, Defender);
-  }
-
-  public void MagicFight()
-  {
-    CombatFormulas.MagicalDamage(Attacker, Defender);
+    CombatFormulas.Damage(Attacker, Defender);
   }
 }

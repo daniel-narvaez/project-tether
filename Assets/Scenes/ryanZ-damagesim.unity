@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96c6ae142c0a58428fb1dd30a1c4fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
+  isBlocking: 0
   Health: 25
   Stamina: 10
   Strength: 10
@@ -161,7 +162,10 @@ MonoBehaviour:
   Finesse: 10
   Speed: 10
   Luck: 10
-  isBlocking: 0
+  damageCategoriesDealt: 00000000
+  damageTypesDealt: 00000000
+  activeVulnerabilties: 07000000
+  activeTolerances: 01000000
 --- !u!65 &600219610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -427,6 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96c6ae142c0a58428fb1dd30a1c4fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
+  isBlocking: 0
   Health: 174
   Stamina: 11
   Strength: 13
@@ -437,7 +442,10 @@ MonoBehaviour:
   Finesse: 13
   Speed: 15
   Luck: 15
-  isBlocking: 0
+  damageCategoriesDealt: 00000000
+  damageTypesDealt: 07000000
+  activeVulnerabilties: 06000000
+  activeTolerances: 010000000000000002000000
 --- !u!65 &1486861719
 BoxCollider:
   m_ObjectHideFlags: 0
