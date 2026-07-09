@@ -119,8 +119,38 @@ public static class CombatFormulas
           return false;
       }
     
-    bool miss = false; //Temporary garunteed hits until formula is given
 
+    float hitchance = (attackerStats.Precision / defenderStats.Finesse);
+    Debug.Log(hitchance);
+    bool miss = false;
+
+    if(hitchance >= 1f) //If Precision > Finesse ie. hit > dodge chance
+    {
+      miss = false;
+      Debug.Log("Garunteed Hit");
+    }
+    else if(hitchance < 1f && hitchance > 0f) //If Precision < Finesse but not 0
+    {
+      float randomhit = Random.Range(0f, 1f);
+      Debug.Log(randomhit);
+      if (randomhit <= hitchance)
+      {
+        miss = false;
+        Debug.Log("Gambled Hit");
+      }
+      else
+      {
+        miss = true;
+        Debug.Log("Gambled Miss");
+      }
+    }
+    else //If Precision is under 0 (other values are covered by the above statements)
+    {
+      miss = true;
+      Debug.Log("True Miss");
+    }
+
+    Debug.Log(miss);
     return miss;
   }
 }
