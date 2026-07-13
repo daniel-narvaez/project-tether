@@ -6,11 +6,11 @@ public class CombatClassSystem : MonoBehaviour, IIntializer
     CombatClass _selectedClass;
     List<CombatClassType> _availableClasses = new();
 
-    StatsSO _stats;
+    UnitStatsSO _stats;
 
     public CombatClass SelectedClass => _selectedClass;
 
-    public void Intialize(StatsSO stats)
+    public void Intialize(UnitStatsSO stats)
     {
         _stats = stats;
     }
