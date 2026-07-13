@@ -12,22 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7703ccdacca4aa6ad9c45d7169dd2a, type: 3}
   m_Name: New Unit Stats
   m_EditorClassIdentifier: Assembly-CSharp::UnitStatsSO
-  test:
-    blunt: 0
-    slash: 0
-    pierce: 0
-    blast: 0
-    water: 0
-    earth: 0
-    wind: 0
-    fire: 0
-  health: 1
-  energy: 1
-  strength: 1
-  defense: 1
-  tech: 1
-  resistance: 1
+  _health: 1
+  _energy: 1
+  _strength: 1
+  _defense: 1
+  _tech: 1
+  _resistance: 1
   precision: 1
-  finesse: 1
-  speed: 1
-  luck: 1
+  _finesse: 1
+  _speed: 1
+  _luck: 1

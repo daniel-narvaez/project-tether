@@ -2,18 +2,18 @@ using UnityEngine;
 
 namespace Denever27.CharacterSystems
 {
-    public class ManaSystem : MonoBehaviour, IIntialize
+    public class EnergySystem : MonoBehaviour, IIntializer
     {
-        StatsSO _stats;
-        float _currentMana;
-        float _maxMana;
+        UnitStatsSO _stats;
+        float _currentEnergy;
+        float _maxEnergy;
 
 
-        public void Intialize(StatsSO stats)
+        public void Intialize(UnitStatsSO stats)
         {
             _stats = stats;
-            _maxMana = (float)_stats.Mana;
-            _currentMana = _maxMana;
+            _maxEnergy = (float)_stats.Energy;
+            _currentEnergy = _maxEnergy;
         }
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created

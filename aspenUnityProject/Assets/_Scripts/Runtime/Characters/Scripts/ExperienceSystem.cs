@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ExperienceSystem : MonoBehaviour, IIntialize
+public class ExperienceSystem : MonoBehaviour, IIntializer
 {
     StatsSO _stats;
     int level;
