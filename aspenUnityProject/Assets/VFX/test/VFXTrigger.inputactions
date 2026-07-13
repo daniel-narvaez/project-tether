@@ -1,0 +1,47 @@
+{
+    "version": 1,
+    "name": "VFXTrigger",
+    "maps": [
+        {
+            "name": "Trigger",
+            "id": "11c52a18-d994-45d3-8a15-cad9dca7df05",
+            "actions": [
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "163f8349-c3b7-4abf-ae4b-350949154e33",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5d79f4da-7f4a-4492-9a15-96e5c8576944",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
