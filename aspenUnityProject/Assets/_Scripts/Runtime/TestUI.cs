@@ -16,7 +16,7 @@ public class TestUI : MonoBehaviour
         _stats = _playerPrefab.GetComponent<Character>().Stats as UnitStatsSO;
         _combatClassSystem = _playerPrefab.GetComponent<CombatClassSystem>();
 
-        _playerText.text = $"Health: {_stats.Health}\nEnergy: {_stats.Energy}\nStrength: {_stats.Strength}\nDefense: {_stats.Defense}\nTech: {_stats.Tech}\nResistance: {_stats.Resistance}\nSpeed: {_stats.Speed}\nPrecision: {_stats.Precision}\nEvasion: {_stats.Finesse}\nLuck: {_stats.Luck}";
+        _playerText.text = $"Health: {_stats.Health}\nEnergy: {_stats.Energy}\nStrength: {_stats.Strength}\nDefense: {_stats.Defense}\nTech: {_stats.Tech}\nResistance: {_stats.Resistance}\nSpeed: {_stats.Speed}\nPrecision: {_stats.Precision}\nEvasion: {_stats.Evasion}\nLuck: {_stats.Luck}";
 
     }
 
