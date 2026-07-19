@@ -17,6 +17,7 @@ namespace Consystently.UI
     public string Name => menuName;
 
     [SerializeField] protected Panel defaultPanel;
+    public Panel DefaultPanel => defaultPanel;
 
     [SerializeField] protected Text_IE nameDisplayText;
 

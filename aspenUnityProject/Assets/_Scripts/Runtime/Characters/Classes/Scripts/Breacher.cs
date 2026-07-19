@@ -8,7 +8,7 @@ public class Breacher : CombatClass
         SeClassType(CombatClassType.Breacher);
     }
 
-    public override void AddClassStatBuff(StatsSO stats)
+    public override void AddClassStatBuff(UnitStatsSO stats)
     {
         base.AddClassStatBuff(stats);
         int def = stats.Defense;
@@ -17,11 +17,11 @@ public class Breacher : CombatClass
         def += 2;
         res += 2;
 
-        stats.SetDefense(def);
-        stats.SetResistance(res);
+        // stats.SetDefense(def);
+        // stats.SetResistance(res);
     }
 
-    public override void RemoveClassStatBuff(StatsSO stats)
+    public override void RemoveClassStatBuff(UnitStatsSO stats)
     {
         base.RemoveClassStatBuff(stats);
         int def = stats.Defense;
@@ -30,7 +30,7 @@ public class Breacher : CombatClass
         def -= 2;
         resist -= 2;
 
-        stats.SetDefense(def);
-        stats.SetResistance(resist);
+        // stats.SetDefense(def);
+        // stats.SetResistance(resist);
     }
 }

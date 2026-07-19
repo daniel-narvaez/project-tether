@@ -1,21 +1,21 @@
 using UnityEngine;
 using Denever27.CharacterSystems;
 
-[RequireComponent(typeof(HealthSystem), typeof(ManaSystem))]
+[RequireComponent(typeof(HealthSystem), typeof(EnergySystem))]
 public abstract class Entity : MonoBehaviour
 {
-    [SerializeField] StatsSO _stats;
+    [SerializeField] UnitStatsSO _stats;
     protected HealthSystem _healthSystem;
-    protected ManaSystem _maanaSystem;
+    protected EnergySystem _energySystem;
 
     private void Awake()
     {
         _healthSystem = GetComponent<HealthSystem>();
-        _maanaSystem = GetComponent<ManaSystem>();
+        _energySystem = GetComponent<EnergySystem>();
 
         _healthSystem.Intialize(_stats);
-        _maanaSystem.Intialize(_stats);
+        _energySystem.Intialize(_stats);
     }
 
-    public StatsSO Stats => _stats;
+    public UnitStatsSO Stats => _stats;
 }

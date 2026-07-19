@@ -30,7 +30,8 @@ namespace Consystently.UI
       {
         rootMenu ??= gameMenu;
         rootMenu.AddPanelToSet(this);
-        Close();
+        if (rootMenu.DefaultPanel != this)
+          Close();
       }
       else
       {

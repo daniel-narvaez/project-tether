@@ -7,16 +7,16 @@ public class TestUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI _playerText;
     [SerializeField] TextMeshProUGUI _classText;
 
-    StatsSO _stats;
+    UnitStatsSO _stats;
     CombatClassSystem _combatClassSystem;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _stats = _playerPrefab.GetComponent<Character>().Stats as StatsSO;
+        _stats = _playerPrefab.GetComponent<Character>().Stats as UnitStatsSO;
         _combatClassSystem = _playerPrefab.GetComponent<CombatClassSystem>();
 
-        _playerText.text = $"Level: {_stats.Level}\nHealth: {_stats.Health}\nMana: {_stats.Mana}\nStrength: {_stats.Strength}\nDefense: {_stats.Defense}\nMagic: {_stats.Magic}\nResistance: {_stats.Resistance}\nSpeed: {_stats.Speed}\nPrecision: {_stats.Precision}\nEvasion: {_stats.Evasion}\nLuck: {_stats.Luck}";
+        _playerText.text = $"Health: {_stats.Health}\nEnergy: {_stats.Energy}\nStrength: {_stats.Strength}\nDefense: {_stats.Defense}\nTech: {_stats.Tech}\nResistance: {_stats.Resistance}\nSpeed: {_stats.Speed}\nPrecision: {_stats.Precision}\nEvasion: {_stats.Evasion}\nLuck: {_stats.Luck}";
 
     }
 

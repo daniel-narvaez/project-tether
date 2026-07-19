@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class ExperienceSystem : MonoBehaviour, IIntialize
+public class ExperienceSystem : MonoBehaviour, IIntializer
 {
-    StatsSO _stats;
+    UnitStatsSO _stats;
     int level;
 
-    public void Intialize(StatsSO stats)
+    public void Intialize(UnitStatsSO stats)
     {
         _stats = stats;
-        level = _stats.Level;
+        // level = _stats.Level;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

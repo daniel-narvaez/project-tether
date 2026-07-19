@@ -3,6 +3,8 @@ namespace Consystently.UI
   using UnityEngine;
   using System.Collections.Generic;
   using Essentials;
+  using System.Linq;
+  using UnityEditor;
 
   [RequireComponent(typeof(InterfaceFunctions))]
   public class MenuManager : Manager<MenuManager>
@@ -10,8 +12,15 @@ namespace Consystently.UI
     // Only one Menu shall be active at a time.
     public GameMenu ActiveMenu { get; protected set; }
 
-    // All Menu Objects shall be added to this Hash Set.
-    public HashSet<GameMenu> MenuSet { get; protected set; } = new HashSet<GameMenu>();
+    // All Menu Objects shall be added to this List.
+    public List<GameMenu> MenuSet { get; protected set; } = new List<GameMenu>();
+
+    public void Update()
+    {
+      if (Input.GetKeyDown(KeyCode.Space))
+        // if (!ActiveMenu)
+          OpenMenu(MenuSet.Find(item => item.Name == "Main Menu"));
+    }
 
     public void AddMenuToSet (GameMenu menu)
     {

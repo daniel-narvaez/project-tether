@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace Denever27.CharacterSystems
 {
-    public class HealthSystem : MonoBehaviour, IIntialize
+    public class HealthSystem : MonoBehaviour, IIntializer
     {
-        StatsSO _stats;
+        UnitStatsSO _stats;
         float _currentHealth;
         float _maxHealth;
 
-        public void Intialize(StatsSO stats)
+        public void Intialize(UnitStatsSO stats)
         {
             _stats = stats;
             _maxHealth = (float) _stats.Health;
