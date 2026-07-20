@@ -8,8 +8,7 @@ namespace Consystently.UI
     [Header("Panel")]
     [SerializeField] protected string panelName;
     public string Name => panelName;
-    [SerializeField] protected GameMenu rootMenu;
-    public GameMenu RootMenu => rootMenu;
+    public GameMenu RootMenu { get; protected set; }
 
     /// <summary>
     /// This panel's index in its menu's panel stack. 0 is reserved for the menu itself.
@@ -28,9 +27,9 @@ namespace Consystently.UI
     {
       if (transform.root.gameObject.TryGetComponent(out GameMenu gameMenu))
       {
-        rootMenu ??= gameMenu;
-        rootMenu.AddPanelToSet(this);
-        if (rootMenu.DefaultPanel != this)
+        RootMenu ??= gameMenu;
+        RootMenu.AddPanelToSet(this);
+        if (RootMenu.DefaultPanel != this)
           Close();
       }
       else
@@ -42,7 +41,7 @@ namespace Consystently.UI
 
     protected virtual void OnDestroy()
     {
-      rootMenu.RemovePanelFromSet(this);
+      RootMenu.RemovePanelFromSet(this);
     }
 
     public bool Open ()
