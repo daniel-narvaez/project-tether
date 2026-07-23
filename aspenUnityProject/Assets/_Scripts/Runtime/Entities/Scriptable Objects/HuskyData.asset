@@ -16,15 +16,15 @@ MonoBehaviour:
   Level: 10
   ExpToNextLevel: 0
   TotalExpGained: 0
-  RemainingHealth: 0
-  RemainingEnergy: 0
-  _health: 1
-  _energy: 3
-  _strength: 2
-  _defense: 3
-  _tech: 2
+  RemainingHealth: 100
+  RemainingEnergy: 100
+  _health: 0
+  _energy: 2
+  _strength: 1
+  _defense: 0
+  _tech: 4
   _resistance: 3
-  _speed: 1
-  _luck: 1
-  _precision: 1
-  _evasion: 2
+  _speed: 4
+  _luck: 2
+  _precision: 3
+  _evasion: 3
