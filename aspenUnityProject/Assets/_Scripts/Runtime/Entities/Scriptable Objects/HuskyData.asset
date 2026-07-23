@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8aeaff202ea21459fba190472b74971c, type: 3}
-  m_Name: MaxBaseData
+  m_Name: HuskyData
   m_EditorClassIdentifier: Assembly-CSharp::UnitDataSO
-  Level: 0
+  _unitName: Husky
+  Level: 10
   ExpToNextLevel: 0
   TotalExpGained: 0
-  StoredHealth: 0
-  StoredEnergy: 0
+  RemainingHealth: 0
+  RemainingEnergy: 0
   _health: 1
   _energy: 3
   _strength: 2

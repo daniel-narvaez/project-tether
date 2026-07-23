@@ -5,7 +5,7 @@ using Tether.CharacterSystems;
 public abstract class Entity : MonoBehaviour
 {
   [Header("Entity")]
-  [SerializeField] UnitDataSO _unitData;
+  [SerializeField] private UnitDataSO _unitData;
   public UnitDataSO UnitData => _unitData;
   protected HealthSystem _healthSystem;
   protected EnergySystem _energySystem;

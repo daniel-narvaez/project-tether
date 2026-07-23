@@ -1,8 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Unit Base Data", menuName = "Scriptable Objects/Unit/Base Data")]
 public class UnitDataSO : ScriptableObject
 {
+  [Header("ID")]
+  [Space(10)]
+  [SerializeField] private string _unitName;
+  
+  public string Name => _unitName;
+
   [Header("Progress")]
   [Space(10)]
   [Range(1, 99)]
@@ -15,14 +22,14 @@ public class UnitDataSO : ScriptableObject
   [Space(5)]
   [Tooltip("The last recorded value of this unit's remaining HP, as a percentage.")]
   [Range(0.00f, 100.00f)]
-  [SerializeField] public float RemainingHealth;
+  [SerializeField] public float RemainingHealth = 100.00f;
 
   [Space(5)]
   [Tooltip("The last recorded value of this unit's remaining EN, as a percentage.")]
   [Range(0.00f, 100.00f)]
-  [SerializeField] public float RemainingEnergy;
+  [SerializeField] public float RemainingEnergy = 100.00f;
   
-  [Header("Base Stats")]
+  [Header("Base Aptitudes")]
   [Space(10)]
   [Tooltip("HP: Total amount of damage a unit can sustain before falling in battle.")]
   [SerializeField] private Tier _health;
@@ -33,9 +40,9 @@ public class UnitDataSO : ScriptableObject
   public Tier Health => _health;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("EN: Total amount of resources a unit can spend to use special abilities.")]
-  [SerializeField] private Tier _energy;
+  [SerializeField] private Tier _energy = Tier.B;
 
   /// <summary>
   /// EN: Total amount of resources a unit can spend to use special abilities.
@@ -43,7 +50,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Energy => _energy;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("STR: A unit's physical power.")]
   [SerializeField] private Tier _strength;
 
@@ -53,7 +60,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Strength => _strength;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("DEF: A unit's durability against physical power.")]
   [SerializeField] private Tier _defense;
 
@@ -63,7 +70,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Defense => _defense;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("TEC: A unit's technical power.")]
   [SerializeField] private Tier _tech;
 
@@ -73,7 +80,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Tech => _tech;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("RES: A unit's durability against technical power.")]
   [SerializeField] private Tier _resistance;
 
@@ -83,7 +90,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Resistance => _resistance;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("SPE: How often a unit moves during battle.")]
   [SerializeField] private Tier _speed;
 
@@ -93,7 +100,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Speed => _speed;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("LCK: A unit's affinity for chance.")]
   [SerializeField] private Tier _luck;
   
@@ -103,7 +110,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Luck => _luck;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("PRC: A unit's accuracy for targeting attacks & abilities.")]
   [SerializeField] private Tier _precision;
 
@@ -113,7 +120,7 @@ public class UnitDataSO : ScriptableObject
   public Tier Precision => _precision;
 
 
-  [Space(10)]
+  [Space(5)]
   [Tooltip("EVA: A unit's evasiveness to incoming attacks & abilities.")]
   [SerializeField] private Tier _evasion;
 
@@ -121,4 +128,18 @@ public class UnitDataSO : ScriptableObject
   /// EVA: A unit's evasiveness to incoming attacks & abilities.
   /// </summary>
   public Tier Evasion => _evasion;
+
+  public Dictionary<Stat, Tier> AllStats => new Dictionary<Stat, Tier>()
+  {
+    { Stat.HP, _health },
+    { Stat.EN, _energy },
+    { Stat.STR, _strength },
+    { Stat.DEF, _defense },
+    { Stat.TEC, _tech },
+    { Stat.RES, _resistance },
+    { Stat.SPE, _speed },
+    { Stat.LCK, _luck },
+    { Stat.PRC, _precision },
+    { Stat.EVA, _evasion },
+  };
 }

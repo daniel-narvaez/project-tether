@@ -3,6 +3,7 @@ namespace Consystently.UI
   using System.Collections.Generic;
   using UnityEngine;
 
+  [RequireComponent(typeof(CanvasGroup))]
   public class Panel : MonoBehaviour
   {
     [Header("Panel")]
@@ -22,15 +23,17 @@ namespace Consystently.UI
 
     public HashSet<InterfaceElement> elements { get; protected set; } = new HashSet<InterfaceElement>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private CanvasGroup _canvasGroup;
+
+    void Awake()
     {
+      _canvasGroup ??= GetComponent<CanvasGroup>();
+
       if (transform.root.gameObject.TryGetComponent(out GameMenu gameMenu))
       {
         RootMenu ??= gameMenu;
         RootMenu.AddPanelToSet(this);
-        if (RootMenu.DefaultPanel != this)
-          Close();
+        Close();
       }
       else
       {
@@ -78,6 +81,7 @@ namespace Consystently.UI
 
     public void Hide()
     {
+      _canvasGroup.interactable = false;
       if(hideInStack)
       {
         gameObject.SetActive(false);
@@ -87,6 +91,7 @@ namespace Consystently.UI
 
     public void Show()
     {
+      _canvasGroup.interactable = true;
       if(hideInStack)
       {
         gameObject.SetActive(true);

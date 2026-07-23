@@ -81,10 +81,10 @@ namespace Consystently.UI
       if (!PanelSet.Contains(panel))
       {
         PanelSet.Add(panel);
-        Debug.Log ($"{panel.Name} has been added to the Parent Game Menu's hash set.");
+        Debug.Log ($"{panel.Name} has been added to the {menuName} Menu's panel stack.");
       }
       else
-        Debug.LogWarning($"Add failed. {panel.Name} is already present in the Parent Game Menu's hash set!");
+        Debug.LogWarning($"Add failed. {panel.Name} is already present in the {menuName} Menu's panel stack!");
     }
 
     public void RemovePanelFromSet (Panel panel)
@@ -92,10 +92,10 @@ namespace Consystently.UI
       if (PanelSet.Contains(panel))
       {
         PanelSet.Remove(panel);
-        Debug.Log ($"{panel.Name} has been removed the Parent Game Menu's hash set.");
+        Debug.Log ($"{panel.Name} has been removed from the {menuName} Menu's panel stack.");
       }
       else
-        Debug.LogWarning($"Remove failed. {panel.Name} was not found in the Parent Game Menu's hash set!");
+        Debug.LogWarning($"Remove failed. {panel.Name} was not found in the {menuName} Menu's panel stack!");
     }
 
 
@@ -117,7 +117,7 @@ namespace Consystently.UI
         }
       }
       else
-        Debug.LogWarning($"{newPanel.Name} panel is already in the open in the panel stack.");
+        Debug.LogWarning($"{newPanel.Name} panel is already in the open in the {menuName} Menu's panel stack.");
     }
 
     public void ClosePanel (Panel panel)
@@ -135,7 +135,7 @@ namespace Consystently.UI
         }
       }
       else
-        Debug.LogWarning($"{panel.Name} panel is not at the top of the panel stack.");
+        Debug.LogWarning($"{panel.Name} panel is not at the top of the {menuName} Menu's panel stack.");
     }
 
     public void ClearStack ()
