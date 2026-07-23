@@ -3,8 +3,6 @@ namespace Consystently.UI
   using UnityEngine;
   using System.Collections.Generic;
   using Essentials;
-  using System.Linq;
-  using UnityEditor;
 
   [RequireComponent(typeof(InterfaceFunctions))]
   public class MenuManager : Manager<MenuManager>

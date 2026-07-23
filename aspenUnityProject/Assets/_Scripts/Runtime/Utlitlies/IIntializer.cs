@@ -1,4 +1,4 @@
 public interface IIntializer
 {
-    void Intialize(UnitStatsSO stats);
+    void Intialize(UnitDataSO unitData);
 }

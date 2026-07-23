@@ -19,8 +19,6 @@ namespace Consystently.UI
     [SerializeField] protected Panel defaultPanel;
     public Panel DefaultPanel => defaultPanel;
 
-    [SerializeField] protected Text_IE nameDisplayText;
-
     public HashSet<Panel> PanelSet = new HashSet<Panel>();
 
     public Stack<Panel> PanelStack = new Stack<Panel>();
@@ -29,9 +27,6 @@ namespace Consystently.UI
 
     protected virtual void Start()
     {
-      if(nameDisplayText)
-        nameDisplayText.TextMeshComp.text = menuName;
-
       MenuManager.Instance.AddMenuToSet(this);
       Close();
     }
