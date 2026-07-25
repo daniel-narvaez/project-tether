@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8aeaff202ea21459fba190472b74971c, type: 3}
-  m_Name: New Unit Base Data
+  m_Name: JadeData
   m_EditorClassIdentifier: Assembly-CSharp::UnitDataSO
-  _unitName: 
-  Level: 1
+  _unitName: '[Jade]'
+  Level: 10
   ExpToNextLevel: 0
   TotalExpGained: 0
   RemainingHealth: 100
   RemainingEnergy: 100
-  _health: 0
-  _energy: 2
-  _strength: 0
-  _defense: 0
+  _health: 4
+  _energy: 0
+  _strength: 4
+  _defense: 3
   _tech: 0
-  _resistance: 0
-  _speed: 0
-  _luck: 0
-  _precision: 0
-  _evasion: 0
+  _resistance: 1
+  _speed: 3
+  _luck: 3
+  _precision: 2
+  _evasion: 2
