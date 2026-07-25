@@ -42,7 +42,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("EN: Total amount of resources a unit can spend to use special abilities.")]
-  [SerializeField] private Tier _energy = Tier.B;
+  [SerializeField] private Tier _energy;
 
   /// <summary>
   /// EN: Total amount of resources a unit can spend to use special abilities.
