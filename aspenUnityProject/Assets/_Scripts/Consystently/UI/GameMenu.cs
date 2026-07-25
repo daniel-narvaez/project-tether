@@ -6,8 +6,8 @@ namespace Consystently.UI
 {
   public interface IPanelHandler
   {
-    protected void OpenPanel(Panel newPanel);
-    protected void ClosePanel(Panel panel);
+    void OpenPanel(GameMenu gameMenu);
+    void ClosePanel(GameMenu gameMenu);
   }
 
   public class GameMenu : MonoBehaviour
@@ -136,6 +136,26 @@ namespace Consystently.UI
       }
       else
         Debug.LogWarning($"{panel.Name} panel is not at the top of the {menuName} Menu's panel stack.");
+    }
+    
+    public void OpenPanel(string panelName)
+    {
+      Panel panel = PanelSet.FirstOrDefault(p => p.Name == panelName);
+
+      if (panel)
+        OpenPanel(panel);
+      else
+        Debug.LogWarning($"Panel with the name '{panelName}' not found in the {menuName} Menu's panel set.");
+    }
+
+    public void ClosePanel(string panelName)
+    {
+      Panel panel = PanelSet.FirstOrDefault(p => p.Name == panelName);
+
+      if (panel)
+        ClosePanel(panel);
+      else
+        Debug.LogWarning($"Panel with the name '{panelName}' not found in the {menuName} Menu's panel set.");
     }
 
     public void ClearStack ()

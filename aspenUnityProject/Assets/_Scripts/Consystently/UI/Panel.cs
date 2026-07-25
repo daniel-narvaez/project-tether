@@ -1,6 +1,7 @@
 namespace Consystently.UI
 {
   using System.Collections.Generic;
+  using System.Linq;
   using UnityEngine;
 
   [RequireComponent(typeof(CanvasGroup))]
@@ -21,7 +22,7 @@ namespace Consystently.UI
 
     public bool Opened { get; protected set; } = true;
 
-    public HashSet<InterfaceElement> elements { get; protected set; } = new HashSet<InterfaceElement>();
+    public HashSet<InterfaceElement> Elements { get; protected set; } = new HashSet<InterfaceElement>();
 
     private CanvasGroup _canvasGroup;
 
@@ -33,6 +34,11 @@ namespace Consystently.UI
       {
         RootMenu ??= gameMenu;
         RootMenu.AddPanelToSet(this);
+
+        Elements = GetComponentsInChildren<InterfaceElement>().ToHashSet();
+        foreach (InterfaceElement e in Elements)
+          e.AssignRootPanel(this);
+        
         Close();
       }
       else
@@ -47,9 +53,9 @@ namespace Consystently.UI
       RootMenu.RemovePanelFromSet(this);
     }
 
-    public bool Open ()
+    public bool Open()
     {
-      if (Opened)
+      if(Opened)
       {
         Debug.LogWarning($"{panelName} panel is already open.");
         return false;
@@ -63,9 +69,9 @@ namespace Consystently.UI
       }
     }
 
-    public bool Close ()
+    public bool Close()
     {
-      if (!Opened)
+      if(!Opened)
       {
         Debug.LogWarning($"{panelName} panel is already closed.");
         return false;
@@ -82,9 +88,10 @@ namespace Consystently.UI
     public void Hide()
     {
       _canvasGroup.interactable = false;
+      _canvasGroup.blocksRaycasts = false;
       if(hideInStack)
       {
-        gameObject.SetActive(false);
+        _canvasGroup.alpha = 0;
         Debug.Log($"{panelName} panel hidden.");
       }
     }
@@ -92,9 +99,10 @@ namespace Consystently.UI
     public void Show()
     {
       _canvasGroup.interactable = true;
+      _canvasGroup.blocksRaycasts = true;
       if(hideInStack)
       {
-        gameObject.SetActive(true);
+        _canvasGroup.alpha = 1;
         Debug.Log($"{panelName} panel shown.");
       }
     }
