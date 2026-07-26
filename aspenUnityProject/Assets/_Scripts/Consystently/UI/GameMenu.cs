@@ -10,6 +10,7 @@ namespace Consystently.UI
     void ClosePanel(GameMenu gameMenu);
   }
 
+  [RequireComponent(typeof(CanvasGroup))]
   public class GameMenu : MonoBehaviour
   {
     [Header("Game Menu")]
@@ -25,8 +26,11 @@ namespace Consystently.UI
 
     public bool Opened { get; protected set; } = true;
 
+    private CanvasGroup _canvasGroup;
+
     protected virtual void Start()
     {
+      _canvasGroup ??= GetComponent<CanvasGroup>();
       MenuManager.Instance.AddMenuToSet(this);
       Close();
     }
@@ -53,7 +57,9 @@ namespace Consystently.UI
         ClearStack();
         OpenPanel(defaultPanel);
         Opened = true;
-        gameObject.SetActive(true);
+        _canvasGroup.interactable = true;
+        _canvasGroup.blocksRaycasts = true;
+        _canvasGroup.alpha = 1;
         Debug.Log($"{menuName} successfully opened.");
         return true;
       }
@@ -70,7 +76,9 @@ namespace Consystently.UI
       {
         ClearStack();
         Opened = false;
-        gameObject.SetActive(false);
+        _canvasGroup.interactable = false;
+        _canvasGroup.blocksRaycasts = false;
+        _canvasGroup.alpha = 0;
         Debug.Log($"{menuName} successfully closed.");
         return true;
       }

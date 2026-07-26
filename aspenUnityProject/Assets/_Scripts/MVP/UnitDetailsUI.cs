@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,48 +17,50 @@ public class UnitDetailsUI : MonoBehaviour
   [Space (10)]
   [SerializeField] private List<TextMeshProUGUI> _equipmentTexts;
 
-  private UnitDataSO _unitData;
+  public event Action<Entity> OnLevelUpdated;
+
+  private Entity _entity;
   private bool _showingAptitudes = false;
   private Dictionary<Stat, int> statData = new Dictionary<Stat, int>();
 
   public void DisplayUnitDetails(Entity entity)
   {
-    _unitData = entity.UnitData ? entity.UnitData : null;
-    if(_unitData)
+    if(entity)
     {
-      _nameText.text = _unitData.Name;
-      _levelText.text = $"Lv.{_unitData.Level}";
-      _levelSlider.value = _unitData.Level; 
-
-      // The TMP's MUST be in the same order that the stats are ordered!
-      for (int i = 0; i < _statTexts.Count; i++)
-      {
-        Stat stat = (Stat)i;
-        int val = Formulae.CalculateStat(stat, _unitData.AllStats[stat], _unitData.Level);
-        _statTexts[i].text = val.ToString();
-        statData.Add(stat, val);
-      }
+      _entity = entity;
+      _levelSlider.value = _entity.UnitData.Level;
+      UpdateData();
     }
   }
 
-  public void UpdateLevel()
+  public void UpdateData()
   {
-    _unitData.Level = (int)_levelSlider.value;
-    _levelText.text = $"Lv.{_unitData.Level}";
+    UnitDataSO unitData = _entity.UnitData;
+    
+    _nameText.text = unitData.Name;
+
+    unitData.Level = (int)_levelSlider.value;
+    _levelText.text = $"Lv.{unitData.Level}";
+
+    // The TMP's MUST be in the same order that the stats are ordered!
     for (int i = 0; i < _statTexts.Count; i++)
     {
       Stat stat = (Stat)i;
-      int val = Formulae.CalculateStat(stat, _unitData.AllStats[stat], _unitData.Level);
+      int val = Formulae.CalculateStat(stat, unitData.AllStats[stat], unitData.Level);
       _statTexts[i].text = val.ToString();
-      statData[stat] = val;
+      if (statData.ContainsKey(stat))
+        statData[stat] = val;
+      else
+        statData.Add(stat, val);
     }
+
+    OnLevelUpdated?.Invoke(_entity);
   }
 
   public void ClearDetails()
   {
     _nameText.text = "Name";
     _levelText.text = "Lv.1";
-    _levelSlider.value = 1;
 
     statData.Clear();
 
@@ -70,7 +73,7 @@ public class UnitDetailsUI : MonoBehaviour
 
   public void ToggleAptitudes()
   {
-    if (_unitData)
+    if (_entity.UnitData)
     {
       // The TMP's MUST be in the same order that the stats are ordered!
       if(_showingAptitudes == false)
@@ -78,7 +81,7 @@ public class UnitDetailsUI : MonoBehaviour
         for (int i = 0; i < _statTexts.Count; i++)
         {
           Stat stat = (Stat)i;
-          string aptitude = _unitData.AllStats[stat].ToString();
+          string aptitude = _entity.UnitData.AllStats[stat].ToString();
           _statTexts[i].text = aptitude;
         }
         _aptitudesText.text = "Show Values";

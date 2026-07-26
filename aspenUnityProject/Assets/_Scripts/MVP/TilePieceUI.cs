@@ -9,8 +9,8 @@ public class TilePieceUI : MonoBehaviour
   [SerializeField] private Entity _pieceEntity;
   public Entity PieceEntity => _pieceEntity;
 
-  [SerializeField] private Party _party;
-  public Party UnitParty => _party;
+  [SerializeField] private Afilliation _party;
+  public Afilliation UnitParty => _party;
   
   public Image PieceImage { get; private set; }
   public bool PiecePlaced = false;

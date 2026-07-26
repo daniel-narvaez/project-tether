@@ -13,7 +13,7 @@ public class TileDetailsButtonUI : InterfaceElement
 
   public Button ButtonComp { get; private set; }
 
-  private Party _party = Party.Neutral;
+  private Afilliation _party = Afilliation.Neutral;
   private List<Image> _slotImages;
   public Dictionary<TilePieceUI, Image> UnitSlots = new Dictionary<TilePieceUI, Image>();
   
@@ -29,13 +29,13 @@ public class TileDetailsButtonUI : InterfaceElement
 
   public void Reset()
   {
-    _party = Party.Neutral;
+    _party = Afilliation.Neutral;
     UnitSlots.Clear();
   }
   
   public bool CheckForSlot(TilePieceUI tilePiece)
   {
-    if (_party != Party.Neutral && tilePiece.UnitParty != _party)
+    if (_party != Afilliation.Neutral && tilePiece.UnitParty != _party)
       return false;
     else if (UnitSlots.Count == 4)
       return false;
@@ -54,7 +54,7 @@ public class TileDetailsButtonUI : InterfaceElement
     slot.color = tilePiece.PieceImage.color;
     UnitSlots.Add(tilePiece, slot);
 
-    if (_party == Party.Neutral)
+    if (_party == Afilliation.Neutral)
       _party = tilePiece.UnitParty;
 
     tilePiece.PiecePlaced = true;
@@ -78,6 +78,6 @@ public class TileDetailsButtonUI : InterfaceElement
     }
 
     if (UnitSlots.Count == 0)
-      _party = Party.Neutral;
+      _party = Afilliation.Neutral;
   }
 }
