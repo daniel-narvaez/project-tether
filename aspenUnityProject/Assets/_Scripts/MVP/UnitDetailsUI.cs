@@ -46,7 +46,7 @@ public class UnitDetailsUI : MonoBehaviour
     for (int i = 0; i < _statTexts.Count; i++)
     {
       Stat stat = (Stat)i;
-      int val = Formulae.CalculateStat(stat, unitData.AllStats[stat], unitData.Level);
+      int val = Formulae.CalculateStat(stat, unitData.Aptitudes[stat], unitData.Level);
       _statTexts[i].text = val.ToString();
       if (statData.ContainsKey(stat))
         statData[stat] = val;
@@ -81,7 +81,7 @@ public class UnitDetailsUI : MonoBehaviour
         for (int i = 0; i < _statTexts.Count; i++)
         {
           Stat stat = (Stat)i;
-          string aptitude = _entity.UnitData.AllStats[stat].ToString();
+          string aptitude = _entity.UnitData.Aptitudes[stat].ToString();
           _statTexts[i].text = aptitude;
         }
         _aptitudesText.text = "Show Values";

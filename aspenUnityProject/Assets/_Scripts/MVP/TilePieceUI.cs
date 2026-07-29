@@ -9,8 +9,8 @@ public class TilePieceUI : MonoBehaviour
   [SerializeField] private Entity _pieceEntity;
   public Entity PieceEntity => _pieceEntity;
 
-  [SerializeField] private Afilliation _party;
-  public Afilliation UnitParty => _party;
+  [SerializeField] private Faction _faction;
+  public Faction UnitFaction => _faction;
   
   public Image PieceImage { get; private set; }
   public bool PiecePlaced = false;
@@ -27,11 +27,12 @@ public class TilePieceUI : MonoBehaviour
     TileSelectionMap = FindFirstObjectByType<TileSelectionMapUI>();
 
     PieceImage ??= GetComponent<Image>();
-    // PieceImage.alphaHitTestMinimumThreshold = 0.5f;
+    PieceImage.alphaHitTestMinimumThreshold = 0.5f;
   }
 
   public void TogglePiece()
   {
+
     if(!PiecePlaced)
     {
       if(TileDetailsMap.TryGetAvailableTileSlots(this, out List<TileSelectButtonUI> availableTiles))
@@ -43,11 +44,9 @@ public class TilePieceUI : MonoBehaviour
         Debug.LogWarning("No available tiles found.");
       }
     }
-    else
+    else if(Placement)
     {
       Placement.RemovePiece(this);
     }
   }
-
-
 }

@@ -1,4 +1,4 @@
-public enum Afilliation
+public enum Faction
 {
   Neutral = 0,
   Allied = 1,

@@ -129,7 +129,7 @@ public class UnitDataSO : ScriptableObject
   /// </summary>
   public Tier Evasion => _evasion;
 
-  public Dictionary<Stat, Tier> AllStats => new Dictionary<Stat, Tier>()
+  public Dictionary<Stat, Tier> Aptitudes => new Dictionary<Stat, Tier>()
   {
     { Stat.HP, _health },
     { Stat.EN, _energy },
@@ -141,5 +141,89 @@ public class UnitDataSO : ScriptableObject
     { Stat.LCK, _luck },
     { Stat.PRC, _precision },
     { Stat.EVA, _evasion },
+  };
+
+  [Header("Affinities")]
+  [Space(10)]
+  [Tooltip("This unit's affinity to Blunt damage.")]
+  [SerializeField] private Affinity _blunt;
+  /// <summary>
+  /// This unit's affinity to Blunt damage.
+  /// </summary>
+  public Affinity Blunt => _blunt;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Slash damage.")]
+  [SerializeField] private Affinity _slash;
+  /// <summary>
+  /// This unit's affinity to Slash damage.
+  /// </summary>
+  public Affinity Slash => _slash;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Pierce damage.")]
+  [SerializeField] private Affinity _pierce;
+  /// <summary>
+  /// This unit's affinity to Pierce damage.
+  /// </summary>
+  public Affinity Pierce => _pierce;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Blast damage.")]
+  [SerializeField] private Affinity _blast;
+  /// <summary>
+  /// This unit's affinity to Blast damage.
+  /// </summary>
+  public Affinity Blast => _blast;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Water damage.")]
+  [SerializeField] private Affinity _water;
+  /// <summary>
+  /// This unit's affinity to Water damage.
+  /// </summary>
+  public Affinity Water => _water;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Earth damage.")]
+  [SerializeField] private Affinity _earth;
+  /// <summary>
+  /// This unit's affinity to Earth damage.
+  /// </summary>
+  public Affinity Earth => _earth;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Wind damage.")]
+  [SerializeField] private Affinity _wind;
+  /// <summary>
+  /// This unit's affinity to Wind damage.
+  /// </summary>
+  public Affinity Wind => _wind;
+
+
+  [Space(5)]
+  [Tooltip("This unit's affinity to Fire damage.")]
+  [SerializeField] private Affinity _fire;
+  /// <summary>
+  /// This unit's affinity to Fire damage.
+  /// </summary>
+  public Affinity Fire => _fire;
+
+  public Dictionary<Element, Affinity> Affinities => new Dictionary<Element, Affinity>()
+  {
+    { Element.Blunt, _blunt },
+    { Element.Slash, _slash },
+    { Element.Pierce, _pierce },
+    { Element.Blast, _blast },
+    { Element.Water, _water },
+    { Element.Earth, _earth },
+    { Element.Wind, _wind },
+    { Element.Fire, _fire },
   };
 }
