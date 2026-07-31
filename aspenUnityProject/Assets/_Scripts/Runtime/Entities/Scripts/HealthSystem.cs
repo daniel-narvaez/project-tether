@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Tether.CharacterSystems
 {
-  public class HealthSystem : MonoBehaviour, IIntializer
+  public class HealthSystem : MonoBehaviour, IInitializer
   {
     private UnitDataSO _unitData;
     public int MaxHealth { get; private set; }

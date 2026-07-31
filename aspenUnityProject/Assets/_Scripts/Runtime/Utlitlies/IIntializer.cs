@@ -1,4 +1,5 @@
-public interface IIntializer
+
+public interface IInitializer
 {
-    void Intialize(UnitDataSO unitData);
+  abstract void Intialize(UnitDataSO unitData);
 }

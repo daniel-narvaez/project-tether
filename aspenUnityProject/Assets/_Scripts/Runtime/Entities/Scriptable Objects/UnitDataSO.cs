@@ -1,23 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Unit Base Data", menuName = "Scriptable Objects/Unit/Base Data")]
-public class UnitDataSO : ScriptableObject
-{
-  [Header("ID")]
-  [Space(10)]
-  [SerializeField] private string _unitName;
-  
-  public string Name => _unitName;
 
-  [Header("Progress")]
+public abstract class UnitDataSO : ScriptableObject
+{
+  [Header("ID", order = 0)]
+  [Space(10)]
+  [SerializeField] protected Sprite _portrait;
+  
+  public Sprite Portrait => _portrait;
+
+  [Space(5)]
+  [SerializeField] protected string _name;
+  
+  public string Name => _name;
+
+  public virtual Faction Faction => Faction.Neutral;
+
+  [Header("Progress", order = 1)]
   [Space(10)]
   [Range(1, 99)]
   [SerializeField] public int Level;
 
-  [HideInInspector] public int ExpToNextLevel;
+  /// <summary>
+  /// The remaining amount of EXP needed for the Unit's next level up. If the Unit is an Enemy, this variable will always be 0.
+  /// </summary>
+  [HideInInspector] public int ExPtsToNextLevel;
 
-  [HideInInspector] public int TotalExpGained;
+  /// <summary>
+  /// The overall amount of EXP the Unit has accumulated. If the Unit is an Enemy, this variable will always be 0.
+  /// </summary>
+  [HideInInspector] public int TotalExPtsGained;
 
   [Space(5)]
   [Tooltip("The last recorded value of this unit's remaining HP, as a percentage.")]
@@ -29,7 +42,7 @@ public class UnitDataSO : ScriptableObject
   [Range(0.00f, 100.00f)]
   [SerializeField] public float RemainingEnergy = 100.00f;
   
-  [Header("Base Aptitudes")]
+  [Header("Base Aptitudes", order = 5)]
   [Space(10)]
   [Tooltip("HP: Total amount of damage a unit can sustain before falling in battle.")]
   [SerializeField] private Tier _health;
@@ -42,7 +55,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("EN: Total amount of resources a unit can spend to use special abilities.")]
-  [SerializeField] private Tier _energy;
+  [SerializeField] protected Tier _energy;
 
   /// <summary>
   /// EN: Total amount of resources a unit can spend to use special abilities.
@@ -52,7 +65,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("STR: A unit's physical power.")]
-  [SerializeField] private Tier _strength;
+  [SerializeField] protected Tier _strength;
 
   /// <summary>
   /// STR: A unit's physical power.
@@ -62,7 +75,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("DEF: A unit's durability against physical power.")]
-  [SerializeField] private Tier _defense;
+  [SerializeField] protected Tier _defense;
 
   /// <summary>
   /// DEF: A unit's durability against physical power.
@@ -72,7 +85,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("TEC: A unit's technical power.")]
-  [SerializeField] private Tier _tech;
+  [SerializeField] protected Tier _tech;
 
   /// <summary>
   /// TEC: A unit's technical power.
@@ -82,7 +95,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("RES: A unit's durability against technical power.")]
-  [SerializeField] private Tier _resistance;
+  [SerializeField] protected Tier _resistance;
 
   /// <summary>
   /// RES: A unit's durability against technical power.
@@ -92,7 +105,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("SPE: How often a unit moves during battle.")]
-  [SerializeField] private Tier _speed;
+  [SerializeField] protected Tier _speed;
 
   /// <summary>
   /// SPE: How often a unit moves during battle.
@@ -102,7 +115,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("LCK: A unit's affinity for chance.")]
-  [SerializeField] private Tier _luck;
+  [SerializeField] protected Tier _luck;
   
   /// <summary>
   /// LCK: A unit's affinity for chance.
@@ -112,7 +125,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("PRC: A unit's accuracy for targeting attacks & abilities.")]
-  [SerializeField] private Tier _precision;
+  [SerializeField] protected Tier _precision;
 
   /// <summary>
   /// PRC: A unit's accuracy for targeting attacks & abilities.
@@ -122,7 +135,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("EVA: A unit's evasiveness to incoming attacks & abilities.")]
-  [SerializeField] private Tier _evasion;
+  [SerializeField] protected Tier _evasion;
 
   /// <summary>
   /// EVA: A unit's evasiveness to incoming attacks & abilities.
@@ -143,10 +156,10 @@ public class UnitDataSO : ScriptableObject
     { Stat.EVA, _evasion },
   };
 
-  [Header("Affinities")]
+  [Header("Affinities", order = 6)]
   [Space(10)]
   [Tooltip("This unit's affinity to Blunt damage.")]
-  [SerializeField] private Affinity _blunt;
+  [SerializeField] protected Affinity _blunt;
   /// <summary>
   /// This unit's affinity to Blunt damage.
   /// </summary>
@@ -155,7 +168,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Slash damage.")]
-  [SerializeField] private Affinity _slash;
+  [SerializeField] protected Affinity _slash;
   /// <summary>
   /// This unit's affinity to Slash damage.
   /// </summary>
@@ -164,7 +177,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Pierce damage.")]
-  [SerializeField] private Affinity _pierce;
+  [SerializeField] protected Affinity _pierce;
   /// <summary>
   /// This unit's affinity to Pierce damage.
   /// </summary>
@@ -173,7 +186,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Blast damage.")]
-  [SerializeField] private Affinity _blast;
+  [SerializeField] protected Affinity _blast;
   /// <summary>
   /// This unit's affinity to Blast damage.
   /// </summary>
@@ -182,7 +195,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Water damage.")]
-  [SerializeField] private Affinity _water;
+  [SerializeField] protected Affinity _water;
   /// <summary>
   /// This unit's affinity to Water damage.
   /// </summary>
@@ -191,7 +204,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Earth damage.")]
-  [SerializeField] private Affinity _earth;
+  [SerializeField] protected Affinity _earth;
   /// <summary>
   /// This unit's affinity to Earth damage.
   /// </summary>
@@ -200,7 +213,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Wind damage.")]
-  [SerializeField] private Affinity _wind;
+  [SerializeField] protected Affinity _wind;
   /// <summary>
   /// This unit's affinity to Wind damage.
   /// </summary>
@@ -209,7 +222,7 @@ public class UnitDataSO : ScriptableObject
 
   [Space(5)]
   [Tooltip("This unit's affinity to Fire damage.")]
-  [SerializeField] private Affinity _fire;
+  [SerializeField] protected Affinity _fire;
   /// <summary>
   /// This unit's affinity to Fire damage.
   /// </summary>

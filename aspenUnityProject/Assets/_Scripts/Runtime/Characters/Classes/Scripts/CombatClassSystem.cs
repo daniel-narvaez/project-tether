@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class CombatClassSystem : MonoBehaviour, IIntializer
+public class CombatClassSystem : MonoBehaviour, IInitializer
 {
     CombatClass _selectedClass;
     List<CombatClassType> _availableClasses = new();

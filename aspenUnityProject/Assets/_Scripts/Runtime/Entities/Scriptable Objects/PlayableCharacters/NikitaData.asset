@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aeaff202ea21459fba190472b74971c, type: 3}
+  m_Script: {fileID: 11500000, guid: f2fadaa9994784724a46b33e21e8bb1c, type: 3}
   m_Name: NikitaData
-  m_EditorClassIdentifier: Assembly-CSharp::UnitDataSO
-  _unitName: Nikita
+  m_EditorClassIdentifier: Assembly-CSharp::PlayableCharacterUnitSO
+  _name: Nikita
   Level: 10
-  ExpToNextLevel: 0
-  TotalExpGained: 0
+  ExPtsToNextLevel: 0
+  TotalExPtsGained: 0
   RemainingHealth: 100
   RemainingEnergy: 100
   _health: 3
@@ -28,3 +28,11 @@ MonoBehaviour:
   _luck: 3
   _precision: 1
   _evasion: 0
+  _blunt: 0
+  _slash: 0
+  _pierce: 0
+  _blast: 0
+  _water: 0
+  _earth: 0
+  _wind: 0
+  _fire: 0

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Tether.CharacterSystems
 {
-  public class EnergySystem : MonoBehaviour, IIntializer
+  public class EnergySystem : MonoBehaviour, IInitializer
   {
     private UnitDataSO _unitData;
     public int MaxEnergy { get; private set; }

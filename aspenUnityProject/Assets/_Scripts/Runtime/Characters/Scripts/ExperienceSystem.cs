@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class ExperienceSystem : MonoBehaviour, IIntializer
+public class ExperienceSystem : MonoBehaviour, IInitializer
 {
   [Header("Level")]
   [Range(1, 99)]
@@ -16,8 +16,9 @@ public class ExperienceSystem : MonoBehaviour, IIntializer
   public void Intialize(UnitDataSO unitData)
   {
     _level = unitData.Level;
-    ExpToNextLevel = unitData.ExpToNextLevel;
-    TotalExpGained = unitData.TotalExpGained;
+
+    ExpToNextLevel = unitData.ExPtsToNextLevel;
+    TotalExpGained = unitData.TotalExPtsGained;
   }
 
   public void ResetSystem()

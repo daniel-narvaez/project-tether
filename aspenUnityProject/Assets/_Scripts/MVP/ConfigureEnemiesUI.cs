@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.UI;
 
 public class ConfigureEnemiesUI : MonoBehaviour
 {
@@ -15,6 +14,16 @@ public class ConfigureEnemiesUI : MonoBehaviour
     // Alphabetize and reverse the order of the enemy buttons, then put them into a stack
     foreach(UnitButtonUI unitButton in _enemyButtons.OrderByDescending(x => x.gameObject.name))
       EnemyButtons.Push(unitButton);
+  }
+
+  public void PreviewDetails()
+  {
+    // show details of hovered enemy
+  }
+
+  public void DisplayDetails()
+  {
+    // show details of selected enemy
   }
 
   public void AddEnemy()
