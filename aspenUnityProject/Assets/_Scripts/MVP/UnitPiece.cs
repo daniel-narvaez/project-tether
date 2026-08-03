@@ -25,12 +25,13 @@ public class UnitPiece : MonoBehaviour
     {
       transform.parent = newSlot.transform;
       Slot = newSlot;
+      Slot.Piece = this;
     }
   }
 
   public void Move(BattlefieldTile newTile)
   {
-    
+    // let the tile handle the placement
   }
 
 
@@ -60,12 +61,12 @@ public class UnitPiece : MonoBehaviour
   [HideInInspector]
   public BattlefieldTile tile;
 
-  public TileDetailsMapUI TileDetailsMap { get; private set; }
+  public BattlefieldMap TileDetailsMap { get; private set; }
   public TileSelectionMapUI TileSelectionMap { get; private set; }
   
   void Start()
   {
-    TileDetailsMap = FindFirstObjectByType<TileDetailsMapUI>();
+    TileDetailsMap = FindFirstObjectByType<BattlefieldMap>();
     TileSelectionMap = FindFirstObjectByType<TileSelectionMapUI>();
 
 

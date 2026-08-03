@@ -1,22 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using Consystently.UI;
-using UnityEngine;
 
-public class TileDetailsMapUI : VisualElement
+public class BattlefieldMap : VisualElement
 {
-  private List<BattlefieldTile> _mapTiles;
+  public List<BattlefieldTile> Tiles { get; private set; }
 
   void Start()
   {
-    _mapTiles ??= GetComponentsInChildren<BattlefieldTile>().ToList();
+    Tiles ??= GetComponentsInChildren<BattlefieldTile>().ToList();
   }
 
   public bool TryGetAvailableTileSlots(UnitPiece tilePiece, out List<TileSelectButtonUI> availableTiles)
   {
     availableTiles = new List<TileSelectButtonUI>();
 
-    foreach (BattlefieldTile tile in _mapTiles)
+    foreach (BattlefieldTile tile in Tiles)
       if (tile.CheckForSlot(tilePiece))
         availableTiles.Add(tile.SelectButton);
 
