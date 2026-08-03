@@ -14,7 +14,6 @@ public class UnitSim : MonoBehaviour
   [SerializeField] private TextMeshProUGUI _name;
   [SerializeField] private TextMeshProUGUI _class;
   [SerializeField] private TextMeshProUGUI _level;
-  
   [Space(5)]
   [SerializeField] private UnitDetailsUI _unitDetailsPanel;
   public Button ButtonComp { get; private set; }

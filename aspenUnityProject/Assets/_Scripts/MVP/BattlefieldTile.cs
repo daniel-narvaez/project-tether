@@ -8,14 +8,14 @@ using Unity.VisualScripting;
 [RequireComponent(typeof(Button))]
 public class BattlefieldTile : VisualElement
 {
-  [SerializeField] private TileSelectButtonUI _selectButton;
-  public TileSelectButtonUI SelectButton => _selectButton;
-
   public Button ButtonComp { get; private set; }
-
   private Faction _faction = Faction.Neutral;
 
-  public Stack<UnitPiece> tilePieces;
+  public Stack<UnitPieceSlot> VacantSlots { get; private set; } = new Stack<UnitPieceSlot>();
+  public List<UnitPieceSlot> FilledSlots { get; private set; } = new List<UnitPieceSlot>();
+
+
+
   private List<Image> _slotImages;
   public Dictionary<UnitPiece, Image> UnitSlots = new Dictionary<UnitPiece, Image>();
   

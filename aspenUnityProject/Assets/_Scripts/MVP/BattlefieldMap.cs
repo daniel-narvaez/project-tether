@@ -1,24 +1,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using Consystently.UI;
+using UnityEngine;
 
 public class BattlefieldMap : VisualElement
 {
+  public static BattlefieldMap Instance { get; private set; }
   public List<BattlefieldTile> Tiles { get; private set; }
 
-  void Start()
+  [Header("Selection")]
+  [SerializeField] ButtonVE _cancelButton;
+
+  private void Awake()
   {
+    Instance ??= this;
     Tiles ??= GetComponentsInChildren<BattlefieldTile>().ToList();
   }
 
-  public bool TryGetAvailableTileSlots(UnitPiece tilePiece, out List<TileSelectButtonUI> availableTiles)
+  public void GetAvailableTileSlots(UnitPiece piece)
   {
-    availableTiles = new List<TileSelectButtonUI>();
+    List<BattlefieldTile> availableTiles = new List<BattlefieldTile>();
 
     foreach (BattlefieldTile tile in Tiles)
-      if (tile.CheckForSlot(tilePiece))
-        availableTiles.Add(tile.SelectButton);
+      if (tile.CheckForSlot(piece))
+        availableTiles.Add(tile);
 
-    return availableTiles.Count > 0;
+    if(availableTiles.Count > 0)
+      SetAvailableTiles(availableTiles);
+    else
+      Debug.LogWarning("No available tiles found.");
+  }
+
+  public void SetAvailableTiles(List<BattlefieldTile> tiles)
+  {
+    
   }
 }

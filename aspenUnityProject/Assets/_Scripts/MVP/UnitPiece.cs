@@ -61,12 +61,12 @@ public class UnitPiece : MonoBehaviour
   [HideInInspector]
   public BattlefieldTile tile;
 
-  public BattlefieldMap TileDetailsMap { get; private set; }
+  public BattlefieldMap Map { get; private set; }
   public TileSelectionMapUI TileSelectionMap { get; private set; }
   
   void Start()
   {
-    TileDetailsMap = FindFirstObjectByType<BattlefieldMap>();
+    Map = FindFirstObjectByType<BattlefieldMap>();
     TileSelectionMap = FindFirstObjectByType<TileSelectionMapUI>();
 
 
@@ -75,24 +75,24 @@ public class UnitPiece : MonoBehaviour
 
   public void TogglePiece()
   {
-    if(!PiecePlaced)
-    {
-      if(TileDetailsMap.TryGetAvailableTileSlots(this, out List<TileSelectButtonUI> availableTiles))
-      {
-        TileSelectionMap.SetAvailableTiles(this, availableTiles);
-      }
-      else
-      {
-        Debug.LogWarning("No available tiles found.");
-      }
-    }
-    else
-      ReturnPiece();
+    // if(!PiecePlaced)
+    // {
+    //   if(Map.TryGetAvailableTileSlots(this, out List<TileSelectButtonUI> availableTiles))
+    //   {
+    //     TileSelectionMap.SetAvailableTiles(this, availableTiles);
+    //   }
+    //   else
+    //   {
+    //     Debug.LogWarning("No available tiles found.");
+    //   }
+    // }
+    // else
+    //   ReturnPiece();
   }
 
   public void ReturnPiece()
   {
-    if(tile)
-      tile.RemovePiece(this);
+    // if(tile)
+    //   tile.RemovePiece(this);
   }
 }

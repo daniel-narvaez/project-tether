@@ -20,9 +20,9 @@ public class TileDetailsUI : MonoBehaviour
     for (int i = 0; i < _unitButtons.Count; i++)
     {
       if (i < units.Count)
-        _unitButtons[i].UpdateDetails(units[i].Sim.Data, units[i].Icon);
+        _unitButtons[i].UpdateDetails(units[i].Sim.Data);
       else
-        _unitButtons[i].UpdateDetails(null,  null);
+        _unitButtons[i].UpdateDetails(null);
     }
   }
 }

@@ -12,7 +12,8 @@ public class UnitPieceSlot : MonoBehaviour
     //If this slot belongs to a sim, return the sim's piece to the slot.
     if(Sim.Piece && !Piece)
       ReturnPiece();
-
+    else
+      BattlefieldMap.Instance.GetAvailableTileSlots(Piece);
   }
 
   public void ReturnPiece() => Sim.Piece.Move(this);
