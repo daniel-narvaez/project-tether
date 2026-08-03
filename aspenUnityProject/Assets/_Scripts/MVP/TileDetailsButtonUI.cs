@@ -15,9 +15,9 @@ public class TileDetailsButtonUI : VisualElement
 
   private Faction _faction = Faction.Neutral;
 
-  public Stack<TilePieceUI> tilePieces;
+  public Stack<UnitPiece> tilePieces;
   private List<Image> _slotImages;
-  public Dictionary<TilePieceUI, Image> UnitSlots = new Dictionary<TilePieceUI, Image>();
+  public Dictionary<UnitPiece, Image> UnitSlots = new Dictionary<UnitPiece, Image>();
   
   void Start()
   {
@@ -34,7 +34,7 @@ public class TileDetailsButtonUI : VisualElement
     UnitSlots.Clear();
   }
   
-  public bool CheckForSlot(TilePieceUI tilePiece)
+  public bool CheckForSlot(UnitPiece tilePiece)
   {
     if (_faction != Faction.Neutral && tilePiece.UnitFaction != _faction)
       return false;
@@ -46,7 +46,7 @@ public class TileDetailsButtonUI : VisualElement
       return true;
   }
 
-  public void PlacePiece(TilePieceUI tilePiece)
+  public void PlacePiece(UnitPiece tilePiece)
   {
     Image slot = _slotImages[0];
     _slotImages.RemoveAt(0);
@@ -62,7 +62,7 @@ public class TileDetailsButtonUI : VisualElement
     tilePiece.Placement = this;
   }
 
-  public void ReplacePiece(TilePieceUI current, TilePieceUI replacement)
+  public void ReplacePiece(UnitPiece current, UnitPiece replacement)
   {
     if (UnitSlots.Count != 1 && current.UnitFaction != replacement.UnitFaction)
       return;
@@ -75,7 +75,7 @@ public class TileDetailsButtonUI : VisualElement
     PlacePiece(replacement);
   }
 
-  public void RemovePiece(TilePieceUI tilePiece)
+  public void RemovePiece(UnitPiece tilePiece)
   {
     if (UnitSlots.ContainsKey(tilePiece))
     {

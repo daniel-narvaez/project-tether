@@ -2,5 +2,5 @@ using UnityEngine;
 
 public class UnitPieceSlot : MonoBehaviour
 {
-  public TilePieceUI UnitPiece;
+  public UnitPiece UnitPiece;
 }

@@ -3,10 +3,10 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
-public class UnitButtonUI : MonoBehaviour
+public class UnitSim : MonoBehaviour
 {
   public UnitDataSO UnitData;
-  public TilePieceUI TilePiece { get; private set; }
+  public UnitPiece TilePiece { get; private set; }
   [Space(5)]
   [SerializeField] private Image _portraitImage;
   [SerializeField] private TextMeshProUGUI _nameText;
@@ -20,7 +20,7 @@ public class UnitButtonUI : MonoBehaviour
   private void Awake()
   {
     ButtonComp ??= GetComponent<Button>();
-    TilePiece ??= GetComponentInChildren<TilePieceUI>();
+    TilePiece ??= GetComponentInChildren<UnitPiece>();
     UpdateDetails(UnitData, _tilePieceImage);
   }
 

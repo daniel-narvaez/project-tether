@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TileDetailsUI : MonoBehaviour
 {
-  [SerializeField] private List<UnitButtonUI> _unitButtons;
+  [SerializeField] private List<UnitSim> _unitButtons;
   // private Stack<UnitButtonUI> buttonStack = new Stack<UnitButtonUI>();
 
   // private void Awake()
@@ -16,7 +16,7 @@ public class TileDetailsUI : MonoBehaviour
 
   public void DisplayTileDetails(TileDetailsButtonUI tileDetails)
   {
-    List<TilePieceUI> units = tileDetails.UnitSlots.Keys.ToList();
+    List<UnitPiece> units = tileDetails.UnitSlots.Keys.ToList();
     for (int i = 0; i < _unitButtons.Count; i++)
     {
       if (i < units.Count)

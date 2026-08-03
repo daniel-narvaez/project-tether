@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class TilePieceUI : MonoBehaviour
+public class UnitPiece : MonoBehaviour
 {
-  public UnitButtonUI UnitButton { get; private set; }
+  public UnitSim UnitButton { get; private set; }
   public Faction UnitFaction => UnitButton.UnitData.Faction;
   
   public Image PieceImage { get; private set; }
@@ -21,7 +21,7 @@ public class TilePieceUI : MonoBehaviour
 
   void Awake()
   {
-    UnitButton ??= GetComponentInParent<UnitButtonUI>();
+    UnitButton ??= GetComponentInParent<UnitSim>();
   }
   void Start()
   {

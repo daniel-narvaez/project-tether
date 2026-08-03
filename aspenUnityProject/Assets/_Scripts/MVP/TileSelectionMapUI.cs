@@ -5,7 +5,7 @@ using Consystently.UI;
 
 public class TileSelectionMapUI : VisualElement
 {
-  public TilePieceUI SelectedPiece { get; private set; }
+  public UnitPiece SelectedPiece { get; private set; }
   private List<TileSelectButtonUI> _mapTiles;
 
   private void Start()
@@ -13,7 +13,7 @@ public class TileSelectionMapUI : VisualElement
     _mapTiles ??= GetComponentsInChildren<TileSelectButtonUI>().ToList();
   }
 
-  public void SetAvailableTiles(TilePieceUI tilePiece, List<TileSelectButtonUI> availableTiles)
+  public void SetAvailableTiles(UnitPiece tilePiece, List<TileSelectButtonUI> availableTiles)
   {
     SelectedPiece = tilePiece;
     foreach (TileSelectButtonUI selectButton in _mapTiles.Except(availableTiles))

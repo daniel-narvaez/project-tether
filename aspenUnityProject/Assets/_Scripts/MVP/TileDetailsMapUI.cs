@@ -12,7 +12,7 @@ public class TileDetailsMapUI : VisualElement
     _mapTiles ??= GetComponentsInChildren<TileDetailsButtonUI>().ToList();
   }
 
-  public bool TryGetAvailableTileSlots(TilePieceUI tilePiece, out List<TileSelectButtonUI> availableTiles)
+  public bool TryGetAvailableTileSlots(UnitPiece tilePiece, out List<TileSelectButtonUI> availableTiles)
   {
     availableTiles = new List<TileSelectButtonUI>();
 

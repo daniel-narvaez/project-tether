@@ -9,10 +9,10 @@ public class ConfigureEnemiesUI : MonoBehaviour
 {
   [SerializeField] private UnitDetailsUI _unitDetailsPanel;
   [SerializeField] private GameObject catalogButtonPrefab;
-  [SerializeField] private List<UnitButtonUI> _enemyButtons;
+  [SerializeField] private List<UnitSim> _enemyButtons;
 
-  public Stack<UnitButtonUI> VacantEnemyButtons { get; private set; } = new Stack<UnitButtonUI>();
-  public List<UnitButtonUI> ActiveEnemyButtons { get; private set; } = new List<UnitButtonUI>();
+  public Stack<UnitSim> VacantEnemyButtons { get; private set; } = new Stack<UnitSim>();
+  public List<UnitSim> ActiveEnemyButtons { get; private set; } = new List<UnitSim>();
 
   private UnitDataSO _hoveredEnemyData, _selectedEnemyData;
   private Dictionary <ButtonVE, EnemyUnitSO> _catalogButtons = new Dictionary<ButtonVE, EnemyUnitSO>();
@@ -21,7 +21,7 @@ public class ConfigureEnemiesUI : MonoBehaviour
   private void Awake()
   {
     // Alphabetize and reverse the order of the enemy buttons, then put them into a stack
-    foreach(UnitButtonUI unitButton in _enemyButtons.OrderByDescending(x => x.gameObject.name))
+    foreach(UnitSim unitButton in _enemyButtons.OrderByDescending(x => x.gameObject.name))
       VacantEnemyButtons.Push(unitButton);
   }
 
@@ -93,7 +93,7 @@ public class ConfigureEnemiesUI : MonoBehaviour
 
   public void AddEnemy()
   {
-    if(VacantEnemyButtons.TryPop(out UnitButtonUI result))
+    if(VacantEnemyButtons.TryPop(out UnitSim result))
     {
       ActiveEnemyButtons.Add(result);
       result.gameObject.SetActive(true);
@@ -107,11 +107,11 @@ public class ConfigureEnemiesUI : MonoBehaviour
     
   }
 
-  public void RemoveEnemy(UnitButtonUI unitButton)
+  public void RemoveEnemy(UnitSim unitButton)
   {
     if(ActiveEnemyButtons.Contains(unitButton))
     {
-      UnitButtonUI last = ActiveEnemyButtons.Last();
+      UnitSim last = ActiveEnemyButtons.Last();
 
       // If this is somewhere in the middle of the stack
       if(ActiveEnemyButtons.Last() != unitButton)
@@ -121,8 +121,8 @@ public class ConfigureEnemiesUI : MonoBehaviour
 
         for(int i = index; i < length - 1; i++)
         {
-          UnitButtonUI current = ActiveEnemyButtons[i];
-          UnitButtonUI next = ActiveEnemyButtons[i + 1];
+          UnitSim current = ActiveEnemyButtons[i];
+          UnitSim next = ActiveEnemyButtons[i + 1];
 
           current.UnitData = next.UnitData;
           current.UpdateDetails(current.UnitData);
