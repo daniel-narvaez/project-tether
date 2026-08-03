@@ -1,20 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class TileDetailsUI : MonoBehaviour
 {
-  [SerializeField] private List<UnitButtonUI> unitButtons;
+  [SerializeField] private List<UnitButtonUI> _unitButtons;
+  // private Stack<UnitButtonUI> buttonStack = new Stack<UnitButtonUI>();
+
+  // private void Awake()
+  // {
+  //   // Alphabetize and reverse the order of the enemy buttons, then put them into a stack
+  //   foreach(UnitButtonUI unitButton in _unitButtons.OrderBy(x => x.gameObject.name))
+  //     buttonStack.Push(unitButton);
+  // }
+
   public void DisplayTileDetails(TileDetailsButtonUI tileDetails)
   {
     List<TilePieceUI> units = tileDetails.UnitSlots.Keys.ToList();
-    for (int i = 0; i < unitButtons.Count; i++)
+    for (int i = 0; i < _unitButtons.Count; i++)
     {
       if (i < units.Count)
-        unitButtons[i].UpdateDetails(units[i].PieceEntity, units[i].PieceImage);
+        _unitButtons[i].UpdateDetails(units[i].UnitButton.UnitData, units[i].PieceImage);
       else
-        unitButtons[i].UpdateDetails(null,  null);
+        _unitButtons[i].UpdateDetails(null,  null);
     }
   }
 }

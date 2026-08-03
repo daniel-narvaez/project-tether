@@ -18,9 +18,9 @@ public class UnitDetailsUI : MonoBehaviour
   [Space (10)]
   [SerializeField] private List<TextMeshProUGUI> _affinityTexts;
 
-  public event Action<Entity> OnLevelUpdated;
+  public event Action<UnitDataSO> OnLevelUpdated;
 
-  private Entity _entity;
+  public UnitDataSO UnitData { get; private set; }
   private bool _showingAptitudes = false;
   public Dictionary<Stat, int> StatData = new Dictionary<Stat, int>();
   public Dictionary<Element, Affinity> AffinityData = new Dictionary<Element, Affinity>();
@@ -30,45 +30,48 @@ public class UnitDetailsUI : MonoBehaviour
     _statTexts = _statTexts.OrderBy(x => x.gameObject.name).ToList();
     _affinityTexts = _affinityTexts.OrderBy(x => x.gameObject.name).ToList();
   }
-  public void DisplayUnitDetails(Entity entity)
+
+  public void DisplayUnitDetails(UnitButtonUI unitButton) => DisplayUnitDetails(unitButton.UnitData);
+
+  public void DisplayUnitDetails(UnitDataSO unitData)
   {
-    if(entity)
+    if(unitData)
     {
-      _entity = entity;
-      _levelSlider.value = _entity.UnitData.Level;
+      UnitData = unitData;
+      _levelSlider.value = unitData.Level;
       UpdateData();
     }
   }
 
   public void UpdateData()
-  {
-    UnitDataSO unitData = _entity.UnitData;
+  { 
+    UnitDataSO data = UnitData;
     
-    _nameText.text = unitData.Name;
+    _nameText.text = data.Name;
 
-    unitData.Level = (int)_levelSlider.value;
-    _levelText.text = $"Lv.{unitData.Level}";
+    data.Level = (int)_levelSlider.value;
+    _levelText.text = $"Lv.{data.Level}";
 
     // The TMP's MUST be in the same order that the stats are ordered!
     for (int i = 0; i < _statTexts.Count; i++)
     {
       Stat stat = (Stat)i;
-      int val = Formulae.CalculateStat(stat, unitData.Aptitudes[stat], unitData.Level);
-      _statTexts[i].text = _showingAptitudes ? unitData.Aptitudes[stat].ToString() : val.ToString();
+      int val = Formulae.CalculateStat(stat, data.Aptitudes[stat], data.Level);
+      _statTexts[i].text = _showingAptitudes ? data.Aptitudes[stat].ToString() : val.ToString();
       if (StatData.ContainsKey(stat))
         StatData[stat] = val;
       else
         StatData.Add(stat, val);
     }
     
-    AffinityData = unitData.Affinities;
+    AffinityData = data.Affinities;
     for (int i = 0; i < _affinityTexts.Count; i++)
     {
       Element element = (Element)i;
-      _affinityTexts[i].text = unitData.Affinities[element].ToString();
+      _affinityTexts[i].text = data.Affinities[element].ToString();
     }
 
-    OnLevelUpdated?.Invoke(_entity);
+    OnLevelUpdated?.Invoke(UnitData);
   }
 
   public void ClearDetails()
@@ -87,11 +90,13 @@ public class UnitDetailsUI : MonoBehaviour
 
     _aptitudesText.text = "Show Aptitudes";
     _showingAptitudes = false;
+
+    OnLevelUpdated = null;
   }
 
   public void ToggleAptitudes()
   {
-    if (_entity.UnitData)
+    if (UnitData)
     {
       // The TMP's MUST be in the same order that the stats are ordered!
       if(_showingAptitudes == false)
@@ -99,7 +104,7 @@ public class UnitDetailsUI : MonoBehaviour
         for (int i = 0; i < _statTexts.Count; i++)
         {
           Stat stat = (Stat)i;
-          string aptitude = _entity.UnitData.Aptitudes[stat].ToString();
+          string aptitude = UnitData.Aptitudes[stat].ToString();
           _statTexts[i].text = aptitude;
         }
         _aptitudesText.text = "Show Values";

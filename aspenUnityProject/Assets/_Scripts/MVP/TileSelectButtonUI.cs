@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public class TileSelectButtonUI : InterfaceElement
+public class TileSelectButtonUI : VisualElement
 {
   [SerializeField] private TileDetailsButtonUI _detailsButton;
   public TileDetailsButtonUI DetailsButton => _detailsButton;

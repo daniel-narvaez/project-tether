@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Consystently.UI;
 
-public class TileSelectionMapUI : InterfaceElement
+public class TileSelectionMapUI : VisualElement
 {
   public TilePieceUI SelectedPiece { get; private set; }
   private List<TileSelectButtonUI> _mapTiles;

@@ -22,7 +22,7 @@ namespace Consystently.UI
 
     public bool Opened { get; protected set; } = true;
 
-    public HashSet<InterfaceElement> Elements { get; protected set; } = new HashSet<InterfaceElement>();
+    public HashSet<VisualElement> Elements { get; protected set; } = new HashSet<VisualElement>();
 
     private CanvasGroup _canvasGroup;
 
@@ -35,8 +35,8 @@ namespace Consystently.UI
         RootMenu ??= gameMenu;
         RootMenu.AddPanelToSet(this);
 
-        Elements = GetComponentsInChildren<InterfaceElement>().ToHashSet();
-        foreach (InterfaceElement e in Elements)
+        Elements = GetComponentsInChildren<VisualElement>().ToHashSet();
+        foreach (VisualElement e in Elements)
           e.AssignRootPanel(this);
         
         Close();

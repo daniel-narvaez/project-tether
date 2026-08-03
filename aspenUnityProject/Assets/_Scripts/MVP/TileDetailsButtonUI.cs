@@ -4,9 +4,10 @@ using UnityEngine.UI;
 using System.Linq;
 using Consystently.UI;
 using Unity.VisualScripting;
+using UnityEngine.WSA;
 
 [RequireComponent(typeof(Button))]
-public class TileDetailsButtonUI : InterfaceElement
+public class TileDetailsButtonUI : VisualElement
 {
   [SerializeField] private TileSelectButtonUI _selectButton;
   public TileSelectButtonUI SelectButton => _selectButton;
@@ -14,6 +15,7 @@ public class TileDetailsButtonUI : InterfaceElement
   public Button ButtonComp { get; private set; }
 
   private Faction _faction = Faction.Neutral;
+
   private List<Image> _slotImages;
   public Dictionary<TilePieceUI, Image> UnitSlots = new Dictionary<TilePieceUI, Image>();
   
@@ -23,7 +25,6 @@ public class TileDetailsButtonUI : InterfaceElement
     ButtonComp.image.alphaHitTestMinimumThreshold = 0.5f;
     _slotImages ??= transform.GetComponentsInChildren<Image>().ToList();
     _slotImages.Remove(GetComponent<Image>());
-    Debug.Log(_slotImages.Count);
     Reset();
   }
 
@@ -59,6 +60,16 @@ public class TileDetailsButtonUI : InterfaceElement
 
     tilePiece.PiecePlaced = true;
     tilePiece.Placement = this;
+  }
+
+  public void ReplacePiece(TilePieceUI current, TilePieceUI replacement)
+  {
+    if (current.Placement && current.Placement == this)
+      RemovePiece(current);
+    if (replacement.Placement && replacement.Placement != this)
+      replacement.Placement.RemovePiece(replacement);
+    
+    PlacePiece(replacement);
   }
 
   public void RemovePiece(TilePieceUI tilePiece)

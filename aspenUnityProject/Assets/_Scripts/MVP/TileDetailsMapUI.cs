@@ -3,7 +3,7 @@ using System.Linq;
 using Consystently.UI;
 using UnityEngine;
 
-public class TileDetailsMapUI : InterfaceElement
+public class TileDetailsMapUI : VisualElement
 {
   private List<TileDetailsButtonUI> _mapTiles;
 

@@ -4,7 +4,7 @@ namespace Consystently.UI
   using UnityEngine;
   
   [RequireComponent(typeof(TextMeshProUGUI))]
-  public class Text_IE : InterfaceElement
+  public class TextVE : VisualElement
   {
     [Header("Text")]
     public TextMeshProUGUI TextMeshComp { get; private set;}

@@ -2,11 +2,12 @@ namespace Consystently.UI
 {
   using UnityEngine;
 
-  public class InterfaceElement : MonoBehaviour
+
+  public class VisualElement : MonoBehaviour
   {
     public Panel RootPanel { get; private set; }
 
-    [Header("Interface Element")]
+    [Header("Visual Element")]
     [SerializeField] protected string elementName;
     public string Name => elementName;
 

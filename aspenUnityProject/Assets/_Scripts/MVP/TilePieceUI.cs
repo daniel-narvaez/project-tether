@@ -1,18 +1,16 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 public class TilePieceUI : MonoBehaviour
 {
-  [SerializeField] private Entity _pieceEntity;
-  public Entity PieceEntity => _pieceEntity;
-
-  [SerializeField] private Faction _faction;
-  public Faction UnitFaction => _faction;
+  public UnitButtonUI UnitButton { get; private set; }
+  public Faction UnitFaction => UnitButton.UnitData.Faction;
   
   public Image PieceImage { get; private set; }
+
+  [HideInInspector]
   public bool PiecePlaced = false;
 
   [HideInInspector]
@@ -21,6 +19,10 @@ public class TilePieceUI : MonoBehaviour
   public TileDetailsMapUI TileDetailsMap { get; private set; }
   public TileSelectionMapUI TileSelectionMap { get; private set; }
 
+  void Awake()
+  {
+    UnitButton ??= GetComponentInParent<UnitButtonUI>();
+  }
   void Start()
   {
     TileDetailsMap = FindFirstObjectByType<TileDetailsMapUI>();
@@ -32,7 +34,6 @@ public class TilePieceUI : MonoBehaviour
 
   public void TogglePiece()
   {
-
     if(!PiecePlaced)
     {
       if(TileDetailsMap.TryGetAvailableTileSlots(this, out List<TileSelectButtonUI> availableTiles))
@@ -44,9 +45,13 @@ public class TilePieceUI : MonoBehaviour
         Debug.LogWarning("No available tiles found.");
       }
     }
-    else if(Placement)
-    {
+    else
+      ReturnPiece();
+  }
+
+  public void ReturnPiece()
+  {
+    if(Placement)
       Placement.RemovePiece(this);
-    }
   }
 }

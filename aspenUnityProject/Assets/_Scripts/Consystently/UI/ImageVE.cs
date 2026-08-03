@@ -4,7 +4,7 @@ namespace Consystently.UI
   using UnityEngine.UI;
 
   [RequireComponent(typeof(Image))]
-  public class Image_IE : InterfaceElement
+  public class Image_IE : VisualElement
   {
     [Header("Image")]
     public Image ImageComp { get; protected set; }

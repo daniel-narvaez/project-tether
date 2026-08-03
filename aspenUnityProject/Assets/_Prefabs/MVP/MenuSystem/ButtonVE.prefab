@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9018395002085182858}
   - component: {fileID: 2768004293814456699}
   m_Layer: 5
-  m_Name: Text_IE
+  m_Name: TextVE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 1534124288101949333}
   - component: {fileID: 7645430022533669353}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonVE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 4876999116640262267}
   - component: {fileID: 7048479307239966164}
   m_Layer: 5
-  m_Name: Image_IE
+  m_Name: ImageVE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

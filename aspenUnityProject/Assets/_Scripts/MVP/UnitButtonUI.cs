@@ -1,47 +1,55 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 public class UnitButtonUI : MonoBehaviour
 {
-  [SerializeField] private Entity _unitEntity;
+  public UnitDataSO UnitData;
+  public TilePieceUI TilePiece { get; private set; }
   [Space(5)]
+  [SerializeField] private Image _portraitImage;
   [SerializeField] private TextMeshProUGUI _nameText;
   [SerializeField] private TextMeshProUGUI _levelText;
   [Space(5)]
-  [SerializeField] private Image _tilePiece;
+  [SerializeField] private Image _tilePieceImage;
+  [SerializeField] private UnitDetailsUI _unitDetailsPanel;
   public Button ButtonComp { get; private set; }
-  public UnitDetailsUI UnitDetailsPanel { get; private set; }
   private UnityAction _displayDetails;
 
   private void Awake()
   {
-    UnitDetailsPanel ??= FindFirstObjectByType<UnitDetailsUI>();
     ButtonComp ??= GetComponent<Button>();
-    UpdateDetails(_unitEntity, _tilePiece);
+    TilePiece ??= GetComponentInChildren<TilePieceUI>();
+    UpdateDetails(UnitData, _tilePieceImage);
   }
 
-  private void OnEnable() => UnitDetailsPanel.OnLevelUpdated += UpdateDetails;
-  private void OnDisable() => UnitDetailsPanel.OnLevelUpdated -= UpdateDetails;
-
-  public void UpdateDetails(Entity entity)
+  public void UpdateDetails (UnitDataSO unitData)
   {
-    if (entity == _unitEntity && _tilePiece)
-      UpdateDetails(_unitEntity, _tilePiece);
+    UpdateDetails(UnitData, _tilePieceImage);
   }
-  public void UpdateDetails (Entity entity, Image tilePiece)
-  {
-    _unitEntity = entity ? entity : null;
-    UnitDataSO data = _unitEntity?.UnitData ? _unitEntity.UnitData : null;
 
-    _nameText.text = data ? data.Name : string.Empty;
-    _levelText.text = data ? $"Lv.{data.Level}" : string.Empty;
-    ButtonComp.interactable = data;
-    if (ButtonComp.interactable && entity && data)
+  public void UpdateDetails (UnitDataSO unitData, Image tilePiece)
+  {
+    if (UnitData = unitData)
     {
-      _displayDetails = () => UnitDetailsPanel.DisplayUnitDetails(entity);
+      if(UnitData.Portrait)
+        _portraitImage.sprite = UnitData.Portrait;
+
+      _nameText.text = UnitData.Name;
+
+      if(_levelText)
+        _levelText.text = $"Lv.{UnitData.Level}";
+    }
+
+    ButtonComp.interactable = UnitData;
+    if (ButtonComp.interactable && UnitData)
+    {
+      _displayDetails = () => {
+        _unitDetailsPanel.DisplayUnitDetails(UnitData);
+        _unitDetailsPanel.OnLevelUpdated += UpdateDetails;
+      };
+
       ButtonComp.onClick.AddListener(_displayDetails);
     }
     else if (_displayDetails != null)
@@ -50,7 +58,26 @@ public class UnitButtonUI : MonoBehaviour
       _displayDetails = null;
     }
 
-    _tilePiece.sprite = tilePiece ? tilePiece.sprite : null;
-    _tilePiece.color = tilePiece ? tilePiece.color : Color.clear;
+    if(tilePiece)
+    {
+      _tilePieceImage.sprite = tilePiece.sprite;
+      _tilePieceImage.color = tilePiece.color;
+    }
+  }
+
+  public void ClearDetails()
+  {
+    UnitData = null;
+    ButtonComp.interactable = UnitData;
+
+    if(_portraitImage)
+      _portraitImage.sprite = null;
+
+    _nameText.text = "Name";
+    
+    if(_levelText)
+      _levelText.text = "Lv.";
+
+    TilePiece.ReturnPiece();
   }
 }
