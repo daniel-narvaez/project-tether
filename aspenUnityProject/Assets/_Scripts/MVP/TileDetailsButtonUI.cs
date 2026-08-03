@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using System.Linq;
 using Consystently.UI;
 using Unity.VisualScripting;
-using UnityEngine.WSA;
 
 [RequireComponent(typeof(Button))]
 public class TileDetailsButtonUI : VisualElement
@@ -16,6 +15,7 @@ public class TileDetailsButtonUI : VisualElement
 
   private Faction _faction = Faction.Neutral;
 
+  public Stack<TilePieceUI> tilePieces;
   private List<Image> _slotImages;
   public Dictionary<TilePieceUI, Image> UnitSlots = new Dictionary<TilePieceUI, Image>();
   
@@ -64,6 +64,9 @@ public class TileDetailsButtonUI : VisualElement
 
   public void ReplacePiece(TilePieceUI current, TilePieceUI replacement)
   {
+    if (UnitSlots.Count != 1 && current.UnitFaction != replacement.UnitFaction)
+      return;
+    
     if (current.Placement && current.Placement == this)
       RemovePiece(current);
     if (replacement.Placement && replacement.Placement != this)
