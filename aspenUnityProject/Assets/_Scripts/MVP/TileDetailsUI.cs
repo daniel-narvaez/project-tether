@@ -14,13 +14,13 @@ public class TileDetailsUI : MonoBehaviour
   //     buttonStack.Push(unitButton);
   // }
 
-  public void DisplayTileDetails(TileDetailsButtonUI tileDetails)
+  public void DisplayTileDetails(BattlefieldTile tileDetails)
   {
     List<UnitPiece> units = tileDetails.UnitSlots.Keys.ToList();
     for (int i = 0; i < _unitButtons.Count; i++)
     {
       if (i < units.Count)
-        _unitButtons[i].UpdateDetails(units[i].UnitButton.UnitData, units[i].PieceImage);
+        _unitButtons[i].UpdateDetails(units[i].Sim.Data, units[i].Icon);
       else
         _unitButtons[i].UpdateDetails(null,  null);
     }

@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class TileDetailsMapUI : VisualElement
 {
-  private List<TileDetailsButtonUI> _mapTiles;
+  private List<BattlefieldTile> _mapTiles;
 
   void Start()
   {
-    _mapTiles ??= GetComponentsInChildren<TileDetailsButtonUI>().ToList();
+    _mapTiles ??= GetComponentsInChildren<BattlefieldTile>().ToList();
   }
 
   public bool TryGetAvailableTileSlots(UnitPiece tilePiece, out List<TileSelectButtonUI> availableTiles)
   {
     availableTiles = new List<TileSelectButtonUI>();
 
-    foreach (TileDetailsButtonUI tile in _mapTiles)
+    foreach (BattlefieldTile tile in _mapTiles)
       if (tile.CheckForSlot(tilePiece))
         availableTiles.Add(tile.SelectButton);
 

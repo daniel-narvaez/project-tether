@@ -5,32 +5,72 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class UnitPiece : MonoBehaviour
 {
-  public UnitSim UnitButton { get; private set; }
-  public Faction UnitFaction => UnitButton.UnitData.Faction;
-  
-  public Image PieceImage { get; private set; }
+  public UnitSim Sim { get; private set; }
+  public UnitPieceSlot Slot { get; private set; }
+  public Image Icon { get; private set; }
+  public Sprite Sprite => Icon.sprite;
+  public Color Color => Icon.color;
+  public Faction Faction => Sim.Data.Faction;
+
+  public void Awake()
+  {
+    Icon ??= GetComponent<Image>();
+  }
+
+  public void SetSim(UnitSim sim) => Sim ??= sim;
+
+  public void Move(UnitPieceSlot newSlot)
+  {
+    if(!newSlot.Piece)
+    {
+      transform.parent = newSlot.transform;
+      Slot = newSlot;
+    }
+  }
+
+  public void Move(BattlefieldTile newTile)
+  {
+    
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   [HideInInspector]
   public bool PiecePlaced = false;
 
   [HideInInspector]
-  public TileDetailsButtonUI Placement;
+  public BattlefieldTile tile;
 
   public TileDetailsMapUI TileDetailsMap { get; private set; }
   public TileSelectionMapUI TileSelectionMap { get; private set; }
-
-  void Awake()
-  {
-    UnitButton ??= GetComponentInParent<UnitSim>();
-  }
+  
   void Start()
   {
     TileDetailsMap = FindFirstObjectByType<TileDetailsMapUI>();
     TileSelectionMap = FindFirstObjectByType<TileSelectionMapUI>();
 
-    PieceImage ??= GetComponent<Image>();
-    PieceImage.alphaHitTestMinimumThreshold = 0.5f;
+
   }
+
 
   public void TogglePiece()
   {
@@ -51,7 +91,7 @@ public class UnitPiece : MonoBehaviour
 
   public void ReturnPiece()
   {
-    if(Placement)
-      Placement.RemovePiece(this);
+    if(tile)
+      tile.RemovePiece(this);
   }
 }

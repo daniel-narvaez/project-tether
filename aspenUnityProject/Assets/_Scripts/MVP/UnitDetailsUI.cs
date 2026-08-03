@@ -31,7 +31,7 @@ public class UnitDetailsUI : MonoBehaviour
     _affinityTexts = _affinityTexts.OrderBy(x => x.gameObject.name).ToList();
   }
 
-  public void DisplayUnitDetails(UnitSim unitButton) => DisplayUnitDetails(unitButton.UnitData);
+  public void DisplayUnitDetails(UnitSim unitButton) => DisplayUnitDetails(unitButton.Data);
 
   public void DisplayUnitDetails(UnitDataSO unitData)
   {

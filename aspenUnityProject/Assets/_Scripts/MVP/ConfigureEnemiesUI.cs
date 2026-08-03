@@ -97,7 +97,7 @@ public class ConfigureEnemiesUI : MonoBehaviour
     {
       ActiveEnemyButtons.Add(result);
       result.gameObject.SetActive(true);
-      result.UnitData = _selectedEnemyData;
+      result.Data = _selectedEnemyData;
       result.UpdateDetails(_selectedEnemyData);
     }
   }
@@ -124,10 +124,10 @@ public class ConfigureEnemiesUI : MonoBehaviour
           UnitSim current = ActiveEnemyButtons[i];
           UnitSim next = ActiveEnemyButtons[i + 1];
 
-          current.UnitData = next.UnitData;
-          current.UpdateDetails(current.UnitData);
+          current.Data = next.Data;
+          current.UpdateDetails(current.Data);
 
-          next.TilePiece.Placement.ReplacePiece(next.TilePiece, current.TilePiece);
+          next.Piece.tile.ReplacePiece(next.Piece, current.Piece);
         }
       }
 

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class TileSelectButtonUI : VisualElement
 {
-  [SerializeField] private TileDetailsButtonUI _detailsButton;
-  public TileDetailsButtonUI DetailsButton => _detailsButton;
+  [SerializeField] private BattlefieldTile _detailsButton;
+  public BattlefieldTile DetailsButton => _detailsButton;
   private TileSelectionMapUI _tileSelectionMap;
 
   public Button ButtonComp { get; private set; }

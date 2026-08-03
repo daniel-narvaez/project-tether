@@ -6,7 +6,7 @@ using Consystently.UI;
 using Unity.VisualScripting;
 
 [RequireComponent(typeof(Button))]
-public class TileDetailsButtonUI : VisualElement
+public class BattlefieldTile : VisualElement
 {
   [SerializeField] private TileSelectButtonUI _selectButton;
   public TileSelectButtonUI SelectButton => _selectButton;
@@ -36,7 +36,7 @@ public class TileDetailsButtonUI : VisualElement
   
   public bool CheckForSlot(UnitPiece tilePiece)
   {
-    if (_faction != Faction.Neutral && tilePiece.UnitFaction != _faction)
+    if (_faction != Faction.Neutral && tilePiece.Faction != _faction)
       return false;
     else if (UnitSlots.Count == 4)
       return false;
@@ -51,26 +51,26 @@ public class TileDetailsButtonUI : VisualElement
     Image slot = _slotImages[0];
     _slotImages.RemoveAt(0);
 
-    slot.sprite = tilePiece.PieceImage.sprite;
-    slot.color = tilePiece.PieceImage.color;
+    slot.sprite = tilePiece.Icon.sprite;
+    slot.color = tilePiece.Icon.color;
     UnitSlots.Add(tilePiece, slot);
 
     if (_faction == Faction.Neutral)
-      _faction = tilePiece.UnitFaction;
+      _faction = tilePiece.Faction;
 
     tilePiece.PiecePlaced = true;
-    tilePiece.Placement = this;
+    tilePiece.tile = this;
   }
 
   public void ReplacePiece(UnitPiece current, UnitPiece replacement)
   {
-    if (UnitSlots.Count != 1 && current.UnitFaction != replacement.UnitFaction)
+    if (UnitSlots.Count != 1 && current.Faction != replacement.Faction)
       return;
     
-    if (current.Placement && current.Placement == this)
+    if (current.tile && current.tile == this)
       RemovePiece(current);
-    if (replacement.Placement && replacement.Placement != this)
-      replacement.Placement.RemovePiece(replacement);
+    if (replacement.tile && replacement.tile != this)
+      replacement.tile.RemovePiece(replacement);
     
     PlacePiece(replacement);
   }
@@ -87,7 +87,7 @@ public class TileDetailsButtonUI : VisualElement
       UnitSlots.Remove(tilePiece);
 
 
-      tilePiece.Placement = null;
+      tilePiece.tile = null;
       tilePiece.PiecePlaced = false;
     }
 
