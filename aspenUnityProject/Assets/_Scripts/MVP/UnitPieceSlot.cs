@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class UnitPieceSlot : MonoBehaviour
 {
+  [HideInInspector]
   public UnitPiece Piece;
   public UnitSim Sim { get; private set; }
+
+  public void Awake()
+  {
+    Piece ??= GetComponentInChildren<UnitPiece>();
+  }
 
   public void SetSim(UnitSim sim) => Sim ??= sim;
 

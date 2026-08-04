@@ -9,7 +9,7 @@ public class ConfigureEnemiesUI : MonoBehaviour
 {
   [SerializeField] private UnitDetailsUI _unitDetailsPanel;
   [SerializeField] private GameObject catalogButtonPrefab;
-  [SerializeField] private List<UnitSim> _enemyButtons;
+  [SerializeField] private List<UnitSim> _enemySims;
 
   public Stack<UnitSim> VacantEnemyButtons { get; private set; } = new Stack<UnitSim>();
   public List<UnitSim> ActiveEnemyButtons { get; private set; } = new List<UnitSim>();
@@ -21,8 +21,11 @@ public class ConfigureEnemiesUI : MonoBehaviour
   private void Awake()
   {
     // Alphabetize and reverse the order of the enemy buttons, then put them into a stack
-    foreach(UnitSim unitButton in _enemyButtons.OrderByDescending(x => x.gameObject.name))
-      VacantEnemyButtons.Push(unitButton);
+    foreach(UnitSim sim in _enemySims.OrderByDescending(x => x.gameObject.name))
+    {
+      sim.gameObject.SetActive(false);
+      VacantEnemyButtons.Push(sim);
+    }
   }
 
   private void Start()

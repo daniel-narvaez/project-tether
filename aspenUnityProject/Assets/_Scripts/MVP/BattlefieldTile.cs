@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 public class BattlefieldTile : VisualElement
 {
   public Button ButtonComp { get; private set; }
-  private Faction _faction = Faction.Neutral;
+  public Faction Faction { get; private set; } = Faction.Neutral;
 
   public Stack<UnitPieceSlot> VacantSlots { get; private set; } = new Stack<UnitPieceSlot>();
   public List<UnitPieceSlot> FilledSlots { get; private set; } = new List<UnitPieceSlot>();
@@ -18,11 +18,18 @@ public class BattlefieldTile : VisualElement
 
   private List<Image> _slotImages;
   public Dictionary<UnitPiece, Image> UnitSlots = new Dictionary<UnitPiece, Image>();
+
+  void Awake()
+  {
+    foreach(UnitPieceSlot slot in GetComponentsInChildren<UnitPieceSlot>().OrderByDescending(s => s.gameObject.name))
+      VacantSlots.Push(slot);
+
+    ButtonComp ??= GetComponent<Button>();
+    ButtonComp.image.alphaHitTestMinimumThreshold = 0.5f;
+  }
   
   void Start()
   {
-    ButtonComp ??= GetComponent<Button>();
-    ButtonComp.image.alphaHitTestMinimumThreshold = 0.5f;
     _slotImages ??= transform.GetComponentsInChildren<Image>().ToList();
     _slotImages.Remove(GetComponent<Image>());
     Reset();
@@ -30,36 +37,29 @@ public class BattlefieldTile : VisualElement
 
   public void Reset()
   {
-    _faction = Faction.Neutral;
+    Faction = Faction.Neutral;
     UnitSlots.Clear();
   }
   
-  public bool CheckForSlot(UnitPiece tilePiece)
+  public bool CheckForSlot(UnitPiece piece)
   {
-    if (_faction != Faction.Neutral && tilePiece.Faction != _faction)
+    if (Faction != Faction.Neutral && piece.Faction != Faction)
       return false;
-    else if (UnitSlots.Count == 4)
+    else if (FilledSlots.Count == 4)
       return false;
-    else if (UnitSlots.Keys.Contains(tilePiece))
+    else if (FilledSlots.Contains(piece.Slot))
       return false;
     else 
       return true;
   }
 
-  public void PlacePiece(UnitPiece tilePiece)
+  public void PlacePiece(UnitPiece piece)
   {
-    Image slot = _slotImages[0];
-    _slotImages.RemoveAt(0);
+    if(VacantSlots.TryPop(out UnitPieceSlot result))
+      piece.Move(result);
 
-    slot.sprite = tilePiece.Icon.sprite;
-    slot.color = tilePiece.Icon.color;
-    UnitSlots.Add(tilePiece, slot);
-
-    if (_faction == Faction.Neutral)
-      _faction = tilePiece.Faction;
-
-    tilePiece.PiecePlaced = true;
-    tilePiece.tile = this;
+    if (Faction == Faction.Neutral)
+      Faction = piece.Faction;
   }
 
   public void ReplacePiece(UnitPiece current, UnitPiece replacement)
@@ -92,6 +92,6 @@ public class BattlefieldTile : VisualElement
     }
 
     if (UnitSlots.Count == 0)
-      _faction = Faction.Neutral;
+      Faction = Faction.Neutral;
   }
 }

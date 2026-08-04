@@ -23,7 +23,7 @@ public class UnitPiece : MonoBehaviour
   {
     if(!newSlot.Piece)
     {
-      transform.parent = newSlot.transform;
+      transform.SetParent(newSlot.transform, false);
       Slot = newSlot;
       Slot.Piece = this;
     }

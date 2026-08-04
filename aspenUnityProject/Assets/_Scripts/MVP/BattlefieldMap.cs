@@ -33,6 +33,6 @@ public class BattlefieldMap : VisualElement
 
   public void SetAvailableTiles(List<BattlefieldTile> tiles)
   {
-    
+    Debug.Log("Do the thing!");
   }
 }
