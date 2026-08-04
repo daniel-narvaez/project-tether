@@ -11,6 +11,7 @@ namespace Consystently.UI
   }
 
   [RequireComponent(typeof(CanvasGroup))]
+  [DisallowMultipleComponent]
   public class GameMenu : MonoBehaviour
   {
     [Header("Game Menu")]

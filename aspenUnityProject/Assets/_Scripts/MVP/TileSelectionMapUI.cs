@@ -19,7 +19,7 @@ public class TileSelectionMapUI : VisualElement
     foreach (TileSelectButtonUI selectButton in _mapTiles.Except(availableTiles))
       selectButton.ButtonComp.interactable = false;
 
-    RootPanel.RootMenu.OpenPanel(RootPanel);
+    Panel.Menu.OpenPanel(Panel);
   }
 
   public void ClearSelection()

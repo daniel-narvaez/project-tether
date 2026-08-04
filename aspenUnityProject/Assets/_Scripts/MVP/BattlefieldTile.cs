@@ -6,9 +6,9 @@ using Consystently.UI;
 using Unity.VisualScripting;
 
 [RequireComponent(typeof(Button))]
-public class BattlefieldTile : VisualElement
+public class BattlefieldTile : MonoBehaviour
 {
-  public Button ButtonComp { get; private set; }
+  public Button Button { get; private set; }
   public Faction Faction { get; private set; } = Faction.Neutral;
 
   public Stack<UnitPieceSlot> VacantSlots { get; private set; } = new Stack<UnitPieceSlot>();
@@ -24,8 +24,8 @@ public class BattlefieldTile : VisualElement
     foreach(UnitPieceSlot slot in GetComponentsInChildren<UnitPieceSlot>().OrderByDescending(s => s.gameObject.name))
       VacantSlots.Push(slot);
 
-    ButtonComp ??= GetComponent<Button>();
-    ButtonComp.image.alphaHitTestMinimumThreshold = 0.5f;
+    Button ??= GetComponent<Button>();
+    Button.image.alphaHitTestMinimumThreshold = 0.5f;
   }
   
   void Start()
@@ -62,36 +62,42 @@ public class BattlefieldTile : VisualElement
       Faction = piece.Faction;
   }
 
-  public void ReplacePiece(UnitPiece current, UnitPiece replacement)
-  {
-    if (UnitSlots.Count != 1 && current.Faction != replacement.Faction)
-      return;
-    
-    if (current.tile && current.tile == this)
-      RemovePiece(current);
-    if (replacement.tile && replacement.tile != this)
-      replacement.tile.RemovePiece(replacement);
-    
-    PlacePiece(replacement);
-  }
 
-  public void RemovePiece(UnitPiece tilePiece)
+  public void RemovePiece(UnitPiece piece)
   {
-    if (UnitSlots.ContainsKey(tilePiece))
+    if (piece.Slot && FilledSlots.Contains(piece.Slot))
     {
-      UnitSlots[tilePiece].sprite = null;
-      UnitSlots[tilePiece].color = Color.clear;
+      UnitPieceSlot last = FilledSlots.Last();
+      last.Sim.ReturnPiece();
 
-      _slotImages.Add(UnitSlots[tilePiece]);
+      if(last != piece.Slot)
+      {
+        int index = FilledSlots.IndexOf(piece.Slot);
 
-      UnitSlots.Remove(tilePiece);
+        for(int i = index; i < FilledSlots.Count - 1; i++)
+        {
+          UnitPieceSlot current = FilledSlots[i];
+          UnitPieceSlot next = FilledSlots[i + 1];
 
-
-      tilePiece.tile = null;
-      tilePiece.PiecePlaced = false;
+          next.Piece.Move(current);
+        }
+      }
     }
 
     if (UnitSlots.Count == 0)
       Faction = Faction.Neutral;
   }
+
+  // public void ReplacePiece(UnitPiece current, UnitPiece replacement)
+  // {
+  //   if (UnitSlots.Count != 1 && current.Faction != replacement.Faction)
+  //     return;
+    
+  //   if (current.Tile && current.Tile == this)
+  //     RemovePiece(current);
+  //   if (replacement.Tile && replacement.Tile != this)
+  //     replacement.Tile.RemovePiece(replacement);
+    
+  //   PlacePiece(replacement);
+  // }
 }

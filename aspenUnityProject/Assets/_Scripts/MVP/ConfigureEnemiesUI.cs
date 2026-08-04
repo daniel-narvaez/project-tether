@@ -11,8 +11,8 @@ public class ConfigureEnemiesUI : MonoBehaviour
   [SerializeField] private GameObject catalogButtonPrefab;
   [SerializeField] private List<UnitSim> _enemySims;
 
-  public Stack<UnitSim> VacantEnemyButtons { get; private set; } = new Stack<UnitSim>();
-  public List<UnitSim> ActiveEnemyButtons { get; private set; } = new List<UnitSim>();
+  public Stack<UnitSim> VacantEnemySims { get; private set; } = new Stack<UnitSim>();
+  public List<UnitSim> ActiveEnemySims { get; private set; } = new List<UnitSim>();
 
   private UnitDataSO _hoveredEnemyData, _selectedEnemyData;
   private Dictionary <ButtonVE, EnemyUnitSO> _catalogButtons = new Dictionary<ButtonVE, EnemyUnitSO>();
@@ -24,7 +24,7 @@ public class ConfigureEnemiesUI : MonoBehaviour
     foreach(UnitSim sim in _enemySims.OrderByDescending(x => x.gameObject.name))
     {
       sim.gameObject.SetActive(false);
-      VacantEnemyButtons.Push(sim);
+      VacantEnemySims.Push(sim);
     }
   }
 
@@ -96,9 +96,9 @@ public class ConfigureEnemiesUI : MonoBehaviour
 
   public void AddEnemy()
   {
-    if(VacantEnemyButtons.TryPop(out UnitSim result))
+    if(VacantEnemySims.TryPop(out UnitSim result))
     {
-      ActiveEnemyButtons.Add(result);
+      ActiveEnemySims.Add(result);
       result.gameObject.SetActive(true);
       result.Data = _selectedEnemyData;
       result.UpdateDetails(_selectedEnemyData);
@@ -110,35 +110,34 @@ public class ConfigureEnemiesUI : MonoBehaviour
     
   }
 
-  public void RemoveEnemy(UnitSim unitButton)
+  public void RemoveEnemy(UnitSim sim)
   {
-    if(ActiveEnemyButtons.Contains(unitButton))
+    if(ActiveEnemySims.Contains(sim))
     {
-      UnitSim last = ActiveEnemyButtons.Last();
+      UnitSim last = ActiveEnemySims.Last();
 
       // If this is somewhere in the middle of the stack
-      if(ActiveEnemyButtons.Last() != unitButton)
+      if(last != sim)
       {
-        int index = ActiveEnemyButtons.IndexOf(unitButton);
-        int length = ActiveEnemyButtons.Count;
+        int index = ActiveEnemySims.IndexOf(sim);
 
-        for(int i = index; i < length - 1; i++)
+        for(int i = index; i < ActiveEnemySims.Count - 1; i++)
         {
-          UnitSim current = ActiveEnemyButtons[i];
-          UnitSim next = ActiveEnemyButtons[i + 1];
+          UnitSim current = ActiveEnemySims[i];
+          UnitSim next = ActiveEnemySims[i + 1];
 
           current.Data = next.Data;
           current.UpdateDetails(current.Data);
 
-          next.Piece.tile.ReplacePiece(next.Piece, current.Piece);
+          //next.Piece?.Tile?.ReplacePiece(next.Piece, current.Piece);
         }
       }
 
       last.ClearDetails();
       last.gameObject.SetActive(false);
       
-      ActiveEnemyButtons.Remove(last);
-      VacantEnemyButtons.Push(last);
+      ActiveEnemySims.Remove(last);
+      VacantEnemySims.Push(last);
     }
   }
 }

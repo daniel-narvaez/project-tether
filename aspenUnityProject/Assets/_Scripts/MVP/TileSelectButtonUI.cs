@@ -22,7 +22,7 @@ public class TileSelectButtonUI : VisualElement
 
   public void PlacePiece()
   {
-    RootPanel.RootMenu.ClosePanel(RootPanel);
+    Panel.Menu.ClosePanel(Panel);
     _detailsButton.PlacePiece(_tileSelectionMap.SelectedPiece);
   }
 }

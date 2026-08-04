@@ -15,19 +15,17 @@ namespace Consystently.UI
     public TextMeshProUGUI TextChild => _textChild;
 
     public Image BackgroundImage { get; protected set; }
-    public Button ButtonComp { get; protected set; }
+    public Button Component { get; protected set; }
     public EventTrigger Trigger { get; protected set; }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       BackgroundImage ??= GetComponentInChildren<Image>();
-      ButtonComp ??= GetComponent<Button>();
+      Component ??= GetComponent<Button>();
       Trigger ??= GetComponent<EventTrigger>();
 
-      if(elementName == string.Empty)
-        elementName = _textChild.text;
-
-      ButtonComp.interactable = ButtonComp.onClick.GetPersistentEventCount() > 0;
+      Component.interactable = Component.onClick.GetPersistentEventCount() > 0;
     }
   }
 }

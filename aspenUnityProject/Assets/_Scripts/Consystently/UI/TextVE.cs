@@ -7,11 +7,12 @@ namespace Consystently.UI
   public class TextVE : VisualElement
   {
     [Header("Text")]
-    public TextMeshProUGUI TextMeshComp { get; private set;}
+    public TextMeshProUGUI Component { get; private set; }
 
-    protected void Awake()
+    protected override void Awake()
     {
-      TextMeshComp ??= GetComponent<TextMeshProUGUI>();
+      base.Awake();
+      Component ??= GetComponent<TextMeshProUGUI>();
     }
   }
 }

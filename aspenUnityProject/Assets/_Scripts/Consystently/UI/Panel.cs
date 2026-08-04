@@ -4,13 +4,12 @@ namespace Consystently.UI
   using System.Linq;
   using UnityEngine;
 
-  [RequireComponent(typeof(CanvasGroup))]
-  public class Panel : MonoBehaviour
+  public class Panel : VisualElement
   {
     [Header("Panel")]
     [SerializeField] protected string panelName;
     public string Name => panelName;
-    public GameMenu RootMenu { get; protected set; }
+    public GameMenu Menu { get; protected set; }
 
     /// <summary>
     /// This panel's index in its menu's panel stack. 0 is reserved for the menu itself.
@@ -24,16 +23,14 @@ namespace Consystently.UI
 
     public HashSet<VisualElement> Elements { get; protected set; } = new HashSet<VisualElement>();
 
-    private CanvasGroup _canvasGroup;
-
-    void Awake()
+    protected override void Awake()
     {
-      _canvasGroup ??= GetComponent<CanvasGroup>();
+      base.Awake();
 
-      if (transform.root.gameObject.TryGetComponent(out GameMenu gameMenu))
+      if (transform.root.gameObject.TryGetComponent(out GameMenu menu))
       {
-        RootMenu ??= gameMenu;
-        RootMenu.AddPanelToSet(this);
+        Menu ??= menu;
+        Menu.AddPanelToSet(this);
 
         Elements = GetComponentsInChildren<VisualElement>().ToHashSet();
         foreach (VisualElement e in Elements)
@@ -50,7 +47,7 @@ namespace Consystently.UI
 
     protected virtual void OnDestroy()
     {
-      RootMenu.RemovePanelFromSet(this);
+      Menu.RemovePanelFromSet(this);
     }
 
     public bool Open()
@@ -85,18 +82,7 @@ namespace Consystently.UI
       }
     }
 
-    public void Hide()
-    {
-      _canvasGroup.interactable = false;
-      _canvasGroup.blocksRaycasts = false;
-      if(hideInStack)
-      {
-        _canvasGroup.alpha = 0;
-        Debug.Log($"{panelName} panel hidden.");
-      }
-    }
-
-    public void Show()
+    public override void Show()
     {
       _canvasGroup.interactable = true;
       _canvasGroup.blocksRaycasts = true;
@@ -104,6 +90,17 @@ namespace Consystently.UI
       {
         _canvasGroup.alpha = 1;
         Debug.Log($"{panelName} panel shown.");
+      }
+    }
+
+    public override void Hide()
+    {
+      _canvasGroup.interactable = false;
+      _canvasGroup.blocksRaycasts = false;
+      if(hideInStack)
+      {
+        _canvasGroup.alpha = 0;
+        Debug.Log($"{panelName} panel hidden.");
       }
     }
   }

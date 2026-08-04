@@ -24,10 +24,10 @@ public class UnitSim : MonoBehaviour
     ButtonComp ??= GetComponent<Button>();
 
     Slot ??= GetComponentInChildren<UnitPieceSlot>();
-    Slot.SetSim(this);
+    Slot?.SetSim(this);
 
     Piece ??= GetComponentInChildren<UnitPiece>();
-    Piece.SetSim(this);
+    Piece?.SetSim(this);
 
     UpdateDetails(Data);
   }
@@ -77,4 +77,6 @@ public class UnitSim : MonoBehaviour
 
     Piece.ReturnPiece();
   }
+
+  public void ReturnPiece() => Slot?.ReturnPiece();
 }

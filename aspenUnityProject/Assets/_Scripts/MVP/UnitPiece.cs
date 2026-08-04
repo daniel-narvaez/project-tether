@@ -59,7 +59,7 @@ public class UnitPiece : MonoBehaviour
   public bool PiecePlaced = false;
 
   [HideInInspector]
-  public BattlefieldTile tile;
+  public BattlefieldTile Tile;
 
   public BattlefieldMap Map { get; private set; }
   public TileSelectionMapUI TileSelectionMap { get; private set; }

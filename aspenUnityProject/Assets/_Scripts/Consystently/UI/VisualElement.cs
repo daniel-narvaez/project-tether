@@ -2,15 +2,33 @@ namespace Consystently.UI
 {
   using UnityEngine;
 
-
+  [RequireComponent(typeof(CanvasGroup))]
+  [DisallowMultipleComponent]
   public class VisualElement : MonoBehaviour
   {
-    public Panel RootPanel { get; private set; }
+    public Panel Panel { get; private set; }
 
-    [Header("Visual Element")]
-    [SerializeField] protected string elementName;
-    public string Name => elementName;
+    public void AssignRootPanel(Panel panel) => Panel ??= panel;
 
-    public void AssignRootPanel(Panel rootPanel) => RootPanel ??= rootPanel;
+    protected CanvasGroup _canvasGroup;
+
+    protected virtual void Awake()
+    {
+      _canvasGroup ??= GetComponent<CanvasGroup>();
+    }
+
+    public virtual void Show()
+    {
+      _canvasGroup.interactable = true;
+      _canvasGroup.blocksRaycasts = true;
+      _canvasGroup.alpha = 1;
+    }
+
+    public virtual void Hide()
+    {
+      _canvasGroup.interactable = false;
+      _canvasGroup.blocksRaycasts = false;
+      _canvasGroup.alpha = 0;
+    }
   }
 }

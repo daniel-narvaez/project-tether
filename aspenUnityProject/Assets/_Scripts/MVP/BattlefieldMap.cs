@@ -3,18 +3,25 @@ using System.Linq;
 using Consystently.UI;
 using UnityEngine;
 
-public class BattlefieldMap : VisualElement
+public class BattlefieldMap : MonoBehaviour
 {
   public static BattlefieldMap Instance { get; private set; }
   public List<BattlefieldTile> Tiles { get; private set; }
 
   [Header("Selection")]
   [SerializeField] ButtonVE _cancelButton;
+  [SerializeField] ImageVE _helperTextBackground;
 
   private void Awake()
   {
     Instance ??= this;
     Tiles ??= GetComponentsInChildren<BattlefieldTile>().ToList();
+
+  }
+
+  void Start()
+  {
+    SetTileDetailsMode();
   }
 
   public void GetAvailableTileSlots(UnitPiece piece)
@@ -26,13 +33,45 @@ public class BattlefieldMap : VisualElement
         availableTiles.Add(tile);
 
     if(availableTiles.Count > 0)
-      SetAvailableTiles(availableTiles);
+      SetPiecePlacementMode(piece, availableTiles);
     else
       Debug.LogWarning("No available tiles found.");
   }
 
-  public void SetAvailableTiles(List<BattlefieldTile> tiles)
+  public void SetTileDetailsMode()
   {
-    Debug.Log("Do the thing!");
+    _cancelButton.Hide();
+    _helperTextBackground.Hide();
+
+    foreach (BattlefieldTile tile in Tiles)
+    {
+      tile.Button.onClick.RemoveAllListeners();
+      tile.Button.interactable = true;
+      tile.Button.onClick.AddListener(() => TileDetails.Instance.DisplayTileDetails(tile));
+    }
+  }
+
+  public void SetPiecePlacementMode(UnitPiece piece, List<BattlefieldTile> availableTiles)
+  {
+    _cancelButton.Show();
+    _helperTextBackground.Show();
+
+    foreach (BattlefieldTile tile in Tiles)
+    {
+      tile.Button.onClick.RemoveAllListeners();
+
+      if(availableTiles.Contains(tile))
+        tile.Button.onClick.AddListener(() => {
+          tile.PlacePiece(piece);
+          EndPiecePlacement();
+        });
+      else
+        tile.Button.interactable = false;
+    }
+  }
+
+  public void EndPiecePlacement()
+  {
+    SetTileDetailsMode();
   }
 }

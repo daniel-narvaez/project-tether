@@ -4,14 +4,15 @@ namespace Consystently.UI
   using UnityEngine.UI;
 
   [RequireComponent(typeof(Image))]
-  public class Image_IE : VisualElement
+  public class ImageVE : VisualElement
   {
-    [Header("Image")]
-    public Image ImageComp { get; protected set; }
+    // [Header("Image")]
+    public Image Component { get; protected set; }
 
-    protected void Awake()
+    protected override void Awake()
     {
-      ImageComp ??= GetComponent<Image>();
+      base.Awake();
+      Component ??= GetComponent<Image>();
     }
   }
 }
