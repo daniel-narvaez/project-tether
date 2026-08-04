@@ -1,17 +1,39 @@
+using System;
 using UnityEngine;
 
 public class UnitPieceSlot : MonoBehaviour
 {
   [HideInInspector]
-  public UnitPiece Piece;
+  public UnitPiece Piece { get; private set; }
   public UnitSim Sim { get; private set; }
+  public event Action<UnitPieceSlot> OnPieceSet, OnPieceRemoved;
 
   public void Awake()
   {
     Piece ??= GetComponentInChildren<UnitPiece>();
+    Piece?.SetSlot(this);
   }
 
   public void SetSim(UnitSim sim) => Sim ??= sim;
+
+  public void SetPiece(UnitPiece piece = null)
+  {
+    if(Piece && piece)
+      return;
+    else
+      Piece = piece;
+
+    OnPieceSet?.Invoke(this);
+  }
+
+  public void RemovePiece(UnitPiece piece)
+  {
+    if(Piece != piece || !piece)
+      return;
+
+    Piece = null;
+    OnPieceRemoved?.Invoke(this);
+  }
 
   public void TryPlacePiece()
   {

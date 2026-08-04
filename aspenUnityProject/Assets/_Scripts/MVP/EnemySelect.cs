@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 using Consystently.UI;
 using UnityEngine.EventSystems;
 
-public class ConfigureEnemiesUI : MonoBehaviour
+public class EnemySelect : VisualElement
 {
-  [SerializeField] private UnitDetailsUI _unitDetailsPanel;
-  [SerializeField] private GameObject catalogButtonPrefab;
+  [SerializeField] private GameObject _catalogButtonPrefab;
+  [SerializeField] private GameObject _content;
   [SerializeField] private List<UnitSim> _enemySims;
 
   public Stack<UnitSim> VacantEnemySims { get; private set; } = new Stack<UnitSim>();
@@ -18,14 +17,18 @@ public class ConfigureEnemiesUI : MonoBehaviour
   private Dictionary <ButtonVE, EnemyUnitSO> _catalogButtons = new Dictionary<ButtonVE, EnemyUnitSO>();
 
   
-  private void Awake()
+  protected override void Awake()
   {
+    base.Awake();
+
     // Alphabetize and reverse the order of the enemy buttons, then put them into a stack
     foreach(UnitSim sim in _enemySims.OrderByDescending(x => x.gameObject.name))
     {
       sim.gameObject.SetActive(false);
       VacantEnemySims.Push(sim);
     }
+
+    Hide();
   }
 
   private void Start()
@@ -39,7 +42,7 @@ public class ConfigureEnemiesUI : MonoBehaviour
     foreach (EnemyUnitSO enemyUnit in enemyUnits)
     {
       Debug.Log(enemyUnit.Name);
-      GameObject obj = Instantiate(catalogButtonPrefab, transform);
+      GameObject obj = Instantiate(_catalogButtonPrefab, _content.transform);
       ButtonVE button = obj.GetComponent<ButtonVE>();
       button.TextChild.text = enemyUnit.Name;
 
@@ -84,14 +87,14 @@ public class ConfigureEnemiesUI : MonoBehaviour
     if (_selectedEnemyData)
       DisplayDetails(_selectedEnemyData);
     else
-      _unitDetailsPanel.ClearDetails();
+      SimDetails.Instance.ClearDetails();
 
     _hoveredEnemyData = null;
   }
 
   public void DisplayDetails(UnitDataSO data)
   {
-    _unitDetailsPanel.DisplayUnitDetails(data);
+    SimDetails.Instance.DisplayUnitDetails(data);
   }
 
   public void AddEnemy()

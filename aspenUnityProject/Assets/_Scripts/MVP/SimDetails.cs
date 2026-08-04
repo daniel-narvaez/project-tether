@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Consystently.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitDetailsUI : MonoBehaviour
+public class SimDetails : Panel
 {
+  [Header("Sim Details")]
+  [Space(5)]
   [SerializeField] private TextMeshProUGUI _nameText;
   [Space(10)]
   [SerializeField] private TextMeshProUGUI _levelText;
@@ -18,6 +21,9 @@ public class UnitDetailsUI : MonoBehaviour
   [Space (10)]
   [SerializeField] private List<TextMeshProUGUI> _affinityTexts;
 
+  public static SimDetails Instance { get; private set; }
+  private EnemySelect _enemySelect;
+
   public event Action<UnitDataSO> OnLevelUpdated;
 
   public UnitDataSO UnitData { get; private set; }
@@ -25,10 +31,21 @@ public class UnitDetailsUI : MonoBehaviour
   public Dictionary<Stat, int> StatData = new Dictionary<Stat, int>();
   public Dictionary<Element, Affinity> AffinityData = new Dictionary<Element, Affinity>();
 
-  private void Awake()
+  protected override void Awake()
   {
+    base.Awake();
+
+    Instance ??= this;
     _statTexts = _statTexts.OrderBy(x => x.gameObject.name).ToList();
     _affinityTexts = _affinityTexts.OrderBy(x => x.gameObject.name).ToList();
+    _enemySelect ??= GetComponentInChildren<EnemySelect>();
+  }
+
+  public void OpenEnemySelect()
+  {
+    ClearDetails();
+    Menu.OpenPanel(this);
+    _enemySelect.Show();
   }
 
   public void DisplayUnitDetails(UnitSim unitButton) => DisplayUnitDetails(unitButton.Data);
@@ -37,6 +54,8 @@ public class UnitDetailsUI : MonoBehaviour
   {
     if(unitData)
     {
+      Menu.OpenPanel(this);
+
       UnitData = unitData;
       _levelSlider.value = unitData.Level;
       UpdateData();
@@ -76,17 +95,17 @@ public class UnitDetailsUI : MonoBehaviour
 
   public void ClearDetails()
   {
-    _nameText.text = "Name";
-    _levelText.text = "Lv.1";
+    _nameText.text = string.Empty;
+    _levelText.text = string.Empty;
 
     StatData.Clear();
     AffinityData.Clear();
 
     foreach(TextMeshProUGUI tmp in _statTexts)
-      tmp.text = 0.ToString();
+      tmp.text = string.Empty;
 
     foreach(TextMeshProUGUI tmp in _affinityTexts)
-      tmp.text = Affinity.Neutral.ToString();
+      tmp.text = string.Empty;
 
     _aptitudesText.text = "Show Aptitudes";
     _showingAptitudes = false;

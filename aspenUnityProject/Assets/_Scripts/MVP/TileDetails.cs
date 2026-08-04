@@ -13,7 +13,6 @@ public class TileDetails : Panel
     base.Awake();
     Instance ??= this;
     Sims ??= GetComponentsInChildren<UnitSim>().ToList();
-    Debug.Log(Sims.Count);
   }
 
   public void DisplayTileDetails(BattlefieldTile tile)
@@ -21,13 +20,21 @@ public class TileDetails : Panel
     Menu.OpenPanel(this);
 
     List<UnitPieceSlot> slots = tile.FilledSlots;
-    Debug.Log(slots.Count);
     for (int i = 0; i < Sims.Count; i++)
     {
-      if (i < slots.Count)
-        Sims[i].UpdateDetails(slots[i].Piece.Sim.Data);
+
+      if (i >= slots.Count)
+        Sims[i].ClearDetails();
       else
-        Sims[i].UpdateDetails(null);
+      {
+        Debug.Log(Sims[i]);
+        Debug.Log(slots[i]);
+        Debug.Log(slots[i].Piece);
+        Debug.Log(slots[i].Piece.Sim);
+        Debug.Log(slots[i].Piece.Sim.Data);
+        Sims[i].UpdateDetails(slots[i].Piece.Sim.Data);
+      }
+    
     }
   }
 }

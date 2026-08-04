@@ -14,31 +14,16 @@ public class BattlefieldTile : MonoBehaviour
   public Stack<UnitPieceSlot> VacantSlots { get; private set; } = new Stack<UnitPieceSlot>();
   public List<UnitPieceSlot> FilledSlots { get; private set; } = new List<UnitPieceSlot>();
 
-
-
-  private List<Image> _slotImages;
-  public Dictionary<UnitPiece, Image> UnitSlots = new Dictionary<UnitPiece, Image>();
-
   void Awake()
   {
     foreach(UnitPieceSlot slot in GetComponentsInChildren<UnitPieceSlot>().OrderByDescending(s => s.gameObject.name))
+    {
       VacantSlots.Push(slot);
+      slot.OnPieceRemoved += RemovePiece;
+    }
 
     Button ??= GetComponent<Button>();
     Button.image.alphaHitTestMinimumThreshold = 0.5f;
-  }
-  
-  void Start()
-  {
-    _slotImages ??= transform.GetComponentsInChildren<Image>().ToList();
-    _slotImages.Remove(GetComponent<Image>());
-    Reset();
-  }
-
-  public void Reset()
-  {
-    Faction = Faction.Neutral;
-    UnitSlots.Clear();
   }
   
   public bool CheckForSlot(UnitPiece piece)
@@ -65,29 +50,30 @@ public class BattlefieldTile : MonoBehaviour
     }
   }
 
-
-  public void RemovePiece(UnitPiece piece)
+  public void RemovePiece(UnitPieceSlot slot)
   {
-    if (piece.Slot && FilledSlots.Contains(piece.Slot))
+    if (slot && FilledSlots.Contains(slot))
     {
       UnitPieceSlot last = FilledSlots.Last();
-      last.Sim.ReturnPiece();
 
-      if(last != piece.Slot)
+      if(last != slot)
       {
-        int index = FilledSlots.IndexOf(piece.Slot);
+        int index = FilledSlots.IndexOf(slot);
 
         for(int i = index; i < FilledSlots.Count - 1; i++)
         {
           UnitPieceSlot current = FilledSlots[i];
           UnitPieceSlot next = FilledSlots[i + 1];
-
+          
           next.Piece.Move(current);
         }
       }
+
+      VacantSlots.Push(last);
+      FilledSlots.Remove(last);
     }
 
-    if (UnitSlots.Count == 0)
+    if (FilledSlots.Count == 0)
       Faction = Faction.Neutral;
   }
 

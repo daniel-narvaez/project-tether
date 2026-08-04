@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,80 +19,16 @@ public class UnitPiece : MonoBehaviour
 
   public void SetSim(UnitSim sim) => Sim ??= sim;
 
+  public void SetSlot(UnitPieceSlot slot) => Slot = slot;
+
   public void Move(UnitPieceSlot newSlot)
   {
     if(!newSlot.Piece)
     {
       transform.SetParent(newSlot.transform, false);
-      Slot = newSlot;
-      Slot.Piece = this;
+      Slot.RemovePiece(this);
+      newSlot.SetPiece(this);
+      SetSlot(newSlot);
     }
-  }
-
-  public void Move(BattlefieldTile newTile)
-  {
-    // let the tile handle the placement
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  [HideInInspector]
-  public bool PiecePlaced = false;
-
-  [HideInInspector]
-  public BattlefieldTile Tile;
-
-  public BattlefieldMap Map { get; private set; }
-  public TileSelectionMapUI TileSelectionMap { get; private set; }
-  
-  void Start()
-  {
-    Map = FindFirstObjectByType<BattlefieldMap>();
-    TileSelectionMap = FindFirstObjectByType<TileSelectionMapUI>();
-
-
-  }
-
-
-  public void TogglePiece()
-  {
-    // if(!PiecePlaced)
-    // {
-    //   if(Map.TryGetAvailableTileSlots(this, out List<TileSelectButtonUI> availableTiles))
-    //   {
-    //     TileSelectionMap.SetAvailableTiles(this, availableTiles);
-    //   }
-    //   else
-    //   {
-    //     Debug.LogWarning("No available tiles found.");
-    //   }
-    // }
-    // else
-    //   ReturnPiece();
-  }
-
-  public void ReturnPiece()
-  {
-    // if(tile)
-    //   tile.RemovePiece(this);
   }
 }

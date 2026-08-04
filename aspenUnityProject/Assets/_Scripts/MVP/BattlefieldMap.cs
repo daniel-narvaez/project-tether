@@ -8,7 +8,7 @@ public class BattlefieldMap : MonoBehaviour
   public static BattlefieldMap Instance { get; private set; }
   public List<BattlefieldTile> Tiles { get; private set; }
 
-  [Header("Selection")]
+  [Header("Battlefield Map")]
   [SerializeField] ButtonVE _cancelButton;
   [SerializeField] ImageVE _helperTextBackground;
 

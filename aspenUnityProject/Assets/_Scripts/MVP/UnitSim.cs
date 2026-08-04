@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UnitSim : MonoBehaviour
 {
@@ -14,14 +14,12 @@ public class UnitSim : MonoBehaviour
   [SerializeField] private TextMeshProUGUI _name;
   [SerializeField] private TextMeshProUGUI _class;
   [SerializeField] private TextMeshProUGUI _level;
-  [Space(5)]
-  [SerializeField] private UnitDetailsUI _unitDetailsPanel;
-  public Button ButtonComp { get; private set; }
-  private UnityAction _displayDetails;
+
+  public Button Button { get; private set; }
 
   private void Awake()
   {
-    ButtonComp ??= GetComponent<Button>();
+    Button ??= GetComponent<Button>();
 
     Slot ??= GetComponentInChildren<UnitPieceSlot>();
     Slot?.SetSim(this);
@@ -34,6 +32,8 @@ public class UnitSim : MonoBehaviour
 
   public void UpdateDetails (UnitDataSO unitData)
   {
+    Data ??= unitData;
+    
     if (Data = unitData)
     {
       if(Data.Portrait)
@@ -45,37 +45,30 @@ public class UnitSim : MonoBehaviour
         _level.text = $"Lv.{Data.Level}";
     }
 
-    ButtonComp.interactable = Data;
-    if (ButtonComp.interactable && Data)
+    Button.interactable = Data;
+    if (Button.interactable && Data)
     {
-      _displayDetails = () => {
-        _unitDetailsPanel.DisplayUnitDetails(Data);
-        _unitDetailsPanel.OnLevelUpdated += UpdateDetails;
-      };
-
-      ButtonComp.onClick.AddListener(_displayDetails);
+      Button.onClick.AddListener(() => {
+        SimDetails.Instance.DisplayUnitDetails(Data);
+        SimDetails.Instance.OnLevelUpdated += UpdateDetails;
+      });
     }
-    else if (_displayDetails != null)
-    {
-      ButtonComp.onClick.RemoveListener(_displayDetails);
-      _displayDetails = null;
-    }
+    else
+      Button.onClick.RemoveAllListeners();
   }
 
   public void ClearDetails()
   {
     Data = null;
-    ButtonComp.interactable = Data;
+    Button.interactable = Data;
 
     if(_portrait)
       _portrait.sprite = null;
 
-    _name.text = "Name";
+    _name.text = string.Empty;
     
     if(_level)
-      _level.text = "Lv.";
-
-    Piece.ReturnPiece();
+      _level.text = string.Empty;
   }
 
   public void ReturnPiece() => Slot?.ReturnPiece();
