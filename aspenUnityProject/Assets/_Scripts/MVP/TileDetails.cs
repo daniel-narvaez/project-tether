@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using Consystently.UI;
@@ -12,15 +13,19 @@ public class TileDetails : Panel
     base.Awake();
     Instance ??= this;
     Sims ??= GetComponentsInChildren<UnitSim>().ToList();
+    Debug.Log(Sims.Count);
   }
 
   public void DisplayTileDetails(BattlefieldTile tile)
   {
-    List<UnitPieceSlot> units = tile.FilledSlots;
+    Menu.OpenPanel(this);
+
+    List<UnitPieceSlot> slots = tile.FilledSlots;
+    Debug.Log(slots.Count);
     for (int i = 0; i < Sims.Count; i++)
     {
-      if (i < units.Count)
-        Sims[i].UpdateDetails(units[i].Sim.Data);
+      if (i < slots.Count)
+        Sims[i].UpdateDetails(slots[i].Piece.Sim.Data);
       else
         Sims[i].UpdateDetails(null);
     }

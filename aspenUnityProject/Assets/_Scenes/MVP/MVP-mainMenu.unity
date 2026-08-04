@@ -10389,7 +10389,7 @@ PrefabInstance:
     - target: {fileID: 1534124288101949333, guid: 2921899475b2f4ea5aa308294f0cf887, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 1652609827}
+      objectReference: {fileID: 1652609831}
     - target: {fileID: 1534124288101949333, guid: 2921899475b2f4ea5aa308294f0cf887, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: Consystently.UI.Panel, Assembly-CSharp
@@ -18123,9 +18123,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitButtonUI
   Data: {fileID: 0}
   _portrait: {fileID: 0}
-  _name: {fileID: 0}
+  _name: {fileID: 608529520}
   _class: {fileID: 0}
-  _level: {fileID: 0}
+  _level: {fileID: 400689410}
   _unitDetailsPanel: {fileID: 0}
 --- !u!1 &765525209
 GameObject:
@@ -23143,9 +23143,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitButtonUI
   Data: {fileID: 0}
   _portrait: {fileID: 0}
-  _name: {fileID: 0}
+  _name: {fileID: 187931533}
   _class: {fileID: 0}
-  _level: {fileID: 0}
+  _level: {fileID: 2058864934}
   _unitDetailsPanel: {fileID: 0}
 --- !u!1 &1062959725
 GameObject:
@@ -34294,10 +34294,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1652609826}
   - component: {fileID: 1652609829}
-  - component: {fileID: 1652609827}
+  - component: {fileID: 1652609831}
   - component: {fileID: 1652609828}
   - component: {fileID: 1652609830}
-  - component: {fileID: 1652609831}
   m_Layer: 5
   m_Name: TileDetailsPanel
   m_TagString: Untagged
@@ -34326,21 +34325,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1652609827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1652609825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dd18603ca90141a2b15a416974050a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Consystently.UI.Panel
-  panelName: Tile Details
-  StackIndex: 1
-  hideInStack: 1
 --- !u!114 &1652609828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34403,6 +34387,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff604ce8767849e089d715d9dafae94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileDetailsUI
+  panelName: Tile Details
+  StackIndex: 1
+  hideInStack: 1
 --- !u!1 &1661774515
 GameObject:
   m_ObjectHideFlags: 0
@@ -40505,9 +40492,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitButtonUI
   Data: {fileID: 0}
   _portrait: {fileID: 0}
-  _name: {fileID: 0}
+  _name: {fileID: 1816914931}
   _class: {fileID: 0}
-  _level: {fileID: 0}
+  _level: {fileID: 2066991329}
   _unitDetailsPanel: {fileID: 0}
 --- !u!1 &1936988494
 GameObject:
@@ -43850,9 +43837,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitButtonUI
   Data: {fileID: 0}
   _portrait: {fileID: 0}
-  _name: {fileID: 0}
+  _name: {fileID: 629272543}
   _class: {fileID: 0}
-  _level: {fileID: 0}
+  _level: {fileID: 715702526}
   _unitDetailsPanel: {fileID: 0}
 --- !u!224 &2060219265
 RectTransform:

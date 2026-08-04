@@ -56,10 +56,13 @@ public class BattlefieldTile : MonoBehaviour
   public void PlacePiece(UnitPiece piece)
   {
     if(VacantSlots.TryPop(out UnitPieceSlot result))
+    {
       piece.Move(result);
+      FilledSlots.Add(result);
 
-    if (Faction == Faction.Neutral)
-      Faction = piece.Faction;
+      if (Faction == Faction.Neutral)
+        Faction = piece.Faction;
+    }
   }
 
 
