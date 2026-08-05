@@ -15,18 +15,17 @@ public class SimDetails : Panel
   [SerializeField] private TextMeshProUGUI _levelText;
   [SerializeField] private Slider _levelSlider;
   [Space(10)]
-  [SerializeField] private TextMeshProUGUI _aptitudesText;
+  [SerializeField] private ButtonVE _aptitudesButton;
   [Space(10)]
   [SerializeField] private List<TextMeshProUGUI> _statTexts;
   [Space (10)]
   [SerializeField] private List<TextMeshProUGUI> _affinityTexts;
 
   public static SimDetails Instance { get; private set; }
-  private EnemySelect _enemySelect;
 
   public event Action<UnitDataSO> OnLevelUpdated;
 
-  public UnitDataSO UnitData { get; private set; }
+  public UnitDataSO Data { get; private set; }
   private bool _showingAptitudes = false;
   public Dictionary<Stat, int> StatData = new Dictionary<Stat, int>();
   public Dictionary<Element, Affinity> AffinityData = new Dictionary<Element, Affinity>();
@@ -38,33 +37,24 @@ public class SimDetails : Panel
     Instance ??= this;
     _statTexts = _statTexts.OrderBy(x => x.gameObject.name).ToList();
     _affinityTexts = _affinityTexts.OrderBy(x => x.gameObject.name).ToList();
-    _enemySelect ??= GetComponentInChildren<EnemySelect>();
   }
 
-  public void OpenEnemySelect()
+  public void DisplayUnitDetails(UnitDataSO data, bool includeEnemySelect = false)
   {
-    ClearDetails();
-    Menu.OpenPanel(this);
-    _enemySelect.Show();
-  }
-
-  public void DisplayUnitDetails(UnitSim unitButton) => DisplayUnitDetails(unitButton.Data);
-
-  public void DisplayUnitDetails(UnitDataSO unitData)
-  {
-    if(unitData)
+    if(data)
     {
-      Menu.OpenPanel(this);
+      if(!Opened)
+        Menu.OpenPanel(this);
 
-      UnitData = unitData;
-      _levelSlider.value = unitData.Level;
+      Data = data;
+      _levelSlider.value = data.Level;
       UpdateData();
     }
   }
 
   public void UpdateData()
   { 
-    UnitDataSO data = UnitData;
+    UnitDataSO data = Data;
     
     _nameText.text = data.Name;
 
@@ -90,11 +80,14 @@ public class SimDetails : Panel
       _affinityTexts[i].text = data.Affinities[element].ToString();
     }
 
-    OnLevelUpdated?.Invoke(UnitData);
+    _aptitudesButton.Component.interactable = Data;
+    OnLevelUpdated?.Invoke(Data);
   }
 
   public void ClearDetails()
   {
+    Data = null;
+
     _nameText.text = string.Empty;
     _levelText.text = string.Empty;
 
@@ -107,7 +100,8 @@ public class SimDetails : Panel
     foreach(TextMeshProUGUI tmp in _affinityTexts)
       tmp.text = string.Empty;
 
-    _aptitudesText.text = "Show Aptitudes";
+    _aptitudesButton.Component.interactable = Data;
+    _aptitudesButton.TextChild.text = "Show Aptitudes";
     _showingAptitudes = false;
 
     OnLevelUpdated = null;
@@ -115,7 +109,7 @@ public class SimDetails : Panel
 
   public void ToggleAptitudes()
   {
-    if (UnitData)
+    if (Data)
     {
       // The TMP's MUST be in the same order that the stats are ordered!
       if(_showingAptitudes == false)
@@ -123,10 +117,10 @@ public class SimDetails : Panel
         for (int i = 0; i < _statTexts.Count; i++)
         {
           Stat stat = (Stat)i;
-          string aptitude = UnitData.Aptitudes[stat].ToString();
+          string aptitude = Data.Aptitudes[stat].ToString();
           _statTexts[i].text = aptitude;
         }
-        _aptitudesText.text = "Show Values";
+        _aptitudesButton.TextChild.text = "Show Values";
         _showingAptitudes = true;
       }
       else
@@ -136,7 +130,7 @@ public class SimDetails : Panel
           Stat stat = (Stat)i;
           _statTexts[i].text = StatData[stat].ToString();
         }
-        _aptitudesText.text = "Show Aptitudes";
+        _aptitudesButton.TextChild.text = "Show Aptitudes";
         _showingAptitudes = false;
       }
     }

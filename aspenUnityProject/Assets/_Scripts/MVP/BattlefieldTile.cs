@@ -19,6 +19,7 @@ public class BattlefieldTile : MonoBehaviour
     foreach(UnitPieceSlot slot in GetComponentsInChildren<UnitPieceSlot>().OrderByDescending(s => s.gameObject.name))
     {
       VacantSlots.Push(slot);
+      slot.SetTile(this);
       slot.OnPieceRemoved += RemovePiece;
     }
 

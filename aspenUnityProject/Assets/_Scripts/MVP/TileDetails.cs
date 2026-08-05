@@ -27,11 +27,6 @@ public class TileDetails : Panel
         Sims[i].ClearDetails();
       else
       {
-        Debug.Log(Sims[i]);
-        Debug.Log(slots[i]);
-        Debug.Log(slots[i].Piece);
-        Debug.Log(slots[i].Piece.Sim);
-        Debug.Log(slots[i].Piece.Sim.Data);
         Sims[i].UpdateDetails(slots[i].Piece.Sim.Data);
       }
     

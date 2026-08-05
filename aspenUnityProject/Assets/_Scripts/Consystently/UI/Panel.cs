@@ -40,7 +40,7 @@ namespace Consystently.UI
       }
       else
       {
-        Debug.LogError($"Game Menu not found. Disabling root game object...");
+        // Debug.LogError($"Game Menu not found. Disabling root game object...");
         transform.root.gameObject.SetActive(false);
       }
     }
@@ -54,14 +54,14 @@ namespace Consystently.UI
     {
       if(Opened)
       {
-        Debug.LogWarning($"{panelName} panel is already open.");
+        // Debug.LogWarning($"{panelName} panel is already open.");
         return false;
       }
       else
       {
         Show();
         Opened = true;
-        Debug.Log($"{panelName} panel successfully opened.");
+        // Debug.Log($"{panelName} panel successfully opened.");
         return true;
       }
     }
@@ -70,14 +70,14 @@ namespace Consystently.UI
     {
       if(!Opened)
       {
-        Debug.LogWarning($"{panelName} panel is already closed.");
+        // Debug.LogWarning($"{panelName} panel is already closed.");
         return false;
       }
       else
       {
         Hide();
         Opened = false;
-        Debug.Log($"{panelName} panel successfully closed.");
+        // Debug.Log($"{panelName} panel successfully closed.");
         return true;
       }
     }
@@ -89,7 +89,7 @@ namespace Consystently.UI
       if(hideInStack)
       {
         _canvasGroup.alpha = 1;
-        Debug.Log($"{panelName} panel shown.");
+        // Debug.Log($"{panelName} panel shown.");
       }
     }
 
@@ -100,7 +100,7 @@ namespace Consystently.UI
       if(hideInStack)
       {
         _canvasGroup.alpha = 0;
-        Debug.Log($"{panelName} panel hidden.");
+        // Debug.Log($"{panelName} panel hidden.");
       }
     }
   }

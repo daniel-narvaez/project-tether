@@ -26,10 +26,10 @@ namespace Consystently.UI
       if (!MenuSet.Contains(menu))
       {
         MenuSet.Add(menu);
-        Debug.Log ($"{menu.Name} has been added to the Menu Manager's hash set.");
+        // Debug.Log ($"{menu.Name} has been added to the Menu Manager's hash set.");
       }
-      else
-        Debug.LogWarning($"Add failed. {menu.Name} is already present in the Menu Manager's hash set!");
+      // else
+        // Debug.LogWarning($"Add failed. {menu.Name} is already present in the Menu Manager's hash set!");
     }
 
     public void RemoveMenuFromSet (GameMenu menu)
@@ -37,17 +37,17 @@ namespace Consystently.UI
       if (MenuSet.Contains(menu))
       {
         MenuSet.Remove(menu);
-        Debug.Log ($"{menu.Name} has been removed the Menu Manager's hash set.");
+        // Debug.Log ($"{menu.Name} has been removed the Menu Manager's hash set.");
       }
-      else
-        Debug.LogWarning($"Remove failed. {menu.Name} was not found in the Menu Manager's hash set!");
+      // else
+        // Debug.LogWarning($"Remove failed. {menu.Name} was not found in the Menu Manager's hash set!");
     }
 
     public void OpenMenu (GameMenu gameMenu)
     {
       if (ActiveMenu != gameMenu)
       {
-        Debug.Log($"Opening {gameMenu.Name}...");
+        // Debug.Log($"Opening {gameMenu.Name}...");
         if(gameMenu.Open())
         {
           CloseActiveMenu();
@@ -60,7 +60,7 @@ namespace Consystently.UI
     {
       if (ActiveMenu)
       {
-        Debug.Log($"Closing {ActiveMenu.Name}...");
+        // Debug.Log($"Closing {ActiveMenu.Name}...");
         if(ActiveMenu.Close())
           ActiveMenu = null;
       }

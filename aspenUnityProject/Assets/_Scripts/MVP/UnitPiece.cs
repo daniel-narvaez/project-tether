@@ -31,4 +31,10 @@ public class UnitPiece : MonoBehaviour
       SetSlot(newSlot);
     }
   }
+
+  public void Move(BattlefieldTile tile)
+  {
+    if(tile.CheckForSlot(this))
+      tile.PlacePiece(this);
+  }
 }

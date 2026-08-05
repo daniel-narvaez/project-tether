@@ -45,12 +45,12 @@ namespace Consystently.UI
     {
       if (Opened)
       {
-        Debug.LogWarning($"{menuName} is already open.");
+        // Debug.LogWarning($"{menuName} is already open.");
         return false;
       }
       else if (!defaultPanel)
       {  
-        Debug.LogError($"Default Panel has not been assigned.");
+        // Debug.LogError($"Default Panel has not been assigned.");
         return false;
       }
       else
@@ -61,7 +61,7 @@ namespace Consystently.UI
         _canvasGroup.interactable = true;
         _canvasGroup.blocksRaycasts = true;
         _canvasGroup.alpha = 1;
-        Debug.Log($"{menuName} successfully opened.");
+        // Debug.Log($"{menuName} successfully opened.");
         return true;
       }
     }
@@ -70,7 +70,7 @@ namespace Consystently.UI
     {
       if (!Opened)
       {
-        Debug.LogWarning($"{menuName} is already closed.");
+        // Debug.LogWarning($"{menuName} is already closed.");
         return false;
       }
       else
@@ -80,7 +80,7 @@ namespace Consystently.UI
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.alpha = 0;
-        Debug.Log($"{menuName} successfully closed.");
+        // Debug.Log($"{menuName} successfully closed.");
         return true;
       }
     }
@@ -90,10 +90,10 @@ namespace Consystently.UI
       if (!PanelSet.Contains(panel))
       {
         PanelSet.Add(panel);
-        Debug.Log ($"{panel.Name} has been added to the {menuName} Menu's panel stack.");
+        // Debug.Log ($"{panel.Name} has been added to the {menuName} Menu's panel stack.");
       }
-      else
-        Debug.LogWarning($"Add failed. {panel.Name} is already present in the {menuName} Menu's panel stack!");
+      // else
+        // Debug.LogWarning($"Add failed. {panel.Name} is already present in the {menuName} Menu's panel stack!");
     }
 
     public void RemovePanelFromSet (Panel panel)
@@ -101,10 +101,10 @@ namespace Consystently.UI
       if (PanelSet.Contains(panel))
       {
         PanelSet.Remove(panel);
-        Debug.Log ($"{panel.Name} has been removed from the {menuName} Menu's panel stack.");
+        // Debug.Log ($"{panel.Name} has been removed from the {menuName} Menu's panel stack.");
       }
-      else
-        Debug.LogWarning($"Remove failed. {panel.Name} was not found in the {menuName} Menu's panel stack!");
+      // else
+        // Debug.LogWarning($"Remove failed. {panel.Name} was not found in the {menuName} Menu's panel stack!");
     }
 
 
@@ -115,7 +115,7 @@ namespace Consystently.UI
     {
       if (!PanelStack.Contains(newPanel))
       {
-        Debug.Log($"Opening {newPanel.Name} panel...");
+        // Debug.Log($"Opening {newPanel.Name} panel...");
         if (newPanel.Open())
         {
           if(PanelStack.Count > 0) 
@@ -125,15 +125,15 @@ namespace Consystently.UI
           newPanel.StackIndex = PanelStack.Count;
         }
       }
-      else
-        Debug.LogWarning($"{newPanel.Name} panel is already in the open in the {menuName} Menu's panel stack.");
+      // else
+        // Debug.LogWarning($"{newPanel.Name} panel is already in the open in the {menuName} Menu's panel stack.");
     }
 
     public void ClosePanel (Panel panel)
     {
       if (PanelStack.Peek() == panel)
       {
-        Debug.Log($"Closing {panel.Name} panel...");
+        // Debug.Log($"Closing {panel.Name} panel...");
         if(panel.Close())
         {
           PanelStack.Pop();
@@ -143,8 +143,8 @@ namespace Consystently.UI
             PanelStack.Peek().Show();
         }
       }
-      else
-        Debug.LogWarning($"{panel.Name} panel is not at the top of the {menuName} Menu's panel stack.");
+      // else
+        // Debug.LogWarning($"{panel.Name} panel is not at the top of the {menuName} Menu's panel stack.");
     }
     
     public void OpenPanel(string panelName)
@@ -153,8 +153,8 @@ namespace Consystently.UI
 
       if (panel)
         OpenPanel(panel);
-      else
-        Debug.LogWarning($"Panel with the name '{panelName}' not found in the {menuName} Menu's panel set.");
+      // else
+        // Debug.LogWarning($"Panel with the name '{panelName}' not found in the {menuName} Menu's panel set.");
     }
 
     public void ClosePanel(string panelName)
@@ -163,8 +163,8 @@ namespace Consystently.UI
 
       if (panel)
         ClosePanel(panel);
-      else
-        Debug.LogWarning($"Panel with the name '{panelName}' not found in the {menuName} Menu's panel set.");
+      // else
+        // Debug.LogWarning($"Panel with the name '{panelName}' not found in the {menuName} Menu's panel set.");
     }
 
     public void ClearStack ()

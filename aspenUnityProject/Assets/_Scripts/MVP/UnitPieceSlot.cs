@@ -6,6 +6,7 @@ public class UnitPieceSlot : MonoBehaviour
   [HideInInspector]
   public UnitPiece Piece { get; private set; }
   public UnitSim Sim { get; private set; }
+  public BattlefieldTile Tile { get; private set; }
   public event Action<UnitPieceSlot> OnPieceSet, OnPieceRemoved;
 
   public void Awake()
@@ -15,6 +16,8 @@ public class UnitPieceSlot : MonoBehaviour
   }
 
   public void SetSim(UnitSim sim) => Sim ??= sim;
+
+  public void SetTile(BattlefieldTile tile) => Tile ??= tile;
 
   public void SetPiece(UnitPiece piece = null)
   {

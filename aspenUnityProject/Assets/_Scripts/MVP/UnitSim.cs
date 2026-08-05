@@ -33,7 +33,7 @@ public class UnitSim : MonoBehaviour
   public void UpdateDetails (UnitDataSO unitData)
   {
     Data ??= unitData;
-    
+
     if (Data = unitData)
     {
       if(Data.Portrait)
@@ -72,4 +72,9 @@ public class UnitSim : MonoBehaviour
   }
 
   public void ReturnPiece() => Slot?.ReturnPiece();
+
+  public void RemoveEnemy() {
+    if(Data.GetType() == typeof(EnemyUnitSO))
+      EnemySelect.Instance.RemoveEnemy(this);
+  }
 }

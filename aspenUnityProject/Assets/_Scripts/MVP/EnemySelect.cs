@@ -3,23 +3,28 @@ using UnityEngine;
 using System.Linq;
 using Consystently.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class EnemySelect : VisualElement
 {
+  public static EnemySelect Instance { get; private set; }
   [SerializeField] private GameObject _catalogButtonPrefab;
   [SerializeField] private GameObject _content;
   [SerializeField] private List<UnitSim> _enemySims;
+  [SerializeField] private ButtonVE _addButton;
 
   public Stack<UnitSim> VacantEnemySims { get; private set; } = new Stack<UnitSim>();
   public List<UnitSim> ActiveEnemySims { get; private set; } = new List<UnitSim>();
 
-  private UnitDataSO _hoveredEnemyData, _selectedEnemyData;
+  private UnitDataSO _hoveredEnemyData = null, _selectedEnemyData = null;
   private Dictionary <ButtonVE, EnemyUnitSO> _catalogButtons = new Dictionary<ButtonVE, EnemyUnitSO>();
 
   
   protected override void Awake()
   {
     base.Awake();
+    
+    Instance ??= this;
 
     // Alphabetize and reverse the order of the enemy buttons, then put them into a stack
     foreach(UnitSim sim in _enemySims.OrderByDescending(x => x.gameObject.name))
@@ -33,6 +38,7 @@ public class EnemySelect : VisualElement
 
   private void Start()
   {
+    _addButton.Component.interactable = _selectedEnemyData;
     List<EnemyUnitSO> enemyUnits = EnemyCatalog.Instance.Objects;
     PopulateEnemyList(enemyUnits);
   }
@@ -41,14 +47,13 @@ public class EnemySelect : VisualElement
   {
     foreach (EnemyUnitSO enemyUnit in enemyUnits)
     {
-      Debug.Log(enemyUnit.Name);
       GameObject obj = Instantiate(_catalogButtonPrefab, _content.transform);
       ButtonVE button = obj.GetComponent<ButtonVE>();
       button.TextChild.text = enemyUnit.Name;
 
       // Subscribe the necessary events
       EventTrigger.Entry hover = new EventTrigger.Entry() { eventID = EventTriggerType.PointerEnter };
-      hover.callback.AddListener((data) => PreviewData(button));
+      hover.callback.AddListener((data) => HoverEnterData(button));
       button.Trigger.triggers.Add(hover);
 
       EventTrigger.Entry select = new EventTrigger.Entry() { eventID = EventTriggerType.PointerClick};
@@ -56,21 +61,21 @@ public class EnemySelect : VisualElement
       button.Trigger.triggers.Add(select);
 
       // EventTrigger.Entry deselect = new EventTrigger.Entry() { eventID = EventTriggerType.Deselect};
-      // deselect.callback.AddListener((data) => SelectData(null));
+      // deselect.callback.AddListener((data) => EmptyData(button));
       // button.Trigger.triggers.Add(deselect);
 
       EventTrigger.Entry exit = new EventTrigger.Entry() { eventID = EventTriggerType.PointerExit };
-      exit.callback.AddListener((data) => EmptyData());
+      exit.callback.AddListener((data) => HoverExitData());
       button.Trigger.triggers.Add(exit);
       
       _catalogButtons.Add(button, enemyUnit);
     }
   }
 
-  public void PreviewData(ButtonVE button)
+  public void HoverEnterData(ButtonVE button)
   {
     _hoveredEnemyData = _catalogButtons[button];
-    DisplayDetails(_hoveredEnemyData);
+    SimDetails.Instance.DisplayUnitDetails(_hoveredEnemyData);
   }
 
   public void SelectData(ButtonVE button)
@@ -78,27 +83,34 @@ public class EnemySelect : VisualElement
     if(button)
     {
       _selectedEnemyData = _catalogButtons[button];
-      DisplayDetails(_selectedEnemyData);
+      SimDetails.Instance.DisplayUnitDetails(_selectedEnemyData);
+      _addButton.Component.interactable = _selectedEnemyData;
     }
   }
 
-  public void EmptyData()
+  public void HoverExitData()
   {
     if (_selectedEnemyData)
-      DisplayDetails(_selectedEnemyData);
+      SimDetails.Instance.DisplayUnitDetails(_selectedEnemyData);
     else
       SimDetails.Instance.ClearDetails();
 
     _hoveredEnemyData = null;
+    _addButton.Component.interactable = _selectedEnemyData;
   }
 
-  public void DisplayDetails(UnitDataSO data)
+  public void EmptyData()
   {
-    SimDetails.Instance.DisplayUnitDetails(data);
+    _hoveredEnemyData = null;
+    _selectedEnemyData = null;
+    SimDetails.Instance.ClearDetails();
   }
 
   public void AddEnemy()
   {
+    if(!_selectedEnemyData)
+      return;
+
     if(VacantEnemySims.TryPop(out UnitSim result))
     {
       ActiveEnemySims.Add(result);
@@ -118,7 +130,6 @@ public class EnemySelect : VisualElement
     if(ActiveEnemySims.Contains(sim))
     {
       UnitSim last = ActiveEnemySims.Last();
-
       // If this is somewhere in the middle of the stack
       if(last != sim)
       {
@@ -132,10 +143,20 @@ public class EnemySelect : VisualElement
           current.Data = next.Data;
           current.UpdateDetails(current.Data);
 
-          //next.Piece?.Tile?.ReplacePiece(next.Piece, current.Piece);
+          if(next.Piece.Slot == next.Slot)
+            current.ReturnPiece();
+          else
+          {
+            UnitPieceSlot storedSlot = next.Piece.Slot;
+            next.ReturnPiece();
+
+            if(storedSlot.Tile)
+              current.Piece.Move(storedSlot.Tile);
+          }
         }
       }
 
+      last.ReturnPiece();
       last.ClearDetails();
       last.gameObject.SetActive(false);
       
