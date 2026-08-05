@@ -14,11 +14,11 @@ namespace Consystently.UI
     // All Menu Objects shall be added to this List.
     public HashSet<GameMenu> MenuSet { get; protected set; } = new HashSet<GameMenu>();
 
+    public void Start() => Debug.Log("Press the Space Bar to open the Main Menu");
     public void Update()
     {
       if (Input.GetKeyDown(KeyCode.Space))
-        // if (!ActiveMenu)
-          OpenMenu(MenuSet.FirstOrDefault(item => item.Name == "Main Menu"));
+        OpenMenu(MenuSet.FirstOrDefault(item => item.Name == "Main Menu"));
     }
 
     public void AddMenuToSet (GameMenu menu)
