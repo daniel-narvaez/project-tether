@@ -24,6 +24,12 @@ public class BattlefieldMap : MonoBehaviour
     SetTileDetailsMode();
   }
 
+  public void ResetBattlefield()
+  {
+    foreach (BattlefieldTile tile in Tiles)
+      tile.ResetTile();
+  }
+
   public void GetAvailableTileSlots(UnitPiece piece)
   {
     List<BattlefieldTile> availableTiles = new List<BattlefieldTile>();

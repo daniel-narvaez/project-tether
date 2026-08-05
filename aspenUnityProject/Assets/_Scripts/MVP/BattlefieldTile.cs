@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Linq;
 using Consystently.UI;
 using Unity.VisualScripting;
+using System;
 
 [RequireComponent(typeof(Button))]
 public class BattlefieldTile : MonoBehaviour
@@ -25,6 +26,20 @@ public class BattlefieldTile : MonoBehaviour
 
     Button ??= GetComponent<Button>();
     Button.image.alphaHitTestMinimumThreshold = 0.5f;
+  }
+
+  internal void ResetTile()
+  {
+    int count = FilledSlots.Count;
+    for (int i = count - 1; i >= 0; i--)
+    {
+      UnitPieceSlot slot = FilledSlots[i];
+      VacantSlots.Push(slot);
+      FilledSlots.Remove(slot);
+      slot.Piece.Sim.ReturnPiece();
+    }
+
+    Faction = Faction.Neutral;
   }
   
   public bool CheckForSlot(UnitPiece piece)
@@ -78,16 +93,5 @@ public class BattlefieldTile : MonoBehaviour
       Faction = Faction.Neutral;
   }
 
-  // public void ReplacePiece(UnitPiece current, UnitPiece replacement)
-  // {
-  //   if (UnitSlots.Count != 1 && current.Faction != replacement.Faction)
-  //     return;
-    
-  //   if (current.Tile && current.Tile == this)
-  //     RemovePiece(current);
-  //   if (replacement.Tile && replacement.Tile != this)
-  //     replacement.Tile.RemovePiece(replacement);
-    
-  //   PlacePiece(replacement);
-  // }
+
 }
