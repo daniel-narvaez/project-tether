@@ -10,19 +10,21 @@ Texture2D:
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 2
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 4
   m_Width: 64
   m_Height: 1
   m_CompleteImageSize: 256
+  m_MipsStripped: 0
   m_TextureFormat: 4
   m_MipCount: 1
   m_IsReadable: 1
-  m_IgnoreMasterTextureLimit: 0
   m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 0
+  m_MipmapLimitGroupName: 
   m_StreamingMipmaps: 0
   m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
   m_AlphaIsTransparency: 0
   m_ImageCount: 1
   m_TextureDimension: 2
@@ -36,30 +38,47 @@ Texture2D:
     m_WrapW: 1
   m_LightmapFormat: 0
   m_ColorSpace: 0
+  m_PlatformBlob: 
   image data: 256
   _typelessdata: 1aa4ecff1ba6ecff1ca8edff1caaedff1dadedff1eafedff1fb1eeff1fb4eeff20b6eeff21b8efff22bbefff22bdefff23bfefff24c1f0ff25c4f0ff25c6f0ff26c8f1ff27cbf1ff28cdf1ff29cff2ff29d1f2ff2ad4f2ff2bd6f2ff2cd8f3ff2cdbf3ff2dddf3ff2edff4ff2fe2f4ff2fe4f4ff30e6f4ff31e8f5ff32ebf5ff33edf5ff33eff6ff34f2f6ff35f4f6ff36f6f6ff36f8f7ff37fbf7ff38fdf7ff3afff8ff42fff8ff4bfff8ff54fff9ff5cfff9ff65fff9ff6dfffaff76fffaff7efffaff87fffbff90fffbff98fffbffa1fffbffa9fffcffb2fffcffbafffcffc3fffdffccfffdffd4fffdffddfffeffe5fffeffeefffefff6ffffffffffffff
   m_StreamData:
+    serializedVersion: 2
     offset: 0
     size: 0
     path: 
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WaterBaseLit
   m_Shader: {fileID: 4800000, guid: 429def76850425146bd4e32b571ab184, type: 3}
-  m_ShaderKeywords: ALPHAFADE_ON COLORRAMPGRAD_ON COLORRAMP_ON GLOW_ON HSV_ON MASK_ON
-    POLARUVDISTORT_ON POLARUV_ON ROUNDWAVEUV_ON SHAPE1CONTRAST_ON SHAPE1DISTORT_ON
-    TWISTUV_ON WAVEUV_ON
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - ALPHAFADE_ON
+  - COLORRAMPGRAD_ON
+  - COLORRAMP_ON
+  - GLOW_ON
+  - HSV_ON
+  - MASK_ON
+  - POLARUVDISTORT_ON
+  - POLARUV_ON
+  - ROUNDWAVEUV_ON
+  - SHAPE1CONTRAST_ON
+  - SHAPE1DISTORT_ON
+  - TWISTUV_ON
+  - WAVEUV_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -135,6 +154,19 @@ Material:
         m_Texture: {fileID: 2800000, guid: 48da24d771916524899d36e4bfe7f762, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _Alpha: 0.666
     - _AlphaBrightness: 0
@@ -193,6 +225,8 @@ Material:
     - _PixelateSize: 32
     - _PosterizeGamma: 0.75
     - _PosterizeNumColors: 8
+    - _QueueControl: -1
+    - _QueueOffset: 0
     - _RandomSh1Mult: 1
     - _RandomSh2Mult: 1
     - _RandomSh3Mult: 1
@@ -289,3 +323,5 @@ Material:
     - _Shape2Color: {r: 1, g: 1, b: 1, a: 1}
     - _Shape3Color: {r: 1, g: 1, b: 1, a: 1}
     - _ShapeColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
