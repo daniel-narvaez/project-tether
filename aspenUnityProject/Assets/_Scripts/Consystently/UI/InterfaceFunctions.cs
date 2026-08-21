@@ -14,13 +14,13 @@ namespace Consystently.UI
 
     public void CloseActiveMenu() => MenuManager.Instance?.CloseActiveMenu();
 
-    public void OpenPanel(Panel panel) => panel.RootMenu?.OpenPanel(panel);
+    public void OpenPanel(Panel panel) => panel.Menu?.OpenPanel(panel);
 
-    public void ClosePanel(Panel panel) => panel.RootMenu?.ClosePanel(panel);
+    public void ClosePanel(Panel panel) => panel.Menu?.ClosePanel(panel);
 
     public void ClearStack(GameMenu gameMenu) => gameMenu.ClearStack();
 
-    public void ClearStack(Panel panel) => panel.RootMenu?.ClearStack();
+    public void ClearStack(Panel panel) => panel.Menu?.ClearStack();
   }
 }
 
