@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace TileSystem
 {
+    // Follows the builder design pattern
     public class TileBuilder : ITileBuilder
     {
         Tile _tile;

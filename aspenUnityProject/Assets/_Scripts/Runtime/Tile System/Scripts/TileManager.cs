@@ -4,6 +4,7 @@ using Consystently.Essentials;
 
 public class TileManager : Singleton<TileManager>
 {
+    // For all future tiles, follow a flow similar to PLAIN_TILE
     #region PLAIN_TILE
     [Header("Plain Tile Settings")]
     [SerializeField] TileType _plainTileType;
@@ -24,7 +25,7 @@ public class TileManager : Singleton<TileManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     public Tile CreatePlainTile()

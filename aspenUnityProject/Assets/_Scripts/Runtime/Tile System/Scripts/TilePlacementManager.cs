@@ -5,10 +5,11 @@ using UnityEditor;
 using UnityEngine;
 
 
-/* IF we need to optimize, create a tile object pool that holds tile creation data,
+/* Note: IF we need to optimize, create a tile object pool that holds tile creation data,
  * stores them in a dict and looksup tile data whenever its required
- * 
  */
+
+// Customizing the tile dictionary in the editor to make it more user friendly for designers
 
 [CustomEditor(typeof(TilePlacementManager))]
 public class CustomTilePlacementManagerEditor : Editor
@@ -60,19 +61,17 @@ public class TilePlacementManager : MonoBehaviour
 
     SerializedDictionary<Transform, TileType> _tileDict = new();
 
-    const int requiredSize = 19;
-    [SerializeField] 
-    TileType[] _allTilesTypes = new TileType[requiredSize];
-
+    const int REQUIRED_SIZE = 19;
+    [SerializeField] TileType[] _allTilesTypes = new TileType[REQUIRED_SIZE];
     [SerializeField] GameObject _allTiles;
 
 
     private void OnValidate()
     {
-        if (_allTilesTypes.Length != requiredSize)
+        if (_allTilesTypes.Length != REQUIRED_SIZE)
         {
-            Debug.LogWarning($"Array size is locked to {requiredSize}!");
-            Array.Resize(ref _allTilesTypes, requiredSize);
+            Debug.LogWarning($"Array size is locked to {REQUIRED_SIZE}!");
+            Array.Resize(ref _allTilesTypes, REQUIRED_SIZE);
         }
 
         if (_allTiles == null)
@@ -89,6 +88,7 @@ public class TilePlacementManager : MonoBehaviour
 
     void GenerateAllTiles()
     {
+        // Adds all the tiles from the tile prefab to _tileDict
         for (int i = 0, j = 0; i < _allTilesTypes.Length && j < _allTiles.transform.childCount; i++, j++)
         {
             _tileDict.Add(_allTiles.transform.GetChild(j), _allTilesTypes[i]);
@@ -117,7 +117,11 @@ public class TilePlacementManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if(!Application.isPlaying)
+        // Visualizes what tile type a tile is on scene editor
+        // When the application is playing, make it to where the material of the tiles go back to default
+        // Primairy used for the designers
+
+        if (!Application.isPlaying)
         {
             SerializedDictionary<Transform, TileType> dict = new();
 
