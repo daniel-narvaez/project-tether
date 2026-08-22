@@ -16,7 +16,6 @@ public class BattlefieldMap : MonoBehaviour
     {
         Instance ??= this;
         Tiles ??= GetComponentsInChildren<BattlefieldTile>().ToList();
-
     }
 
     void Start()

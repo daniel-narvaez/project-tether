@@ -26,8 +26,8 @@ public class UnitPieceSlot : MonoBehaviour
         else
             Piece = piece;
 
-        BattleSimManager.Instance.AddSimToDict(piece.Sim);
-        BattleSimEncounterSeedManager.Instance.AddMappedTile(Tile.gameObject.name, Tile);
+        // BattleSimManager.Instance.AddSimToDict(piece.Sim);
+        // BattleSimEncounterSeedManager.Instance.AddMappedTile(Tile.gameObject.name, Tile);
 
         OnPieceSet?.Invoke(this);
     }
@@ -37,8 +37,8 @@ public class UnitPieceSlot : MonoBehaviour
         if (Piece != piece || !piece)
             return;
 
-        BattleSimManager.Instance.RemoveSimFromDict(piece.Sim);
-        BattleSimEncounterSeedManager.Instance.DeleteMappedTile(Tile.gameObject.name);
+        // BattleSimManager.Instance.RemoveSimFromDict(piece.Sim);
+        // BattleSimEncounterSeedManager.Instance.DeleteMappedTile(Tile.gameObject.name);
 
         Piece = null;
         OnPieceRemoved?.Invoke(this);

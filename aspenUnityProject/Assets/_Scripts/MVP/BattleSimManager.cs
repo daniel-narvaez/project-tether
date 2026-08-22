@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Consystently.Essentials;
 using System.Linq;
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
-using System.Diagnostics.Contracts;
 using UnityEngine.UI;
 
 /*
@@ -14,34 +12,27 @@ using UnityEngine.UI;
 
 public class BattleSimManager : Manager<BattleSimManager>
 {
-    public SerializedDictionary<UnitSim, bool> PlayerSims = new SerializedDictionary<UnitSim, bool>();
-    public SerializedDictionary<UnitSim, bool> EnemySims = new SerializedDictionary<UnitSim, bool>();
-    public List<BattlefieldTile> Tiles { get; private set; }
+    public Dictionary<UnitSim, BattlefieldTile> PlayerSims { get; private set; } = new Dictionary<UnitSim, BattlefieldTile>();
+    public Dictionary<UnitSim, BattlefieldTile> EnemySims { get; private set; } = new Dictionary<UnitSim, BattlefieldTile>();
+
+    public HashSet<UnitPiece> PlayerPieces = new HashSet<UnitPiece>();
+    public HashSet<UnitPiece> EnemyPieces = new HashSet<UnitPiece>();
 
     [SerializeField] Button _battleButton;
 
     private void Start()
     {
-        _battleButton.interactable = false;
+      _battleButton.interactable = false;
     }
 
-    public void AddSimToDict(UnitSim sim)
+    public void ActivateSim(UnitSim sim)
     {
-        switch (sim.Data.Faction)
-        {
-            case Faction.Ally:
-                PlayerSims.Add(sim, true);
-                break;
-            case Faction.Enemy:
-                EnemySims.Add(sim, true);
-                break;
-        }
-        Debug.Log(PlayerSims.Count + EnemySims.Count);
+      PlayerSims.TryAdd(sim, null);
 
-        _battleButton.interactable = AtLeastTwoFactionsPlaced();
+      _battleButton.interactable = AtLeastTwoFactionsPlaced();
     }
 
-    public void RemoveSimFromDict(UnitSim sim)
+    public void DeactivateSim(UnitSim sim)
     {
         switch (sim.Data.Faction)
         {
@@ -53,10 +44,9 @@ public class BattleSimManager : Manager<BattleSimManager>
                 break;
         }
 
-        Debug.Log(PlayerSims.Count + EnemySims.Count);
-
         _battleButton.interactable = AtLeastTwoFactionsPlaced();
     }
+
     //public void UpdateSimStatus2(UnitPieceSlot sim)
     //{
     //    UnitSim currPiece = sim.Piece.Sim;
