@@ -3,6 +3,7 @@ using Consystently.Essentials;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Consystently.UI;
 
 /*
  * 
@@ -12,86 +13,99 @@ using UnityEngine.UI;
 
 public class BattleSimManager : Manager<BattleSimManager>
 {
-    public Dictionary<UnitSim, BattlefieldTile> PlayerSims { get; private set; } = new Dictionary<UnitSim, BattlefieldTile>();
-    public Dictionary<UnitSim, BattlefieldTile> EnemySims { get; private set; } = new Dictionary<UnitSim, BattlefieldTile>();
+  public Dictionary<UnitSim, BattlefieldTile> PlayerSims { get; private set; } = new Dictionary<UnitSim, BattlefieldTile>();
+  public Dictionary<UnitSim, BattlefieldTile> EnemySims { get; private set; } = new Dictionary<UnitSim, BattlefieldTile>();
 
-    public HashSet<UnitPiece> PlayerPieces = new HashSet<UnitPiece>();
-    public HashSet<UnitPiece> EnemyPieces = new HashSet<UnitPiece>();
+  // public HashSet<UnitPiece> PlayerPieces = new HashSet<UnitPiece>();
+  // public HashSet<UnitPiece> EnemyPieces = new HashSet<UnitPiece>();
 
-    [SerializeField] Button _battleButton;
+  [SerializeField] Button _battleButton;
 
-    private void Start()
+  private void Start()
+  {
+    _battleButton.interactable = false;
+  }
+
+  public void ActivateSim(UnitSim sim)
+  {
+    switch(sim.Data?.Faction)
     {
-      _battleButton.interactable = false;
+      case Faction.Ally:
+        PlayerSims.TryAdd(sim, null);
+      break;
+      case Faction.Enemy:
+        EnemySims.TryAdd(sim, null);
+      break;
     }
 
-    public void ActivateSim(UnitSim sim)
-    {
-      PlayerSims.TryAdd(sim, null);
+    Debug.Log($"{sim.Data?.Name} activated.");
+    _battleButton.interactable = AtLeastTwoFactionsPlaced();
+  }
 
-      _battleButton.interactable = AtLeastTwoFactionsPlaced();
+  public void DeactivateSim(UnitSim sim)
+  {
+    switch (sim.Data?.Faction)
+    {
+      case Faction.Ally:
+        PlayerSims.Remove(sim);
+      break;
+      case Faction.Enemy:
+        EnemySims.Remove(sim);
+      break;
     }
 
-    public void DeactivateSim(UnitSim sim)
-    {
-        switch (sim.Data.Faction)
-        {
-            case Faction.Ally:
-                PlayerSims.Remove(sim);
-                break;
-            case Faction.Enemy:
-                EnemySims.Remove(sim);
-                break;
-        }
+    Debug.Log($"{sim.Data?.Name} deactivated.");
+    _battleButton.interactable = AtLeastTwoFactionsPlaced();
+  }
 
-        _battleButton.interactable = AtLeastTwoFactionsPlaced();
+  public void UpdatePiecePlacement(UnitPiece piece, BattlefieldTile tile = null)
+  {
+    switch (piece.Sim.Data?.Faction)
+    {
+      case Faction.Ally:
+        if(PlayerSims.ContainsKey(piece.Sim))
+          PlayerSims[piece.Sim] = tile;
+      break;
+      case Faction.Enemy:
+        if(EnemySims.ContainsKey(piece.Sim))
+          EnemySims[piece.Sim] = tile;
+      break;
     }
 
-    //public void UpdateSimStatus2(UnitPieceSlot sim)
-    //{
-    //    UnitSim currPiece = sim.Piece.Sim;
+    _battleButton.interactable = AtLeastTwoFactionsPlaced();
+  }
 
-    //    switch (currPiece.Data?.Faction)
-    //    {
-    //        case Faction.Ally:
-    //            if (PlayerSims.ContainsKey(currPiece))
-    //                PlayerSims[currPiece] = currPiece.Button.interactable;
-    //            else
-    //                PlayerSims.Add(currPiece, currPiece.Button.interactable);
+  public bool AtLeastTwoFactionsPlaced()
+  {
+    if(PlayerSims.Values.Any(s => s != null) && EnemySims.Values.Any(s => s != null))
+      return true;
 
-    //            break;
-    //        case Faction.Enemy:
-    //        default:
-    //            if (EnemySims.ContainsKey(currPiece))
-    //                EnemySims[currPiece] = currPiece.Button.interactable;
-    //            else
-    //                EnemySims.Add(currPiece, currPiece.Button.interactable);
 
-    //            break;
-    //    }
-    //}
+    return false;
+  }
 
-    public bool AtLeastTwoFactionsPlaced() => (PlayerSims.Count + EnemySims.Count) >= 2;
+  public bool AllSimPiecesPlaced()
+  {
+    if(PlayerSims.Values.All(s => s != null) && EnemySims.Values.All(s => s != null))
+      return true;
+    else
+      return false;
+  }
 
-    public bool AllSimPiecesPlaced()
+  public void TryStartBattle()
+  {
+    if(AllSimPiecesPlaced())
     {
-        return true;
+      StartBattle();
     }
-
-    public void StartBattleSim()
+    else
     {
-        //Debug.Log($"Number of factions on field: {ListOfEnitiesOnField.Count}");
-
-        Debug.Log($"Player Sims on Field: {PlayerSims.Count}");
-        Debug.Log($"Enemy Sims on Field: {EnemySims.Count}");
-
-        if (AtLeastTwoFactionsPlaced())
-        {
-            Debug.Log("Enough Factions are placed. Start Battle");
-        }
-        else
-        {
-            Debug.LogWarning("Two Factions must be placed on the filed");
-        }
+      MenuManager.Instance?.OpenPanel("Placement Warning");
     }
+  }
+
+  public void StartBattle()
+  {
+    Debug.Log("Start Battle Code");
+  }
 }

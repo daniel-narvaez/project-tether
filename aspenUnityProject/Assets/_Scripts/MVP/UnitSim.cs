@@ -30,6 +30,11 @@ public class UnitSim : MonoBehaviour
     UpdateDetails(Data);
   }
 
+  // private void Start()
+  // {
+  //   Activate(Button.interactable);
+  // }
+
   public void UpdateDetails (UnitDataSO unitData)
   {
     Data ??= unitData;
@@ -59,6 +64,7 @@ public class UnitSim : MonoBehaviour
 
   public void ClearDetails()
   {
+    Activate(false);
     Data = null;
     Button.interactable = Data;
 
@@ -76,5 +82,13 @@ public class UnitSim : MonoBehaviour
   public void RemoveEnemy() {
     if(Data.GetType() == typeof(EnemyUnitSO))
       EnemySelect.Instance.RemoveEnemy(this);
+  }
+
+  public void Activate(bool value)
+  {
+    if(value == true)
+      BattleSimManager.Instance?.ActivateSim(this);
+    else
+      BattleSimManager.Instance?.DeactivateSim(this);
   }
 }

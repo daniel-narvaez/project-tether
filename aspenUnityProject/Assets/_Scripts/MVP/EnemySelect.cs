@@ -117,6 +117,7 @@ public class EnemySelect : VisualElement
       result.gameObject.SetActive(true);
       result.Data = _selectedEnemyData;
       result.UpdateDetails(_selectedEnemyData);
+      BattleSimManager.Instance.ActivateSim(result); 
     }
   }
 

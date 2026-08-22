@@ -56,6 +56,8 @@ namespace Consystently.UI
       }
     }
 
+    public void OpenPanel (string panelName) => ActiveMenu.OpenPanel(panelName);
+
     public void CloseActiveMenu ()
     {
       if (ActiveMenu)
