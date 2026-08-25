@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2fadaa9994784724a46b33e21e8bb1c, type: 3}
   m_Name: HuskyData
   m_EditorClassIdentifier: Assembly-CSharp::PlayableCharacterUnitSO
+  _portrait: {fileID: 0}
   _name: Husky
   Level: 10
   ExPtsToNextLevel: 0
