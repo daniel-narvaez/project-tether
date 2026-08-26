@@ -7,7 +7,7 @@ public class UnitPieceSlot : MonoBehaviour
     public UnitPiece Piece { get; private set; }
     public UnitSim Sim { get; private set; }
     public BattlefieldTile Tile { get; private set; }
-    public event Action<UnitPieceSlot> OnPieceSet, OnPieceRemoved;
+    public event Action<UnitPiece, UnitPieceSlot> OnPieceSet, OnPieceRemoved;
 
     public void Awake()
     {
@@ -29,7 +29,7 @@ public class UnitPieceSlot : MonoBehaviour
         // BattleSimManager.Instance.AddSimToDict(piece.Sim);
         // BattleSimEncounterSeedManager.Instance.AddMappedTile(Tile.gameObject.name, Tile);
 
-        OnPieceSet?.Invoke(this);
+        OnPieceSet?.Invoke(piece, this);
     }
 
     public void RemovePiece(UnitPiece piece)
@@ -41,7 +41,7 @@ public class UnitPieceSlot : MonoBehaviour
         // BattleSimEncounterSeedManager.Instance.DeleteMappedTile(Tile.gameObject.name);
 
         Piece = null;
-        OnPieceRemoved?.Invoke(this);
+        OnPieceRemoved?.Invoke(piece, this);
     }
 
     public void TryPlacePiece()

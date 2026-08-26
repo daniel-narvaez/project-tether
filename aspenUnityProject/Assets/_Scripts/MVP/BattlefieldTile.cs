@@ -60,37 +60,39 @@ public class BattlefieldTile : MonoBehaviour
         {
             piece.Move(result);
             FilledSlots.Add(result);
+            BattleSimManager.Instance.UpdatePiecePlacement(piece, this);
 
             if (Faction == Faction.Neutral)
                 Faction = piece.Faction;
         }
     }
 
-    public void RemovePiece(UnitPieceSlot slot)
+    public void RemovePiece(UnitPiece piece, UnitPieceSlot slot)
     {
-        if (slot && FilledSlots.Contains(slot))
+      BattleSimManager.Instance.UpdatePiecePlacement(piece, null);
+      if (slot && FilledSlots.Contains(slot))
+      {
+        UnitPieceSlot last = FilledSlots.Last();
+
+        if (last != slot)
         {
-            UnitPieceSlot last = FilledSlots.Last();
+          int index = FilledSlots.IndexOf(slot);
 
-            if (last != slot)
-            {
-                int index = FilledSlots.IndexOf(slot);
+          for (int i = index; i < FilledSlots.Count - 1; i++)
+          {
+            UnitPieceSlot current = FilledSlots[i];
+            UnitPieceSlot next = FilledSlots[i + 1];
 
-                for (int i = index; i < FilledSlots.Count - 1; i++)
-                {
-                    UnitPieceSlot current = FilledSlots[i];
-                    UnitPieceSlot next = FilledSlots[i + 1];
-
-                    next.Piece.Move(current);
-                }
-            }
-
-            VacantSlots.Push(last);
-            FilledSlots.Remove(last);
+            next.Piece.Move(current);
+          }
         }
 
-        if (FilledSlots.Count == 0)
-            Faction = Faction.Neutral;
+        VacantSlots.Push(last);
+        FilledSlots.Remove(last);
+      }
+
+      if (FilledSlots.Count == 0)
+          Faction = Faction.Neutral;
     }
 
 
