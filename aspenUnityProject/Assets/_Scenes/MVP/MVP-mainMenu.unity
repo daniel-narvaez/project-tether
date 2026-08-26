@@ -12153,6 +12153,7 @@ GameObject:
   - component: {fileID: 637671400}
   - component: {fileID: 637671399}
   - component: {fileID: 637671401}
+  - component: {fileID: 637671402}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -12199,6 +12200,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323a5dec5f2304c9c8950db58c32b48c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Consystently.UI.InterfaceFunctions
+--- !u!114 &637671402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 637671398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69997b13177749aa9b0a84c23f0b15b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Consystently.UI.BattleButtonController
 --- !u!1 &650964996
 GameObject:
   m_ObjectHideFlags: 0

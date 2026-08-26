@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Consystently.Essentials
 {
@@ -8,6 +9,7 @@ namespace Consystently.Essentials
        public override void Enter()
        {
            Debug.Log("combat game state entered");
+           UnityEngine.SceneManagement.SceneManager.LoadScene("battleScene");
        }
        public override void Update()
        {

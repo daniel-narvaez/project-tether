@@ -26,8 +26,7 @@ namespace Consystently.UI
 
         void OnButtonClicked()
         {
-            //GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
-            Debug.Log("battle button clicked");
+            GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
         }
     }
 }
