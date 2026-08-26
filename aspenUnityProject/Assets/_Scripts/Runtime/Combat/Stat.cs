@@ -25,17 +25,17 @@ public enum Stat
   /// </summary>
   RES = 5,
   /// <summary>
-  /// Precision
-  /// </summary>
-  PRC = 6,
-  /// <summary>
-  /// Finesse
-  /// </summary>
-  FIN = 7,
-  /// <summary>
   /// Speed
   /// </summary>
-  SPE = 8,
+  SPE = 6,
+  /// <summary>
+  /// Precision
+  /// </summary>
+  PRC = 7,
+  /// <summary>
+  /// Evasion
+  /// </summary>
+  EVA = 8,
   /// <summary>
   /// Luck
   /// </summary>

@@ -71,6 +71,17 @@ public class UnitStatsSO : ScriptableObject
 
 
   [Space(10)]
+  [Tooltip("SPE: How often a unit moves during battle.")]
+  [Range(1, 999)]
+  [SerializeField] private int _speed;
+
+  /// <summary>
+  /// SPE: How often a unit moves during battle.
+  /// </summary>
+  public int Speed => _speed;
+
+
+  [Space(10)]
   [Tooltip("PRC: A unit's accuracy for targeting attacks & abilities.")]
   [Range(1, 999)]
   [SerializeField] private int precision;
@@ -82,25 +93,14 @@ public class UnitStatsSO : ScriptableObject
 
 
   [Space(5)]
-  [Tooltip("FIN: A unit's evasiveness to incoming attacks & abilities.")]
+  [Tooltip("EVA: A unit's evasiveness to incoming attacks & abilities.")]
   [Range(1, 999)]
-  [SerializeField] private int _finesse;
+  [SerializeField] private int _evasion;
 
   /// <summary>
-  /// FIN: A unit's evasiveness to incoming attacks & abilities.
+  /// EVA: A unit's evasiveness to incoming attacks & abilities.
   /// </summary>
-  public int Finesse => _finesse;
-
-
-  [Space(10)]
-  [Tooltip("SPE: How often a unit moves during battle.")]
-  [Range(1, 999)]
-  [SerializeField] private int _speed;
-
-  /// <summary>
-  /// SPE: How often a unit moves during battle.
-  /// </summary>
-  public int Speed => _speed;
+  public int Evasion => _evasion;
 
 
   [Space(10)]
@@ -121,7 +121,7 @@ public class UnitStatsSO : ScriptableObject
     {Stat.TEC, _tech},
     {Stat.RES, _resistance},
     {Stat.PRC, precision},
-    {Stat.FIN, _finesse},
+    {Stat.EVA, _evasion},
     {Stat.SPE, _speed},
     {Stat.LCK, _luck}
   };
