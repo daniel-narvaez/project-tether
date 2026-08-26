@@ -35,7 +35,7 @@ namespace Consystently.Essentials
       ChangedGameState?.Invoke(newGameState);
     }
 
-    //primarily for pause screens, menu screens, screens that return, etc.
+    //primarily for pause screens, menu screens, and other states that can transition to any other state 
     public void ReturnGameState()
     {
       currentGameGameState = previousGameStates.Pop();
