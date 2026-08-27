@@ -54,7 +54,7 @@ namespace _Scripts.Runtime.Misc
 
         public bool removeUnit(int tile, int unitPosition)
         {
-            if (unitPositions[tile] < unitPosition)
+            if (unitPositions[tile] > 3 || tiles[tile, unitPosition] == null)
             {
                 Debug.Log($"no unit to remove at ({tile}, {unitPosition})");
                 return false;
