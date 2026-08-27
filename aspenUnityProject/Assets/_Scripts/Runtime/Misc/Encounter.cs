@@ -10,19 +10,19 @@ namespace _Scripts.Runtime.Misc
     public class Encounter
     {
         //19 tiles, max 4 units per tile
-        private UnitDataSO[,] tiles = new UnitDataSO[19, 4];
+        private GameObject[,] tiles = new GameObject[19, 4];
         
         //represents the positions within the tile - the indices cap at 3
         //used for determining the ordering of units when adding them to the tile
         private int[] unitPositions = new int[19];
         
-        public UnitDataSO this[int tile, int unitPosition]
+        public GameObject this[int tile, int unitPosition]
         {
             get => tiles[tile, unitPosition];
         }
 
         //if replace not successful, return false. bool used for potential future conditional popups triggered by managers. 
-        public bool changeUnit(int tile, int unitPosition, UnitDataSO newUnit)
+        public bool changeUnit(int tile, int unitPosition, GameObject newUnit)
         {
             if (unitPosition > unitPositions[tile])
             {
@@ -33,7 +33,7 @@ namespace _Scripts.Runtime.Misc
             return true;
         }
 
-        public bool addUnit(int tile, UnitDataSO newUnit)
+        public bool addUnit(int tile, GameObject newUnit)
         {
             if (unitPositions[tile] > 3)
             {

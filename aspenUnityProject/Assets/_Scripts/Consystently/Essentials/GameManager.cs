@@ -9,7 +9,6 @@ namespace Consystently.Essentials
   {
     public bool GameIsPaused { get; private set; } = false;
     
-    
     public event Action<GameState> ChangedGameState;
 
     private GameState currentGameGameState;

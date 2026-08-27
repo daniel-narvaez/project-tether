@@ -107,6 +107,7 @@ public class BattleSimManager : Manager<BattleSimManager>
   public void StartBattle()
   {
     Debug.Log("Start Battle Code");
+    EncounterManager.Instance.GenerateEncounter(BattlefieldMap.Instance.Tiles);
     GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
   }
 }

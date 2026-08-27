@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _Scripts.Runtime.Misc;
 using Tether.CharacterSystems;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Consystently.Essentials
         private GameObject[,] initialObjectFormation = new GameObject[19,4];
         private IUnitController[,] unitControllers = new IUnitController[19,4];
         
-        void OnEnable()
+        void Start()
         {
             GameManager.Instance.ChangedGameState += HandleState;
         }
@@ -41,7 +42,7 @@ namespace Consystently.Essentials
             return encounter;
         }
 
-        //called from EnemyUnitGO
+        //called from EnemyUnitController
         public void StartEncounter(EncounterSO encounterSo)
         {
            this.encounterSo = encounterSo; 
@@ -59,9 +60,11 @@ namespace Consystently.Essentials
             GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
         }
 
-        public void ResetEncounter()
+        //for mvp primarily 
+        public void GenerateEncounter(List<BattlefieldTile> tiles)
         {
-            encounter = new Encounter(); 
+           Debug.Log($"tiles length: {tiles.Count}");
+           Debug.Log($"tiles length: {tiles[0].FilledSlots}");
         }
 
     }
