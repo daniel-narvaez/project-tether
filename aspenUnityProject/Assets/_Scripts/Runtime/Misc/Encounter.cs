@@ -9,18 +9,16 @@ namespace _Scripts.Runtime.Misc
     //This will be used for the MVP demo, as the player will create encounters during runtime. 
     public class Encounter
     {
+        //19 tiles, max 4 units per tile
         private GameObject[,] tiles = new GameObject[19, 4];
         
         //represents the positions within the tile - the indices cap at 3
         //used for determining the ordering of units when adding them to the tile
         private int[] unitPositions = new int[19];
-
+        
         public GameObject this[int tile, int unitPosition]
         {
-            get
-            {
-                return tiles[tile, unitPosition];
-            }
+            get => tiles[tile, unitPosition];
         }
 
         //if replace not successful, return false. bool used for potential future conditional popups triggered by managers. 
@@ -37,13 +35,32 @@ namespace _Scripts.Runtime.Misc
 
         public bool addUnit(int tile, GameObject newUnit)
         {
-            if (unitPositions[tile] >= 3)
+            if (unitPositions[tile] > 3)
             {
                 Debug.Log($"max units at tile {tile}");
                 return false;
             }
             tiles[tile,unitPositions[tile]] = newUnit;
-            unitPositions[tile]++;
+            for (int i = unitPositions[tile]+1; i < 4; i++)
+            {
+                if (tiles[tile, i] != null)
+                {
+                    unitPositions[tile]++;
+                    break;
+                }
+            }
+            return true;
+        }
+
+        public bool removeUnit(int tile, int unitPosition)
+        {
+            if (unitPositions[tile] < unitPosition)
+            {
+                Debug.Log($"no unit to remove at ({tile}, {unitPosition})");
+                return false;
+            }
+            tiles[tile,unitPositions[tile]] = null;
+            unitPositions[tile] = unitPosition;
             return true;
         }
         
