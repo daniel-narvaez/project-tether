@@ -13,6 +13,9 @@ namespace Consystently.Essentials
     {
         private EncounterSO encounterSo;
         private Encounter encounter; 
+        
+        //TODO:
+        //have the manager check if there is SO data. If there is none, use encounter 
         void OnEnable()
         {
             //encounter = EncounterManager.Instance.GetEncounter();

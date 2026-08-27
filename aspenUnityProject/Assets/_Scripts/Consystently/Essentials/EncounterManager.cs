@@ -33,6 +33,7 @@ namespace Consystently.Essentials
             return encounter;
         }
 
+        //called from EnemyUnitGO
         public void StartEncounter(EncounterSO encounterSo)
         {
            this.encounterSo = encounterSo; 
@@ -43,6 +44,11 @@ namespace Consystently.Essentials
         {
            this.encounter = encounter; 
            GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance)); 
+        }
+
+        public void StartEncounter()
+        {
+            GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
         }
 
     }
