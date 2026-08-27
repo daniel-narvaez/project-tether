@@ -51,5 +51,10 @@ namespace Consystently.Essentials
             GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
         }
 
+        public void ResetEncounter()
+        {
+            encounter = new Encounter(); 
+        }
+
     }
 }

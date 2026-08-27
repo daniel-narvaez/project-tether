@@ -2,17 +2,18 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//this script must be attached to the object before converting it to a prefab and dragging it to an SO
 namespace Tether.CharacterSystems
 {
     public class EnemyUnitGO : MonoBehaviour
     {
         private EnemyUnit stats;
-        [SerializeField] private EnemyUnitSO baseStats;
         
         //encounters to be passed upon player collision 
         [SerializeField] private EncounterSO[] encounters; 
-
-        private void Awake()
+        
+        //to be called by the combat manager. Will pass in encounter data and initialize the units. 
+        public void Initialize(EnemyUnitSO baseStats)
         {
             stats = new EnemyUnit(baseStats);
         }

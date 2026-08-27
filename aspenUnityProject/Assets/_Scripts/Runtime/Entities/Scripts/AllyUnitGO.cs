@@ -1,10 +1,11 @@
 using UnityEngine;
 
+//this script must be dragged to an object before making it a prefab and dragging the prefab to a unit SO.
 public class AllyUnitGO : MonoBehaviour {
    private AllyUnit stats;
-   [SerializeField] private PlayableCharacterUnitSO baseStats;
 
-   private void Awake()
+   //to be called by the combat maanager 
+   public void initialize(PlayableCharacterUnitSO baseStats)
    {
       stats = new AllyUnit(baseStats);
    }
@@ -20,7 +21,7 @@ public class AllyUnitGO : MonoBehaviour {
 
    public void TakeDamage(int damage)
    {
-      stats.ChangeHealthRemaining(damage); 
+      stats?.ChangeHealthRemaining(damage); 
    }
    
 }

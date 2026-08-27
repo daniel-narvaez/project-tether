@@ -7,9 +7,9 @@ public class EncounterSO : ScriptableObject
     [System.Serializable]
     public class Tile
     {
-        [SerializeField] private GameObject[] entities = new GameObject[4];
+        [SerializeField] private UnitDataSO[] entities = new UnitDataSO[4];
 
-        public GameObject this[int index]
+        public UnitDataSO this[int index]
         {
             get => entities[index];
             set => entities[index] = value;

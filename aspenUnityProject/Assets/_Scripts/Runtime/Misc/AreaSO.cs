@@ -7,8 +7,8 @@ namespace _Scripts.Runtime.Misc
     [CreateAssetMenu(fileName = "New Area", menuName = "Scriptable Objects/Misc/Area")]
     public class AreaSO : ScriptableObject
     {
-        [SerializeField] private GameObject[] enemyPool;
+        [SerializeField] private UnitDataSO[] enemyPool;
 
-        public GameObject[] EnemyPool => enemyPool;
+        public UnitDataSO[] EnemyPool => enemyPool;
     }
 }
