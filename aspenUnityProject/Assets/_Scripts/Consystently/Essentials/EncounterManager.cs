@@ -74,7 +74,7 @@ namespace Consystently.Essentials
                
                for (int unit = 0; unit < FilledSlots.Count; unit++)
                {
-                   Debug.Log(FilledSlots[unit].Piece.Sim.Data);
+                   Debug.Log(FilledSlots[unit].Piece.Sim.Data.Model);
                }
            }
         }

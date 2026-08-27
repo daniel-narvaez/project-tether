@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyUnitSO
   _portrait: {fileID: 0}
   _name: Pantheon
+  _model: {fileID: 8642023848279196920, guid: 128631cd648082e0ab1c702d007c89dd, type: 3}
   Level: 3
   ExPtsToNextLevel: 0
   TotalExPtsGained: 0
