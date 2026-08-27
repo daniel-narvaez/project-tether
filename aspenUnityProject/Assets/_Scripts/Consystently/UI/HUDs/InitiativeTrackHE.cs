@@ -11,8 +11,9 @@ namespace Consystently.UI
 
     public InitiativeSlot[] initiativeSlots { get; protected set; } = new InitiativeSlot[16];
 
-    protected void Start()
+    protected override void Start()
     {
+      base.Start();
       for (int i = 0; i < initiativeSlots.Length; i++)
       {
         initiativeSlots[i] = Instantiate(_slotPrefab, i == 0 ? _zeroPanel : _content);

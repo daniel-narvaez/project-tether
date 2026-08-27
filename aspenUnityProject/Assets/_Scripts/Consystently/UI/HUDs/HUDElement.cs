@@ -12,13 +12,24 @@ namespace Consystently.UI
     public string Name => hudName;
 
     public HUD Hud { get; protected set; }
-
-    void Awake()
+    protected CanvasGroup _canvasGroup;
+    protected virtual void Start()
     {
-      // if (transform.root.gameObject.TryGetComponent(out HUD hud))
-      // {
-      //   Hud ??= hud;
-      // }
+      _canvasGroup ??= GetComponent<CanvasGroup>();
+    }
+
+    protected virtual void Show()
+    {
+      _canvasGroup.interactable = true;
+      _canvasGroup.blocksRaycasts = true;
+      _canvasGroup.alpha = 1;
+    }
+
+    protected virtual void Hide()
+    {
+      _canvasGroup.interactable = false;
+      _canvasGroup.blocksRaycasts = false;
+      _canvasGroup.alpha = 0;
     }
   }
 }

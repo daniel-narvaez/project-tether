@@ -10,8 +10,9 @@ namespace Consystently.UI
 
     public UnitVitals[] UnitVitalsObjects { get; protected set; } = new UnitVitals[4];
 
-    private void Start()
+    protected override void Start()
     {
+      base.Start();
       for (int i = 0; i < UnitVitalsObjects.Length; i++)
       {
         UnitVitalsObjects[i] ??= Instantiate(_unitVitalsPrefab, _vitalsPanel);
