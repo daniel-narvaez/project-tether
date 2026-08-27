@@ -8,11 +8,12 @@ namespace Consystently.Essentials
     public class EncounterManager : Manager<EncounterManager>
     {
         private EncounterSO encounterSo;
+        
+        
+        //initial unit formation generated from BattlefieldMap for the mvp 
         private Encounter encounter = new Encounter();
         
-        //initial unit formation generated from BattlefieldMap - will be used to
         //determine the positions of the unit controllers (which will store unit data such as position)
-        private GameObject[,] initialObjectFormation = new GameObject[19,4];
         private IUnitController[,] unitControllers = new IUnitController[19,4];
         
         void Start()
@@ -64,7 +65,18 @@ namespace Consystently.Essentials
         public void GenerateEncounter(List<BattlefieldTile> tiles)
         {
            Debug.Log($"tiles length: {tiles.Count}");
-           Debug.Log($"tiles length: {tiles[0].FilledSlots}");
+           for (int tile = 0; tile < tiles.Count; tile++)
+           {
+               if (tiles[tile].FilledSlots.Count < 1)
+                   continue; 
+               Debug.Log($"tiles length: {tile} {tiles[tile].FilledSlots.Count}");
+               List<UnitPieceSlot> FilledSlots = tiles[tile].FilledSlots;
+               
+               for (int unit = 0; unit < FilledSlots.Count; unit++)
+               {
+                   Debug.Log(FilledSlots[unit].Piece.Sim.Data);
+               }
+           }
         }
 
     }
