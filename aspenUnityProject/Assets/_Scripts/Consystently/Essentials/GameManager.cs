@@ -27,19 +27,21 @@ namespace Consystently.Essentials
     {
       if (currentGameGameState == newGameState)
         return;
-      
       currentGameGameState?.Exit();
       previousGameState = currentGameGameState;
       currentGameGameState = newGameState;
-      currentGameGameState.Enter();
+      currentGameGameState?.Enter();
       ChangedGameState?.Invoke(newGameState);
     }
 
     //primarily for pause screens, menu screens, and other states that can transition to any other state 
     public void ReturnGameState()
     {
+      if (previousGameStates.Count < 1)
+        return;
+      currentGameGameState?.Exit();
       currentGameGameState = previousGameStates.Pop();
-      currentGameGameState.Enter(); 
+      currentGameGameState?.Enter(); 
       ChangedGameState?.Invoke(currentGameGameState);
     }
 

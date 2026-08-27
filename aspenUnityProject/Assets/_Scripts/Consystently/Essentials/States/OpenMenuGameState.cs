@@ -15,7 +15,6 @@ namespace Consystently.Essentials
         {
             //unpause
             gameManager.PauseGame();
-            gameManager.ReturnGameState();
         }
     }
 }
