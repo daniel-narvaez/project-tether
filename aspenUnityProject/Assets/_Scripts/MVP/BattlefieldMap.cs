@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Consystently.Essentials;
 using Consystently.UI;
 using UnityEngine;
 
@@ -79,5 +80,9 @@ public class BattlefieldMap : MonoBehaviour
     public void EndPiecePlacement()
     {
         SetTileDetailsMode();
+    }
+
+    public void GetTiles()
+    {
     }
 }

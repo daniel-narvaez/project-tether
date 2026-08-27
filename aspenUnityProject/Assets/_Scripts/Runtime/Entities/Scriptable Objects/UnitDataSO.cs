@@ -15,6 +15,11 @@ public abstract class UnitDataSO : ScriptableObject
   
   public string Name => _name;
 
+  [Space(5)]
+  [SerializeField] protected GameObject _model;
+  
+  public GameObject Model => _model;
+
   public virtual Faction Faction => Faction.Neutral;
 
   [Header("Progress", order = 1)]

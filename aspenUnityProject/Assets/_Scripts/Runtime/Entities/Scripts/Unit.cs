@@ -30,6 +30,8 @@ public abstract class Unit
     protected float HealthRemaining { get; set; } 
     protected float EnergyRemaining { get; set; }
 
+    protected int currentTile; 
+
 //   public event Action HasDied;
 
    //level will draw from save
@@ -54,9 +56,11 @@ public abstract class Unit
    public void SetStatTech(int value) { Tech = value; }
    public void SetStatResistance(int value) { Resistance = value; }
    public void  SetStatSpeed(int value) { Speed = value; }
-   public  void SetStatLuck(int value) { Luck = value; }
+   public void SetStatLuck(int value) { Luck = value; }
    public void SetStatPrecision(int value) { Precision = value; }
    public void SetStatEvasion(int value) { Evasion = value; }
+
+   public void setTile(int tile) {  currentTile = tile; }
    
    public abstract void ChangeHealthRemaining(int value);
    public abstract void ChangeEnergyRemaining(int value);

@@ -4,9 +4,9 @@ public class EnemyUnit : Unit
 {
    public event Action<EnemyUnit> HasDied;
    
-   public EnemyUnit(EnemyUnitSO unit) : base(unit)
+   public EnemyUnit(UnitDataSO unit) : base(unit)
    {
-      Faction = unit.Faction;
+      Faction = Faction.Enemy;
    }
 
    public override void ChangeHealthRemaining(int value)

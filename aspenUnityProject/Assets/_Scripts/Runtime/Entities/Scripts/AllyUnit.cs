@@ -6,9 +6,9 @@ public class AllyUnit : Unit
     public event Action<AllyUnit> HasDied;
     
     //private CombatClass combatClass; 
-    public AllyUnit(PlayableCharacterUnitSO unit) : base(unit)
+    public AllyUnit(UnitDataSO unit) : base(unit)
     {
-        Faction = unit.Faction; 
+        Faction = Faction.Ally;
     }
     
     //probably do damage formula later either here or in a diff class 
@@ -53,5 +53,6 @@ public class AllyUnit : Unit
     {
         
     }
+    
 
 }
