@@ -2,10 +2,10 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-//this script must be attached to the object before converting it to a prefab and dragging it to an SO
+//this script must be attached to the object before converting it to a prefab and dragging it to a unit SO. 
 namespace Tether.CharacterSystems
 {
-    public class EnemyUnitGO : MonoBehaviour
+    public class EnemyUnitController : MonoBehaviour, IUnitController
     {
         private EnemyUnit stats;
         
@@ -13,9 +13,19 @@ namespace Tether.CharacterSystems
         [SerializeField] private EncounterSO[] encounters; 
         
         //to be called by the combat manager. Will pass in encounter data and initialize the units. 
-        public void Initialize(EnemyUnitSO baseStats)
+        public void Initialize(UnitDataSO baseStats)
         {
             stats = new EnemyUnit(baseStats);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            
+        }
+
+        public void Move(Vector3 translation)
+        {
+            
         }
     
         /*TODO:

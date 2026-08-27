@@ -1,4 +1,6 @@
 using _Scripts.Runtime.Misc;
+using Tether.CharacterSystems;
+using UnityEngine;
 
 namespace Consystently.Essentials
 {
@@ -6,6 +8,11 @@ namespace Consystently.Essentials
     {
         private EncounterSO encounterSo;
         private Encounter encounter = new Encounter();
+        
+        //initial unit formation generated from BattlefieldMap - will be used to
+        //determine the positions of the unit controllers (which will store unit data such as position)
+        private GameObject[,] initialObjectFormation = new GameObject[19,4];
+        private IUnitController[,] unitControllers = new IUnitController[19,4];
         
         void OnEnable()
         {
@@ -27,6 +34,7 @@ namespace Consystently.Essentials
         {
             return encounterSo;
         }
+        //returns 2d Unit array (for the data) 
 
         public Encounter GetEncounter()
         {
