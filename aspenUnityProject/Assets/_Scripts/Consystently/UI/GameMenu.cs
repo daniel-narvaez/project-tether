@@ -33,6 +33,10 @@ namespace Consystently.UI
     {
       _canvasGroup ??= GetComponent<CanvasGroup>();
       MenuManager.Instance.AddMenuToSet(this);
+
+      foreach (Panel panel in GetComponentsInChildren<Panel>())
+        panel.Initialize(this);
+        
       Close();
     }
 
