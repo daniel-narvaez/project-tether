@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//move to separate directory later
+//misc directory is temp name? 
 [CreateAssetMenu(fileName = "NewEncounter", menuName = "Scriptable Objects/Misc/Encounter")]
 public class EncounterSO : ScriptableObject
 {
