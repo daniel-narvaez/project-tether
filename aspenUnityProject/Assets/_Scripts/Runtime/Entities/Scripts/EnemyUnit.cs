@@ -6,7 +6,7 @@ public class EnemyUnit : Unit
    
    public EnemyUnit(UnitDataSO unit) : base(unit)
    {
-      Faction = Faction.Enemy;
+      SetFaction(Faction.Enemy);
    }
 
    public override void ChangeHealthRemaining(int value)

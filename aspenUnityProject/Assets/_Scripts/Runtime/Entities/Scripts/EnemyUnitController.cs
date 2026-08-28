@@ -16,6 +16,7 @@ namespace Tether.CharacterSystems
         public void Initialize(UnitDataSO baseStats)
         {
             stats = new EnemyUnit(baseStats);
+            Debug.Log($"{gameObject.name} initialized with stats instance ID: {stats.GetHashCode()}"); 
         }
 
         public void TakeDamage(int damage)
@@ -26,6 +27,11 @@ namespace Tether.CharacterSystems
         public void Move(Vector3 translation)
         {
             
+        }
+
+        public Unit GetData()
+        {
+            return stats; 
         }
     
         /*TODO:

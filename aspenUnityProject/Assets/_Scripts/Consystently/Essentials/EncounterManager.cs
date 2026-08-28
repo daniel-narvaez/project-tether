@@ -7,14 +7,11 @@ namespace Consystently.Essentials
 {
     public class EncounterManager : Manager<EncounterManager>
     {
-        private EncounterSO encounterSo;
-        
+        //probably stupid way of implementing this 
+        private UnitDataSO[,] initializerData = new UnitDataSO[19,4];
         
         //initial unit formation generated from BattlefieldMap for the mvp 
-        private Encounter encounter = new Encounter();
-        
-        //determine the positions of the unit controllers (which will store unit data such as position)
-        private IUnitController[,] unitControllers = new IUnitController[19,4];
+        private Encounter encounter;
         
         void Start()
         {
@@ -31,30 +28,34 @@ namespace Consystently.Essentials
             //switch statement here if it ever becomes useful
         }
 
-        //getters may or may not have expanded functions down the line
-        public EncounterSO GetEncounterSo()
-        {
-            return encounterSo;
-        }
-        //returns 2d Unit array (for the data) 
-
+       //returns 2d Unit array (for the data) 
         public Encounter GetEncounter()
         {
             return encounter;
         }
 
+
+        public UnitDataSO[,] GetInitializerData()
+        {
+            return initializerData;
+        }
+
         //called from EnemyUnitController
+        //update to generate encounter type 
         public void StartEncounter(EncounterSO encounterSo)
         {
-           this.encounterSo = encounterSo; 
+           GenerateEncounter(encounterSo);
            GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance)); 
         }
 
+        //if ever add randomized enemy positioning for encounters, we will have to update and use this function. 
+        /* 
         public void StartEncounter(Encounter encounter)
         {
            this.encounter = encounter; 
            GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance)); 
         }
+        */
 
         public void StartEncounter()
         {
@@ -64,19 +65,31 @@ namespace Consystently.Essentials
         //for mvp primarily 
         public void GenerateEncounter(List<BattlefieldTile> tiles)
         {
+           encounter = new Encounter();
            Debug.Log($"tiles length: {tiles.Count}");
            for (int tile = 0; tile < tiles.Count; tile++)
            {
                if (tiles[tile].FilledSlots.Count < 1)
                    continue; 
-               Debug.Log($"tiles length: {tile} {tiles[tile].FilledSlots.Count}");
-               List<UnitPieceSlot> FilledSlots = tiles[tile].FilledSlots;
+               List<UnitPieceSlot> filledSlots = tiles[tile].FilledSlots;
                
-               for (int unit = 0; unit < FilledSlots.Count; unit++)
+               for (int unit = 0; unit < filledSlots.Count; unit++)
                {
-                   Debug.Log(FilledSlots[unit].Piece.Sim.Data.Model);
+                   UnitSim sim = filledSlots[unit].Piece?.Sim;
+                   encounter.AddUnit(tile, (sim?.Data.Model));
+                   initializerData[tile, unit] = (sim?.Data);
+//                   Debug.Log($"tile:{tile} | unit:{unit}");
+//                  Debug.Log(FilledSlots[unit].Piece.Sim.Data.Model);
                }
            }
+//           encounter.Validate();
+        }
+
+        //TODO: finish this function when we get to the overworld or level selection  
+        public void GenerateEncounter(EncounterSO encounterSo)
+        {
+           encounter = new Encounter();
+           
         }
 
     }

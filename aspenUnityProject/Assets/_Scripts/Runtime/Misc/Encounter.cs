@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 namespace _Scripts.Runtime.Misc
 {
     //for creating new encounters within the game.
-    //EncounterSO encounters are premade and should not be modified in-game.
-    //EncounterManager will use account for both EncounterSOs and this class, but mainly SOs will be used.  
-    //This will be used for the MVP demo, as the player will create encounters during runtime. 
+    //because unitPositions starts at index 0, there may be off-by-one errors. 
+    //If they persist, initiate values of unitPositions as -1.
+    //TODO: get rid of magic numbers 
     public class Encounter
     {
         //19 tiles, max 4 units per tile
@@ -22,9 +23,9 @@ namespace _Scripts.Runtime.Misc
         }
 
         //if replace not successful, return false. bool used for potential future conditional popups triggered by managers. 
-        public bool changeUnit(int tile, int unitPosition, GameObject newUnit)
+        public bool ChangeUnit(int tile, int unitPosition, GameObject newUnit)
         {
-            if (unitPosition > unitPositions[tile])
+            if (unitPosition > unitPositions[tile]-1)
             {
                 Debug.Log($"no unit to replace at ({tile}, {unitPosition})");
                 return false;
@@ -33,15 +34,16 @@ namespace _Scripts.Runtime.Misc
             return true;
         }
 
-        public bool addUnit(int tile, GameObject newUnit)
+        public bool AddUnit(int tile, GameObject newUnit)
         {
-            if (unitPositions[tile] > 3)
+            if (unitPositions[tile] >= 4)
             {
                 Debug.Log($"max units at tile {tile}");
                 return false;
             }
             tiles[tile,unitPositions[tile]] = newUnit;
-            for (int i = unitPositions[tile]+1; i < 4; i++)
+            unitPositions[tile]++;
+            for (int i = unitPositions[tile]; i < 4; i++)
             {
                 if (tiles[tile, i] != null)
                 {
@@ -52,16 +54,44 @@ namespace _Scripts.Runtime.Misc
             return true;
         }
 
-        public bool removeUnit(int tile, int unitPosition)
+
+        public bool RemoveUnit(int tile, int unitPosition)
         {
-            if (unitPositions[tile] > 3 || tiles[tile, unitPosition] == null)
+            if (unitPositions[tile] < 1 || tiles[tile, unitPosition] == null)
             {
                 Debug.Log($"no unit to remove at ({tile}, {unitPosition})");
                 return false;
             }
-            tiles[tile,unitPositions[tile]] = null;
-            unitPositions[tile] = unitPosition;
+            tiles[tile,unitPosition] = null;
+            unitPositions[tile] = unitPosition+1;
             return true;
+        }
+
+        public int TotalTiles()
+        {
+            return tiles.GetLength(0);
+        }
+
+        public int MaxUnitsPerTile()
+        {
+            return tiles.GetLength(1); 
+        }
+
+        public int UnitCountAtTile(int tile)
+        {
+            return unitPositions[tile];
+        }
+
+        public void Validate()
+        {
+            for (int i = 0; i < 19; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if(tiles[i,j] != null)
+                        Debug.Log($"tile {i}: {unitPositions[i]} ");
+                }
+            }
         }
         
     }

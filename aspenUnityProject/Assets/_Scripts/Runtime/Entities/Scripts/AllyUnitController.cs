@@ -29,5 +29,11 @@ public class AllyUnitController : MonoBehaviour, IUnitController {
    {
       
    }
+
+   public Unit GetData()
+   {
+      return stats; 
+   }
+   
    
 }

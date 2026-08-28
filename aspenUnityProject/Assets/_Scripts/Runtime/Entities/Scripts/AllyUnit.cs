@@ -8,7 +8,7 @@ public class AllyUnit : Unit
     //private CombatClass combatClass; 
     public AllyUnit(UnitDataSO unit) : base(unit)
     {
-        Faction = Faction.Ally;
+        SetFaction(Faction.Ally);
     }
     
     //probably do damage formula later either here or in a diff class 
@@ -19,7 +19,7 @@ public class AllyUnit : Unit
             HasDied?.Invoke(this); 
     }
 
-    public override void ChangeEnergyRemaining(int value)
+     public override void ChangeEnergyRemaining(int value)
     {
         EnergyRemaining -= value;
     }

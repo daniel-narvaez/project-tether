@@ -82,7 +82,4 @@ public class BattlefieldMap : MonoBehaviour
         SetTileDetailsMode();
     }
 
-    public void GetTiles()
-    {
-    }
 }
