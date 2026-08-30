@@ -8,6 +8,7 @@ namespace Tether.CharacterSystems
     public class EnemyUnitController : MonoBehaviour, IUnitController
     {
         private EnemyUnit stats;
+        private int tile; 
         
         //encounters to be passed upon player collision 
         [SerializeField] private EncounterSO[] encounters; 
@@ -24,14 +25,24 @@ namespace Tether.CharacterSystems
             
         }
 
-        public void Move(Vector3 translation)
+        public void Move(int newTile)
         {
-            
+            tile = newTile; 
         }
 
         public Unit GetData()
         {
             return stats; 
+        }
+
+        public int GetTile()
+        {
+            return tile;
+        }
+
+        public void SetTile(int tile)
+        {
+            this.tile = tile;
         }
     
         /*TODO:

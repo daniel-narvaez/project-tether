@@ -8,7 +8,10 @@ namespace Tether.CharacterSystems
         public void TakeDamage(int damage);
        
         //convert later to deal with tiles
-        public void Move(Vector3 translation);
+        public void Move(int tile);
         public Unit GetData();
+
+        public int GetTile();
+        public void SetTile(int tile);
     }
 }

@@ -30,7 +30,6 @@ public abstract class Unit
     public float HealthRemaining { get; protected set; } 
     public float EnergyRemaining { get; protected set; }
 
-    public int CurrentTile { get; protected set; }
 
 //   public event Action HasDied;
 
@@ -52,6 +51,9 @@ public abstract class Unit
    //placeholder
   
    protected void SetFaction(Faction value) { Faction = value; }
+
+
+   
 
    public abstract void ChangeHealthRemaining(int value);
    public abstract void ChangeEnergyRemaining(int value);

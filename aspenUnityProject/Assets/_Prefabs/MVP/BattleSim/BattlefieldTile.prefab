@@ -71,6 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4963955483919176486}
+  - component: {fileID: 8024500116697297257}
   m_Layer: 0
   m_Name: BattlefieldTile
   m_TagString: Untagged
@@ -95,6 +96,19 @@ Transform:
   - {fileID: 463336248175791414}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8024500116697297257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4051248449132416663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89ff4948db464b2d859571d3ca77e59e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileSystem.TileController
+  tileNum: 0
 --- !u!1 &4507144362437243118
 GameObject:
   m_ObjectHideFlags: 0

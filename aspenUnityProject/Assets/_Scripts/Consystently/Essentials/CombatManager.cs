@@ -1,6 +1,7 @@
 using System;
 using _Scripts.Runtime.Misc;
 using Tether.CharacterSystems;
+using TileSystem;
 using UnityEngine;
 
 namespace Consystently.Essentials
@@ -8,12 +9,15 @@ namespace Consystently.Essentials
     /*will not be a traditional manager because it does not 
     need to be static. EncounterManager will be static and the one 
     to send the data over to CombatManager. CombatManager will exist
-    in the battle scene only 
+    in the battle scene only. The UIManager will need a reference to the CombatManager 
     */
     public class CombatManager : MonoBehaviour
     {
         //need to input data into the empty husk gameObjects 
         private UnitDataSO[,] initializerData;
+        
+        //no use in mvp
+        //private TileSO[] tiles;
         
         //used for instantiating the models
         private Encounter encounter; 
@@ -21,18 +25,35 @@ namespace Consystently.Essentials
         //used for the actual unit logic 
         private readonly IUnitController[,] unitControllers =  new IUnitController[19, 4];
         
-        //gets the transforms of the battle scene tiles. For determining player movements 
-        //TODO: implement this and run on start
-        private Transform[] tileTransforms; 
+        
+
+        [SerializeField] private Transform tilesParent;
+        private TileController[] tileControllers = new TileController[19];
+        
         
         void Start()
         {
             encounter = EncounterManager.Instance.GetEncounter();
             initializerData = EncounterManager.Instance.GetInitializerData();
+            SortTiles(tilesParent.GetComponentsInChildren<TileController>());
             CreateObjects(); 
             ValidateData();
         }
 
+        //Correct order is not guaranteed by GetComponentsInChildren
+        private void SortTiles(TileController[] tiles)
+        {
+            foreach (TileController tileController in tiles)
+            {
+                tileControllers[tileController.Num()] = tileController;
+            } 
+        }
+        
+        //TODO: subscribe to units 
+        //TODO: subscribe to uimanager's actions
+        
+
+        
         void CreateObjects()
         {
             for (int tile = 0; tile < encounter.TotalTiles(); tile++)
@@ -43,18 +64,25 @@ namespace Consystently.Essentials
                 {
                     if (unit > encounter.UnitCountAtTile(tile) - 1)
                         break;
-                    GameObject newTempObject = Instantiate(encounter[tile,unit], encounter[tile,unit].transform.position, Quaternion.identity);
-                    
-                    //set up controllers after object instantiation so they don't override each other
-                    if(initializerData[tile,unit].Faction == Faction.Ally)
-                        unitControllers[tile,unit] = newTempObject.GetComponent<AllyUnitController>();
-                    else if (initializerData[tile,unit].Faction == Faction.Enemy)
-                        unitControllers[tile,unit] = newTempObject.GetComponent<EnemyUnitController>();
+                    GameObject newTempObject = Instantiate(encounter[tile,unit], tileControllers[tile].Position(), Quaternion.identity);
+                    //set up controllers after object instantiation so objects don't override each other's data
+                    //the newly cloned object does not share the same reference as the original prefab, so there is no overriding
+                    if (initializerData[tile, unit].Faction == Faction.Ally) 
+                        tileControllers[tile].AddUnit(newTempObject.GetComponent<AllyUnitController>());
+                    else if (initializerData[tile, unit].Faction == Faction.Enemy)
+                        tileControllers[tile].AddUnit(newTempObject.GetComponent<EnemyUnitController>());
                     else 
                         Debug.Log("neutral units not yet implemented");
-                    unitControllers[tile, unit].Initialize(initializerData[tile,unit]);
+//                    Debug.Log($"{tile}: {unit}, {tileControllers[tile].UnitCount()}");
+                    tileControllers[tile].GetUnitAt(unit).Initialize(initializerData[tile,unit]);
+                    tileControllers[tile].GetUnitAt(unit).SetTile(tile);
                 }
             }
+        }
+
+        void GetTiles()
+        {
+            
         }
         
 
@@ -71,8 +99,8 @@ namespace Consystently.Essentials
                 for (int unit = 0; unit < encounter.MaxUnitsPerTile(); unit++)
                 {
                     if (unit > encounter.UnitCountAtTile(tile) - 1)
-                        continue;
-                    Debug.Log($"{unitControllers[tile,unit].GetData().Name}:  {unitControllers[tile,unit].GetData().Level}");
+                        break;
+                    Debug.Log($"{tileControllers[tile].GetUnitAt(unit).GetData().Name}:  {tileControllers[tile].GetUnitAt(unit).GetData().Name}");
                     
                 }
             }

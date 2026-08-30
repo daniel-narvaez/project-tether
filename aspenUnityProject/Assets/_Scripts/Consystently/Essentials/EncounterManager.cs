@@ -10,6 +10,9 @@ namespace Consystently.Essentials
         //probably stupid way of implementing this 
         private UnitDataSO[,] initializerData = new UnitDataSO[19,4];
         
+        //NOT useful yet. Will be useful when we decide to add tile effects 
+        private TileSO[] tileInitializerData = new TileSO[19];
+        
         //initial unit formation generated from BattlefieldMap for the mvp 
         private Encounter encounter;
         
@@ -62,6 +65,7 @@ namespace Consystently.Essentials
             GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
         }
 
+        //TODO: when we add tile effects, add tile data to generate methods
         //for mvp primarily 
         public void GenerateEncounter(List<BattlefieldTile> tiles)
         {

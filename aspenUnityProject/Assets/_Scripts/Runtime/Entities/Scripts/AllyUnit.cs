@@ -4,6 +4,7 @@ public class AllyUnit : Unit
 {
     public event Action<AllyUnit> HasLeveled;
     public event Action<AllyUnit> HasDied;
+    public event Action<AllyUnit> HasMoved;
     
     //private CombatClass combatClass; 
     public AllyUnit(UnitDataSO unit) : base(unit)

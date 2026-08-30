@@ -3,6 +3,7 @@ using System;
 public class EnemyUnit : Unit
 {
    public event Action<EnemyUnit> HasDied;
+   public event Action<EnemyUnit> HasMoved; 
    
    public EnemyUnit(UnitDataSO unit) : base(unit)
    {
