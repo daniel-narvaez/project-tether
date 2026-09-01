@@ -9,6 +9,7 @@ namespace Tether.CharacterSystems
        
         //convert later to deal with tiles
         public void Move(int tile);
+        public void Move(Vector3 position);
         public Unit GetData();
 
         public int GetTile();

@@ -30,6 +30,11 @@ public class AllyUnitController : MonoBehaviour, IUnitController {
    public void Move(int tile)
    {
    }
+
+   public void Move(Vector3 position)
+   {
+     transform.position = position; 
+   }
    
    public Unit GetData()
    {

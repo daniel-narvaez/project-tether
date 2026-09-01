@@ -54,6 +54,19 @@ namespace TileSystem
             return transform.position; 
         }
 
+        //. . . triangle box 
+        public void RepositionUnits(float offset)
+        {
+            int count = unitControllers.Count;
+            if (count <= 1)
+                return;
+            for (int unit = 0; unit < count; unit++)
+            {
+                float angle = (2f * Mathf.PI * unit) / count;
+               unitControllers[unit].Move(transform.position + new Vector3(offset * Mathf.Cos(angle), 0, offset * Mathf.Sin(angle)));
+            }
+        }
+
         public int Num()
         {
             return tileNum;

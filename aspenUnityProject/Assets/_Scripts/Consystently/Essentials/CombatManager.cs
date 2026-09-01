@@ -64,7 +64,7 @@ namespace Consystently.Essentials
                 {
                     if (unit > encounter.UnitCountAtTile(tile) - 1)
                         break;
-                    GameObject newTempObject = Instantiate(encounter[tile,unit], tileControllers[tile].Position(), Quaternion.identity);
+                    GameObject newTempObject = Instantiate(encounter[tile,unit], tileControllers[tile].Position(), Quaternion.Euler(-90f,0,0));
                     //set up controllers after object instantiation so objects don't override each other's data
                     //the newly cloned object does not share the same reference as the original prefab, so there is no overriding
                     if (initializerData[tile, unit].Faction == Faction.Ally) 
@@ -77,6 +77,7 @@ namespace Consystently.Essentials
                     tileControllers[tile].GetUnitAt(unit).Initialize(initializerData[tile,unit]);
                     tileControllers[tile].GetUnitAt(unit).SetTile(tile);
                 }
+                tileControllers[tile].RepositionUnits(10f);
             }
         }
 

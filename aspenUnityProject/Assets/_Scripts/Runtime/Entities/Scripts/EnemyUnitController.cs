@@ -30,6 +30,11 @@ namespace Tether.CharacterSystems
             tile = newTile; 
         }
 
+        public void Move(Vector3 position)
+        {
+           transform.position = position;
+        }
+
         public Unit GetData()
         {
             return stats; 
