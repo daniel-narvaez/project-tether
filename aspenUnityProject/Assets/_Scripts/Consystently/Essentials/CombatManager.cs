@@ -95,7 +95,6 @@ namespace Consystently.Essentials
         //debug tool
         //TODO:
         //FINISH STAT SYSTEM; health will be at zero when printed
-        //NOTE: currently, the most recently placed enemy will override 
         void ValidateData()
         {
             for (int tile = 0; tile < encounter.TotalTiles(); tile++)

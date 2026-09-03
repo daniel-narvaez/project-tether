@@ -63,7 +63,7 @@ namespace TileSystem
             for (int unit = 0; unit < count; unit++)
             {
                 float angle = (2f * Mathf.PI * unit) / count;
-               unitControllers[unit].Move(transform.position + new Vector3(offset * Mathf.Cos(angle), 0, offset * Mathf.Sin(angle)));
+               unitControllers[unit].Move(transform.position + new Vector3(offset * -Mathf.Cos(angle), 0, offset * Mathf.Sin(angle)));
             }
         }
 

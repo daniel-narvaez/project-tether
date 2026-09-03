@@ -2,6 +2,7 @@ using UnityEngine;
 
 public static class CombatFormulas
 {
+  //TODO: change data types to work with CombatManager
   public static void Damage(GameObject attacker, GameObject defender)
   {
     UnitStats attackerStats = attacker.GetComponent<UnitStats>();

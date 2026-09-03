@@ -27,7 +27,7 @@ public class EncounterSO : ScriptableObject
     }
 
     [Header("Tiles")]
-    public Tile[] battleField = new Tile[19];
+    [SerializeField] private Tile[] battleField = new Tile[19];
 
     void OnValidate()
     {
