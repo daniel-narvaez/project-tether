@@ -1,10 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 //Entity but pure c# class. Abstract class -> split into ally and enemy 
 //Missing Energy/Health system
-public abstract class Unit
-{
+public abstract class Unit {
+    
+    public event Action<EnemyUnit> HasDied;
+    public event Action<EnemyUnit> HasMoved; 
     public Sprite Portrait { get; private set; }
     public string Name { get; set; }
     public Faction Faction { get; protected set; }

@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using _Scripts.Runtime.Misc;
 using Tether.CharacterSystems;
 using TileSystem;
@@ -22,14 +22,12 @@ namespace Consystently.Essentials
         //used for instantiating the models
         private Encounter encounter; 
         
-        //used for the actual unit logic 
-        private readonly IUnitController[,] unitControllers =  new IUnitController[19, 4];
-        
-        
 
         [SerializeField] private Transform tilesParent;
-        private TileController[] tileControllers = new TileController[19];
+        private readonly TileController[] tileControllers = new TileController[19];
         
+        //least to greatest
+        private readonly List<IUnitController> turnOrder = new  List<IUnitController>();
         
         void Start()
         {
@@ -37,6 +35,7 @@ namespace Consystently.Essentials
             initializerData = EncounterManager.Instance.GetInitializerData();
             SortTiles(tilesParent.GetComponentsInChildren<TileController>());
             CreateObjects(); 
+            turnOrder.Sort((a,b) => a.GetData().Speed.CompareTo(b.GetData().Speed));
             ValidateData();
         }
 
@@ -76,6 +75,7 @@ namespace Consystently.Essentials
 //                    Debug.Log($"{tile}: {unit}, {tileControllers[tile].UnitCount()}");
                     tileControllers[tile].GetUnitAt(unit).Initialize(initializerData[tile,unit]);
                     tileControllers[tile].GetUnitAt(unit).SetTile(tile);
+                    turnOrder.Add(tileControllers[tile].GetUnitAt(unit));
                 }
                 tileControllers[tile].RepositionUnits(10f);
             }
@@ -84,6 +84,11 @@ namespace Consystently.Essentials
         void GetTiles()
         {
             
+        }
+
+        public List<IUnitController> GetTurnOrder()
+        {
+            return turnOrder;
         }
         
 
