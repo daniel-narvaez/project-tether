@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Scripts.Runtime.Misc;
 using Tether.CharacterSystems;
@@ -15,15 +16,16 @@ namespace Consystently.Essentials
         
         //initial unit formation generated from BattlefieldMap for the mvp 
         private Encounter encounter;
+        public static event Action<GameState> encountered; 
         
-        void Start()
+        void OnEnable()
         {
-            GameManager.Instance.ChangedGameState += HandleState;
+            GameManager.ChangedGameState += HandleState;
         }
 
         void OnDisable()
         {
-            GameManager.Instance.ChangedGameState -= HandleState; 
+            GameManager.ChangedGameState -= HandleState; 
         }
 
         void HandleState(GameState gameState)
@@ -48,7 +50,7 @@ namespace Consystently.Essentials
         public void StartEncounter(EncounterSO encounterSo)
         {
            GenerateEncounter(encounterSo);
-           GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance)); 
+           encountered?.Invoke(new CombatGameState(GameManager.Instance));
         }
 
         //if ever add randomized enemy positioning for encounters, we will have to update and use this function. 
@@ -62,7 +64,7 @@ namespace Consystently.Essentials
 
         public void StartEncounter()
         {
-            GameManager.Instance.ChangeGameState(new CombatGameState(GameManager.Instance));
+            encountered?.Invoke(new CombatGameState(GameManager.Instance));
         }
 
         //TODO: when we add tile effects, add tile data to generate methods

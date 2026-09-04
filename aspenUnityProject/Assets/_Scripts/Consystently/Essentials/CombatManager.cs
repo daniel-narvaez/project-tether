@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Scripts.Runtime.Misc;
 using Tether.CharacterSystems;
@@ -26,8 +27,21 @@ namespace Consystently.Essentials
         [SerializeField] private Transform tilesParent;
         private readonly TileController[] tileControllers = new TileController[19];
         
+        //sliding window for displaying it
         //least to greatest
+        //make sure it has references and not copies of the objects, so changes are reflected
         private readonly List<IUnitController> turnOrder = new  List<IUnitController>();
+        
+        
+
+        //combat manager will sub to each unit and read their deaths. Have this action so ui managers don't have to 
+        //sub to each unit themselves 
+        //use arrays for unitsDead because damage is dealt to entire tiles at a time. have whatever handles animations process unit deaths by iterating
+        //TODO: implement the proper response to unit death. For each unit that dies, add them to an array. 
+        private Action<Unit[]> unitsDead;
+        
+        //animation/tile update handled per unit at the instant they move 
+        private Action<IUnitController> unitMoved;
         
         void Start()
         {

@@ -9,20 +9,32 @@ namespace Consystently.Essentials
   {
     public bool GameIsPaused { get; private set; } = false;
     
-    public event Action<GameState> ChangedGameState;
+    public static event Action<GameState> ChangedGameState;
 
     private GameState currentGameGameState;
     //push to stack for certain states 
     private GameState previousGameState;
     private readonly Stack<GameState> previousGameStates = new Stack<GameState>();
 
+    void OnEnable()
+    {
+      EncounterManager.encountered += ChangeGameState;      
+      BattleSimManager.submitted += ChangeGameState;
+    }
+
+    void OnDIsabled()
+    {
+      EncounterManager.encountered -= ChangeGameState;
+      BattleSimManager.submitted -= ChangeGameState;
+    }
+    
     public void PauseGame ()
     {
       GameIsPaused = !GameIsPaused;
       Time.timeScale = GameIsPaused ? 0f : 1f;
     }
 
-    public void ChangeGameState(GameState newGameState)
+    private void ChangeGameState(GameState newGameState)
     {
       if (currentGameGameState == newGameState)
         return;
@@ -34,7 +46,7 @@ namespace Consystently.Essentials
     }
 
     //primarily for pause screens, menu screens, and other states that can transition to any other state 
-    public void ReturnGameState()
+    private void ReturnGameState()
     {
       if (previousGameStates.Count < 1)
         return;
