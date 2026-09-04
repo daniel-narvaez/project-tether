@@ -5,7 +5,7 @@ using UnityEngine;
 //this script must be attached to the object before converting it to a prefab and dragging it to a unit SO. 
 namespace Tether.CharacterSystems
 {
-    public class EnemyUnitController : MonoBehaviour, IUnitController
+    public class EnemyUnitController : UnitController
     {
         private EnemyUnit stats;
         private int tile; 
@@ -14,38 +14,38 @@ namespace Tether.CharacterSystems
         [SerializeField] private EncounterSO[] encounters; 
         
         //to be called by the combat manager. Will pass in encounter data and initialize the units. 
-        public void Initialize(UnitDataSO baseStats)
+        public override void Initialize(UnitDataSO baseStats)
         {
             stats = new EnemyUnit(baseStats);
             Debug.Log($"{gameObject.name} initialized with stats instance ID: {stats.GetHashCode()}"); 
         }
 
-        public void TakeDamage(int damage)
+        public override void TakeDamage(int damage)
         {
             
         }
 
-        public void Move(int newTile)
+        public override void Move(int newTile)
         {
             tile = newTile; 
         }
 
-        public void Move(Vector3 position)
+        public override void Move(Vector3 position)
         {
            transform.position = position;
         }
 
-        public Unit GetData()
+        public override Unit GetData()
         {
             return stats; 
         }
 
-        public int GetTile()
+        public override int GetTile()
         {
             return tile;
         }
 
-        public void SetTile(int tile)
+        public override void SetTile(int tile)
         {
             this.tile = tile;
         }

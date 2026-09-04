@@ -30,7 +30,7 @@ namespace Consystently.Essentials
         //sliding window for displaying it
         //least to greatest
         //make sure it has references and not copies of the objects, so changes are reflected
-        private readonly List<IUnitController> turnOrder = new  List<IUnitController>();
+        private readonly List<UnitController> turnOrder = new  List<UnitController>();
         
         
 
@@ -41,7 +41,7 @@ namespace Consystently.Essentials
         private Action<Unit[]> unitsDead;
         
         //animation/tile update handled per unit at the instant they move 
-        private Action<IUnitController> unitMoved;
+        private Action<UnitController> unitMoved;
         
         void Start()
         {
@@ -90,17 +90,13 @@ namespace Consystently.Essentials
                     tileControllers[tile].GetUnitAt(unit).Initialize(initializerData[tile,unit]);
                     tileControllers[tile].GetUnitAt(unit).SetTile(tile);
                     turnOrder.Add(tileControllers[tile].GetUnitAt(unit));
+                    
                 }
                 tileControllers[tile].RepositionUnits(10f);
             }
         }
-
-        void GetTiles()
-        {
-            
-        }
-
-        public List<IUnitController> GetTurnOrder()
+        
+        public List<UnitController> GetTurnOrder()
         {
             return turnOrder;
         }
@@ -119,7 +115,7 @@ namespace Consystently.Essentials
                 {
                     if (unit > encounter.UnitCountAtTile(tile) - 1)
                         break;
-                    Debug.Log($"{tileControllers[tile].GetUnitAt(unit).GetData().Name}:  {tileControllers[tile].GetUnitAt(unit).GetData().Name}");
+                    Debug.Log($"{tileControllers[tile].GetUnitAt(unit).GetData().Name}:  {tileControllers[tile].GetUnitAt(unit).GetData().Strength}");
                     
                 }
             }

@@ -6,8 +6,7 @@ using System;
 //Missing Energy/Health system
 public abstract class Unit {
     
-    public event Action<EnemyUnit> HasDied;
-    public event Action<EnemyUnit> HasMoved; 
+
     public Sprite Portrait { get; private set; }
     public string Name { get; set; }
     public Faction Faction { get; protected set; }
@@ -48,7 +47,18 @@ public abstract class Unit {
 
        StatGrowths = unit.Aptitudes;
        Affinities = unit.Affinities;
-
+       
+       //TODO: 100% add a function in Formulae for calculating all stats 
+       //actual stat values 
+       Health = Formulae.CalculateStat(Stat.HP, StatGrowths[Stat.HP], Level);
+       Energy = Formulae.CalculateStat(Stat.EN, StatGrowths[Stat.EN], Level);
+       Strength = Formulae.CalculateStat(Stat.STR, StatGrowths[Stat.STR], Level);
+       Defense = Formulae.CalculateStat(Stat.DEF, StatGrowths[Stat.DEF], Level);
+       Tech = Formulae.CalculateStat(Stat.TEC, StatGrowths[Stat.TEC], Level);
+       Resistance = Formulae.CalculateStat(Stat.RES, StatGrowths[Stat.RES], Level);
+       Speed = Formulae.CalculateStat(Stat.SPE, StatGrowths[Stat.SPE], Level);
+       Luck = Formulae.CalculateStat(Stat.LCK, StatGrowths[Stat.LCK], Level);
+       Precision = Formulae.CalculateStat(Stat.PRC, StatGrowths[Stat.PRC], Level);
    }
 
    //placeholder

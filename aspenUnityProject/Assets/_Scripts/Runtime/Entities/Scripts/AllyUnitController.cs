@@ -1,13 +1,14 @@
+using System;
 using Tether.CharacterSystems;
 using UnityEngine;
 
 //this script must be dragged to an object before making it a prefab and dragging the prefab to a unit SO.
-public class AllyUnitController : MonoBehaviour, IUnitController {
+public class AllyUnitController : UnitController {
    private AllyUnit stats;
-   private int tile; 
+   private int tile;
 
    //to be called by the combat maanager 
-   public void Initialize(UnitDataSO baseStats)
+   public override void Initialize(UnitDataSO baseStats)
    {
       stats = new AllyUnit(baseStats);
    }
@@ -21,32 +22,32 @@ public class AllyUnitController : MonoBehaviour, IUnitController {
       
    }
 
-   public void TakeDamage(int damage)
+   public override void TakeDamage(int damage)
    {
       stats?.ChangeHealthRemaining(damage); 
    }
 
    //will differ from SetTile in that it will consider game logic with conditionals 
-   public void Move(int tile)
+   public override void Move(int tile)
    {
    }
 
-   public void Move(Vector3 position)
+   public override void Move(Vector3 position)
    {
      transform.position = position; 
    }
    
-   public Unit GetData()
+   public override Unit GetData()
    {
       return stats; 
    }
 
-   public int GetTile()
+   public override int GetTile()
    {
       return tile;
    }
 
-   public void SetTile(int newTile)
+   public override void SetTile(int newTile)
    {
       this.tile = newTile;
    }

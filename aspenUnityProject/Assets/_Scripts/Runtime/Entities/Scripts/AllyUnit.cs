@@ -16,8 +16,6 @@ public class AllyUnit : Unit
     public override void ChangeHealthRemaining(int value)
     {
         HealthRemaining -= value; 
-        if(HealthRemaining <= 0)
-            HasDied?.Invoke(this); 
     }
 
      public override void ChangeEnergyRemaining(int value)

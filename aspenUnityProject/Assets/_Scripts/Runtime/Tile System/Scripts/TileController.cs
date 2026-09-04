@@ -15,7 +15,7 @@ namespace TileSystem
         
         //change to array if positions ever matter. Everything else so far has been an array because
         //I assumed early on that specific positions within the tile mattered (they don't currently) 
-        private List<IUnitController> unitControllers = new List<IUnitController>();
+        private List<UnitController> unitControllers = new List<UnitController>();
 
 
         public void Initialize(TileSO baseData)
@@ -24,7 +24,7 @@ namespace TileSystem
         }
             
 
-        public bool AddUnit(IUnitController unitController)
+        public bool AddUnit(UnitController unitController)
         {
             if (unitControllers.Contains(unitController) || unitControllers.Count >= 4)
                 return false;
@@ -32,7 +32,7 @@ namespace TileSystem
             return true;
         }
 
-        public IUnitController GetUnitAt(int position)
+        public UnitController GetUnitAt(int position)
         {
             if (unitControllers.Count == 0 ||  position > unitControllers.Count - 1)
                 return null;
@@ -42,9 +42,9 @@ namespace TileSystem
         
         //returns deleted controller so the controller can be moved to a different TileController
         //by the CombatManager
-        public IUnitController RemoveUnit(IUnitController unitController)
+        public UnitController RemoveUnit(UnitController unitController)
         {
-            IUnitController removed = unitController;
+            UnitController removed = unitController;
             unitControllers.Remove(unitController);
             return removed;
         }
