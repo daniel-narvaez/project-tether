@@ -27,10 +27,26 @@ namespace Consystently.Essentials
         [SerializeField] private Transform tilesParent;
         private readonly TileController[] tileControllers = new TileController[19];
         
-        //sliding window for displaying it
+        private readonly Vector3Int[] directions = new Vector3Int[] {
+            new Vector3Int(0,-1,1), //SE 
+            new Vector3Int(-1,0,1), //S
+            new Vector3Int(-1,1,0), //SW
+            new Vector3Int(0, 1,-1), //NW
+            new Vector3Int(1, 0,-1), //N
+            new Vector3Int(1, -1, 0) //NE
+        };
+        
+        
+        private readonly Dictionary<Vector3Int, int> tileCubeCoords = new Dictionary<Vector3Int, int>();
+        
+        //sliding window using currentUnitTurn for displaying it 
         //least to greatest
         //make sure it has references and not copies of the objects, so changes are reflected
         private readonly List<UnitController> turnOrder = new  List<UnitController>();
+        
+        private int totalAllies;
+        private int totalEnemies;
+        private int currentUnitTurn;
         
         
 
@@ -65,6 +81,7 @@ namespace Consystently.Essentials
         //TODO: subscribe to units 
         //TODO: subscribe to uimanager's actions
         
+        //ui class queries static events subscription combat manager is referenced in combat ui ? 
 
         
         void CreateObjects()
@@ -80,10 +97,16 @@ namespace Consystently.Essentials
                     GameObject newTempObject = Instantiate(encounter[tile,unit], tileControllers[tile].Position(), Quaternion.Euler(-90f,0,0));
                     //set up controllers after object instantiation so objects don't override each other's data
                     //the newly cloned object does not share the same reference as the original prefab, so there is no overriding
-                    if (initializerData[tile, unit].Faction == Faction.Ally) 
+                    if (initializerData[tile, unit].Faction == Faction.Ally)
+                    {
                         tileControllers[tile].AddUnit(newTempObject.GetComponent<AllyUnitController>());
+                        totalAllies++;
+                    }
                     else if (initializerData[tile, unit].Faction == Faction.Enemy)
+                    {
                         tileControllers[tile].AddUnit(newTempObject.GetComponent<EnemyUnitController>());
+                        totalEnemies++;
+                    }
                     else 
                         Debug.Log("neutral units not yet implemented");
 //                    Debug.Log($"{tile}: {unit}, {tileControllers[tile].UnitCount()}");
@@ -95,6 +118,38 @@ namespace Consystently.Essentials
                 tileControllers[tile].RepositionUnits(10f);
             }
         }
+
+        //starts at tile 0 and spirals outwards to get the cube coords for every tile 
+        //coords are for determining proper tile selection when the user moves across the field 
+        //3r(r+1)+1=tiles formula for generic implementation if additional rings are added
+        //for reference, tile 18 should be (2,0,-2) 
+        void GenerateCoords()
+        {
+            int tile = 0;
+            Vector3Int currentPos = new Vector3Int(0, 0, 0);
+            for (int ring = 0; ring <= 2; ring++)
+            {
+               tileCubeCoords.Add(currentPos, tile);
+               currentPos += directions[5];
+               tile++;
+               tileCubeCoords.Add(currentPos, tile);
+               for (int southEasts = ring - 1; southEasts > 0; southEasts--)
+               {
+                   currentPos += directions[0];
+                   tile++;
+                   tileCubeCoords.Add(currentPos, tile);
+               }
+               for (int direction = 1; direction < directions.Length; direction++)
+               {
+                   for (int times = ring; times > 0; times--)
+                   {
+                       currentPos += directions[direction];
+                       tile++;
+                       tileCubeCoords.Add(currentPos, tile);
+                   }
+               }
+            }
+        } 
         
         public List<UnitController> GetTurnOrder()
         {
