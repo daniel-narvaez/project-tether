@@ -187,15 +187,17 @@ namespace Consystently.Essentials
         }
         #endregion
         
-        private void ChangePhase()
+        public void ChangePhase()
         {
             if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally)
             {
                 currentPhase = phases[0];
+                battlePhaseChanged?.Invoke(currentPhase);                
             }
             else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy)
             {
                 currentPhase = phases[1];
+                battlePhaseChanged?.Invoke(currentPhase);
             }
         } 
         

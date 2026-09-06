@@ -11,12 +11,12 @@ namespace Consystently.Essentials
 
         public override void Update()
         {
-            
+            //wrapper function in loop for stuff that does the actual state changing 
         }
 
         public override void Exit()
         {
-            
+           combatManager.ChangePhase(); 
         }
     }
 }

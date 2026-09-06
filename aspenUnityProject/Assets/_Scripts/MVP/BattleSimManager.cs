@@ -20,7 +20,7 @@ public class BattleSimManager : Manager<BattleSimManager>
   // public HashSet<UnitPiece> PlayerPieces = new HashSet<UnitPiece>();
   // public HashSet<UnitPiece> EnemyPieces = new HashSet<UnitPiece>();
 
-  public static event Action<GameState> submitted; 
+  public static event Action submitted; 
 
   [SerializeField] Button _battleButton;
 
@@ -111,6 +111,6 @@ public class BattleSimManager : Manager<BattleSimManager>
   {
     Debug.Log("Start Battle Code");
     EncounterManager.Instance.GenerateEncounter(BattlefieldMap.Instance.Tiles);
-    submitted?.Invoke(new CombatGameState(GameManager.Instance));
+    submitted?.Invoke();
   }
 }

@@ -2,7 +2,7 @@ namespace Consystently.Essentials
 {
     public abstract class BattlePhase : State
     {
-        private CombatManager combatManager;
+        protected CombatManager combatManager { get; private set; }
 
         protected BattlePhase(CombatManager combatManager)
         {

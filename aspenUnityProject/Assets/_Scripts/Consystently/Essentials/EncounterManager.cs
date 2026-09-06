@@ -16,17 +16,13 @@ namespace Consystently.Essentials
         
         //initial unit formation generated from BattlefieldMap for the mvp 
         private Encounter encounter;
-        public static event Action<GameState> encountered; 
+        public static event Action encountered; 
         
         void OnEnable()
         {
             GameManager.ChangedGameState += HandleState;
         }
 
-        void OnDisable()
-        {
-            GameManager.ChangedGameState -= HandleState; 
-        }
 
         void HandleState(GameState gameState)
         {
@@ -50,7 +46,7 @@ namespace Consystently.Essentials
         public void StartEncounter(EncounterSO encounterSo)
         {
            GenerateEncounter(encounterSo);
-           encountered?.Invoke(new CombatGameState(GameManager.Instance));
+           encountered?.Invoke();
         }
 
         //if ever add randomized enemy positioning for encounters, we will have to update and use this function. 
@@ -64,7 +60,7 @@ namespace Consystently.Essentials
 
         public void StartEncounter()
         {
-            encountered?.Invoke(new CombatGameState(GameManager.Instance));
+            encountered?.Invoke();
         }
 
         //TODO: when we add tile effects, add tile data to generate methods

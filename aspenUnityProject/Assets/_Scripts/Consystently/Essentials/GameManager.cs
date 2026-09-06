@@ -11,21 +11,22 @@ namespace Consystently.Essentials
     
     public static event Action<GameState> ChangedGameState;
 
+    private List<GameState> gameStates = new List<GameState>();
+
     private GameState currentGameGameState;
     //push to stack for certain states 
     private GameState previousGameState;
     private readonly Stack<GameState> previousGameStates = new Stack<GameState>();
 
-    void OnEnable()
-    {
-      EncounterManager.encountered += ChangeGameState;      
-      BattleSimManager.submitted += ChangeGameState;
-    }
 
-    void OnDIsabled()
+    void Instantiate()
     {
-      EncounterManager.encountered -= ChangeGameState;
-      BattleSimManager.submitted -= ChangeGameState;
+      EncounterManager.encountered += EnterCombat;
+      BattleSimManager.submitted += EnterCombat;
+      gameStates.Add(new MainMenuGameState(this));
+      gameStates.Add(new CombatGameState(this));
+      
+      ChangeGameState(gameStates[0]);
     }
     
     public void PauseGame ()
@@ -58,16 +59,21 @@ namespace Consystently.Essentials
       ChangedGameState?.Invoke(currentGameGameState);
     }
 
-    //use in state enter functions 
     public void PushOldState()
     {
       previousGameStates.Push(previousGameState);
     }
 
+    //probably add an enum or something for the states later
+    public void EnterCombat()
+    {
+      ChangeGameState(gameStates[1]);      
+    }
+
     protected override void Awake()
     {
       base.Awake();
-      ChangeGameState(new MainMenuGameState(this));
+      Instantiate();
     }
 
     void Update()
