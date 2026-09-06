@@ -5,7 +5,7 @@ using UnityEngine;
 //this script must be dragged to an object before making it a prefab and dragging the prefab to a unit SO.
 public class AllyUnitController : UnitController {
    private AllyUnit stats;
-   private int tile;
+   public int Tile {get; private set;}
 
    //to be called by the combat maanager 
    public override void Initialize(UnitDataSO baseStats)
@@ -44,11 +44,11 @@ public class AllyUnitController : UnitController {
 
    public override int GetTile()
    {
-      return tile;
+      return Tile;
    }
 
    public override void SetTile(int newTile)
    {
-      this.tile = newTile;
+      this.Tile = newTile;
    }
 }

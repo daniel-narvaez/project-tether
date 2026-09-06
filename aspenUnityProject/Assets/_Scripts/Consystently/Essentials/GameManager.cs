@@ -34,6 +34,8 @@ namespace Consystently.Essentials
       Time.timeScale = GameIsPaused ? 0f : 1f;
     }
 
+    //have separate public methods that will decide the state being changed to 
+    //PERHAPS have an array of all game states and remove the parameter; swap between them with logic in the method
     private void ChangeGameState(GameState newGameState)
     {
       if (currentGameGameState == newGameState)

@@ -8,7 +8,7 @@ namespace Tether.CharacterSystems
     public class EnemyUnitController : UnitController
     {
         private EnemyUnit stats;
-        private int tile; 
+        public int Tile {get; private set;}
         
         //encounters to be passed upon player collision 
         [SerializeField] private EncounterSO[] encounters; 
@@ -27,7 +27,7 @@ namespace Tether.CharacterSystems
 
         public override void Move(int newTile)
         {
-            tile = newTile; 
+            Tile = newTile; 
         }
 
         public override void Move(Vector3 position)
@@ -42,12 +42,12 @@ namespace Tether.CharacterSystems
 
         public override int GetTile()
         {
-            return tile;
+            return Tile;
         }
 
         public override void SetTile(int tile)
         {
-            this.tile = tile;
+            this.Tile = tile;
         }
     
         /*TODO:
