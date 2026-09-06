@@ -75,12 +75,13 @@ namespace Consystently.Essentials
             GenerateCoords();
             phases[0] = new PlayerPhase(this);
             phases[1] = new EnemyPhase(this);
+            ChangePhase(); 
             ValidateData();
         }
 
         void Update()
         {
-            currentPhase.Update(); 
+//            currentPhase.Update(); 
         }
 
         //Correct order is not guaranteed by GetComponentsInChildren
@@ -143,24 +144,28 @@ namespace Consystently.Essentials
         {
             int tile = 0;
             Vector3Int currentPos = new Vector3Int(0, 0, 0);
-            for (int ring = 0; ring <= 2; ring++)
+            Debug.Log($"tile: {tile}, {currentPos}");
+            TileCubeCoords.Add(currentPos, tile);
+            for (int ring = 1; ring <= 2; ring++)
             {
-               TileCubeCoords.Add(currentPos, tile);
                currentPos += directions[(int)CubeCoordDirections.NE];
                tile++;
+//               Debug.Log($"tile: {tile}, {currentPos}");
                TileCubeCoords.Add(currentPos, tile);
                for (int southEasts = ring - 1; southEasts > 0; southEasts--)
                {
                    currentPos += directions[(int)CubeCoordDirections.SE];
                    tile++;
+//                   Debug.Log($"tile: {tile}, {currentPos}");
                    TileCubeCoords.Add(currentPos, tile);
                }
-               for (int direction = 1; direction < directions.Length; direction++)
+               for (int direction = (int)CubeCoordDirections.S; direction < directions.Length; direction++)
                {
                    for (int times = ring; times > 0; times--)
                    {
                        currentPos += directions[direction];
                        tile++;
+ //                      Debug.Log($"tile: {tile}, {currentPos}");
                        TileCubeCoords.Add(currentPos, tile);
                    }
                }
@@ -191,15 +196,30 @@ namespace Consystently.Essentials
         {
             if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally)
             {
+                currentPhase?.Exit();
                 currentPhase = phases[0];
+                currentPhase.Enter();
                 battlePhaseChanged?.Invoke(currentPhase);                
             }
             else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy)
             {
+                currentPhase?.Exit();
                 currentPhase = phases[1];
+                currentPhase.Enter();
                 battlePhaseChanged?.Invoke(currentPhase);
             }
+            else
+            {
+                Debug.Log("bug");
+            }
         } 
+        
+        //refactor to take a runtime attack class if we need to modify attacks ingame for whatever reason
+        //all attacks target tiles, not individual units 
+        public void DoBattle(Vector3Int attackerPos, UnitController attacker, int move, Vector3Int targetPos)
+        {
+            
+        }
         
     }
 }

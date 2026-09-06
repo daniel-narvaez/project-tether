@@ -244,4 +244,7 @@ public abstract class UnitDataSO : ScriptableObject
     { Element.Wind, _wind },
     { Element.Fire, _fire },
   };
+  
+  [SerializeField] private List<MoveSO> moves = new List<MoveSO>();
+  public List<MoveSO> Moves => moves;
 }

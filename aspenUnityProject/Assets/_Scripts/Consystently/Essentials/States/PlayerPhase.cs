@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Consystently.Essentials
 {
     public class PlayerPhase : BattlePhase
@@ -6,7 +8,7 @@ namespace Consystently.Essentials
 
         public override void Enter()
         {
-            
+           Debug.Log("player phase entered"); 
         }
 
         public override void Update()

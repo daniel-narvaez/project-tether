@@ -31,6 +31,8 @@ public abstract class Unit {
 
     public float HealthRemaining { get; protected set; } 
     public float EnergyRemaining { get; protected set; }
+    
+    public List<MoveSO> Moves { get; protected set; } 
 
 
 //   public event Action HasDied;
@@ -59,6 +61,8 @@ public abstract class Unit {
        Speed = Formulae.CalculateStat(Stat.SPE, StatGrowths[Stat.SPE], Level);
        Luck = Formulae.CalculateStat(Stat.LCK, StatGrowths[Stat.LCK], Level);
        Precision = Formulae.CalculateStat(Stat.PRC, StatGrowths[Stat.PRC], Level);
+
+       Moves = unit.Moves;
    }
 
    //placeholder
