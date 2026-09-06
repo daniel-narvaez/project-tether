@@ -39,7 +39,6 @@ namespace Consystently.Essentials
         public Dictionary<Vector3Int, int> TileCubeCoords { get; private set; }= new Dictionary<Vector3Int, int>();
         
         //sliding window using currentUnitTurn for displaying it 
-        //least to greatest
         //make sure it has references and not copies of the objects, so changes are reflected
         public List<UnitController> TurnOrder { get; private set; }= new List<UnitController>();
         private BattlePhase[] phases = new BattlePhase[2];
@@ -71,11 +70,11 @@ namespace Consystently.Essentials
             initializerData = EncounterManager.Instance.GetInitializerData();
             SortTiles(tilesParent.GetComponentsInChildren<TileController>());
             CreateObjects(); 
-            TurnOrder.Sort((a,b) => a.GetData().Speed.CompareTo(b.GetData().Speed));
+            TurnOrder.Sort((a,b) => b.GetData().Speed.CompareTo(a.GetData().Speed));
             GenerateCoords();
             phases[0] = new PlayerPhase(this);
             phases[1] = new EnemyPhase(this);
-            ChangePhase(); 
+            ChangeTurn(); 
             ValidateData();
         }
 
@@ -185,33 +184,29 @@ namespace Consystently.Essentials
                 {
                     if (unit > encounter.UnitCountAtTile(tile) - 1)
                         break;
-                    Debug.Log($"{tileControllers[tile].GetUnitAt(unit).GetData().Name}:  {tileControllers[tile].GetUnitAt(unit).GetData().Strength}");
+                    Debug.Log($"{tileControllers[tile].GetUnitAt(unit).GetData().Name}:  {tileControllers[tile].GetUnitAt(unit).GetData().Speed}");
                     
                 }
             }
         }
         #endregion
         
-        public void ChangePhase()
+        public void ChangeTurn()
         {
             if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally)
             {
                 currentPhase?.Exit();
                 currentPhase = phases[0];
-                currentPhase.Enter();
-                battlePhaseChanged?.Invoke(currentPhase);                
             }
             else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy)
             {
                 currentPhase?.Exit();
                 currentPhase = phases[1];
-                currentPhase.Enter();
-                battlePhaseChanged?.Invoke(currentPhase);
             }
             else
-            {
-                Debug.Log("bug");
-            }
+                return;
+            currentPhase.Enter();
+            battlePhaseChanged?.Invoke(currentPhase);
         } 
         
         //refactor to take a runtime attack class if we need to modify attacks ingame for whatever reason

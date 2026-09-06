@@ -8,6 +8,8 @@ namespace Tether.CharacterSystems
         public event Action<Unit> OnUnitMove; 
         public event Action<Unit> OnUnitDestroyed;
         
+        public bool IsDead { get; protected set; }
+        
         public abstract void Initialize(UnitDataSO baseStats);
         public abstract void TakeDamage(int damage);
 

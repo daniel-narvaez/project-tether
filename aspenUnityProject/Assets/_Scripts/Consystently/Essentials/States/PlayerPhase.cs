@@ -18,7 +18,6 @@ namespace Consystently.Essentials
 
         public override void Exit()
         {
-           combatManager.ChangePhase(); 
         }
     }
 }
