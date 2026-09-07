@@ -6,7 +6,6 @@ namespace Consystently.Essentials
 {
     public class CombatUITest :  MonoBehaviour
     {
-
         private void Awake()
         {
             

@@ -20,13 +20,11 @@ namespace Consystently.Essentials
         //no use in mvp
         //private TileSO[] tiles;
         
-        //used for instantiating the models
         private Encounter encounter; 
-        
-
         [SerializeField] private Transform tilesParent;
         private readonly TileController[] tileControllers = new TileController[19];
-        
+
+        #region directions
         private readonly Vector3Int[] directions = new Vector3Int[] {
             new Vector3Int(0,-1,1), //SE 
             new Vector3Int(-1,0,1), //S
@@ -35,27 +33,30 @@ namespace Consystently.Essentials
             new Vector3Int(1, 0,-1), //N
             new Vector3Int(1, -1, 0) //NE
         };
+        #endregion
         
         public Dictionary<Vector3Int, int> TileCubeCoords { get; private set; }= new Dictionary<Vector3Int, int>();
         
-        //sliding window using currentUnitTurn for displaying it 
         //make sure it has references and not copies of the objects, so changes are reflected
         public List<UnitController> TurnOrder { get; private set; }= new List<UnitController>();
-        private BattlePhase[] phases = new BattlePhase[2];
+        public List<UnitController> DeadUnits {get; private set;}= new List<UnitController>();
+        private readonly BattlePhase[] phases = new BattlePhase[2];
         private BattlePhase currentPhase;  
         
         #region miscStateManagementVariables
-        //probably not the best way of implementing this 
+        
+        //need totals for defeat/win checks
         public int TotalAllies { get; private set; }
         public int TotalEnemies { get; private set; }
         public int CurrentUnitTurn { get; private set; }
-        public int SelectedTile { get; private set; }
-        public int CurrentTile { get; private set; }
+        public Vector3Int SelectedTile { get; private set; }
+        public Vector3Int CurrentTile { get; private set; } = new Vector3Int(0, 0, 0);
+        public int SelectedUnit  { get; private set; }
+        private int currentUnit;
+        
         #endregion
          
-        
-        //combat manager will sub to each unit and read their deaths. Have this action so ui managers don't have to 
-        //sub to each unit themselves 
+        //TODO: sub to each unit themselves 
         //use arrays for unitsDead because damage is dealt to entire tiles at a time. have whatever handles animations process unit deaths by iterating
         //TODO: implement the proper response to unit death. For each unit that dies, add them to an array. 
         public static event Action<Unit[]> unitsDead;
@@ -93,9 +94,6 @@ namespace Consystently.Essentials
         }
         
         //TODO: subscribe to units 
-        //TODO: subscribe to uimanager's actions
-        
-        //ui class queries static events subscription combat manager is referenced in combat ui ? 
 
         #region setupRelatedStuff
 
@@ -191,29 +189,76 @@ namespace Consystently.Essentials
         }
         #endregion
         
+        //dead are kept because lazy deletion. Also, there may or may not be a revive feature, so their order being kept is good.
+        //I am also not sure if deletion is better because deletion would require searching and result in the entire list shifting. 
         public void ChangeTurn()
         {
-            if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally)
+            if (DeadUnits.Count >= (TotalAllies + TotalEnemies))
+            {
+                Debug.Log("All units dead.");
+                return;
+            }
+
+            if (CurrentUnitTurn > TurnOrder.Count - 1)
+                CurrentUnitTurn = 0;
+            while (TurnOrder[CurrentUnitTurn].IsDead)
+            {
+                CurrentUnitTurn++;
+                if (CurrentUnitTurn > TurnOrder.Count - 1)
+                    CurrentUnitTurn = 0;
+            }
+            if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally && currentPhase != phases[0])
             {
                 currentPhase?.Exit();
                 currentPhase = phases[0];
             }
-            else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy)
+            else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy && currentPhase != phases[1])
             {
                 currentPhase?.Exit();
                 currentPhase = phases[1];
             }
             else
                 return;
+            CurrentUnitTurn++;
             currentPhase.Enter();
             battlePhaseChanged?.Invoke(currentPhase);
         } 
         
-        //refactor to take a runtime attack class if we need to modify attacks ingame for whatever reason
+        //refactor to take a runtime attack class if we need to modify attacks in-game for whatever reason
         //all attacks target tiles, not individual units 
         public void DoBattle(Vector3Int attackerPos, UnitController attacker, int move, Vector3Int targetPos)
         {
+            MoveSO usedMove = attacker.GetData().Moves[move];
             
+        }
+
+        //functions for camera/ui movement/whatever 
+        public void MoveTileSelector(CubeCoordDirections direction)
+        {
+            Vector3Int projectedTile = CurrentTile + directions[(int)direction];            
+            if(TileCubeCoords.TryGetValue(projectedTile, out _))
+            {
+                CurrentTile = projectedTile;
+            }
+        }
+
+        public void SelectTile(Vector3Int tile)
+        {
+            SelectedTile = CurrentTile; 
+        }
+
+        public void MoveUnitSelector()
+        {
+            currentUnit++;
+            if (currentUnit > tileControllers[TileCubeCoords[SelectedTile]].UnitCount())
+            {
+                currentUnit = 0;
+            }
+        }
+
+        public void SelectUnit()
+        {
+            SelectedUnit = currentUnit; 
         }
         
     }
