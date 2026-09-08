@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using _Scripts.Runtime.Misc;
 using Tether.CharacterSystems;
 using TileSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.VirtualTexturing;
 using Debug = UnityEngine.Debug;
 
 namespace Consystently.Essentials
@@ -45,6 +43,8 @@ namespace Consystently.Essentials
         //make sure it has references and not copies of the objects, so changes are reflected
         public List<UnitController> TurnOrder { get; private set; }= new List<UnitController>();
         public List<UnitController> DeadUnits {get; private set;}= new List<UnitController>();
+        
+        //TODO: add an enum for this if we ever have more than just enemy/ally turns 
         private readonly BattleState[] phases = new BattleState[2];
         private BattleState currentState;  
         
@@ -56,6 +56,7 @@ namespace Consystently.Essentials
         public int CurrentUnitTurn { get; private set; }
         public Vector3Int SelectedTile { get; private set; }
         public Vector3Int CurrentTile { get; private set; } = new Vector3Int(0, 0, 0);
+        public CombatActions ReceivedAction { get; private set; }
         
         #endregion
          
@@ -66,8 +67,11 @@ namespace Consystently.Essentials
         
         //animation/tile update handled per unit at the instant they move. Perhaps also camera class  
         public static event Action<UnitController> unitMoved;
+        
+        //we may want sounds when the cursor moves around 
+        public static event Action<Vector3Int> hoverTileChanged;  
         public static event Action<BattleState> battlePhaseChanged;
-        public static event Action selectionCancelled;
+        public static event Action selectionFinished;
 
         private void Awake()
         {
@@ -84,20 +88,20 @@ namespace Consystently.Essentials
             TurnOrder.Sort((a,b) => b.GetData().Speed.CompareTo(a.GetData().Speed));
             phases[0] = new PlayerState(this);
             phases[1] = new EnemyState(this);
-            CombatUIController.PlayerAction += HandlePlayerAction;
+            CombatUIController.PlayerAction += HandleAction;
             ChangeTurn(); 
             ValidateData();
         }
 
         private void OnDisable()
         {
-            CombatUIController.PlayerAction -= HandlePlayerAction;
+            CombatUIController.PlayerAction -= HandleAction;
             Input.Disable();
         }
 
         void Update()
         {
-//            currentPhase.Update(); 
+//           currentState.Update(); 
         }
 
         //Correct order is not guaranteed by GetComponentsInChildren
@@ -264,9 +268,41 @@ namespace Consystently.Essentials
             }
         }
 
-        private void HandlePlayerAction(PlayerActions pAction)
+        /*
+        pushes the inner states of the player/enemy turn states 
+        the player's selectTileState will tell this manager when to 
+        execute the SelectTile function. 
+        I opted for states because the player may undo actions.
+        Usually, the first requirement after selecting a combat action
+        is selecting a tile. 
+        */
+        private void HandleAction(CombatActions action)
         {
-            
+            ReceivedAction = action;
+            switch(action)
+            {
+               case CombatActions.Attack:
+                   currentState.PushState();
+                   break;
+               case CombatActions.Defend:
+                   //unit defend function 
+                   break;
+               case CombatActions.Move:
+                   currentState.PushState();
+                   break;
+               case CombatActions.Ability:
+                   currentState.PushState();
+                   break;
+               case CombatActions.Item:
+                   Debug.Log("items are not implemented in mvp");
+                   break;
+               case CombatActions.View:
+                    currentState.PushState();                   
+                   break;
+                default:
+                    Debug.Log("Unknown action");
+                    break;
+            }
         }
         
 
@@ -281,15 +317,22 @@ namespace Consystently.Essentials
             CurrentTile = SelectedTile;
         }
 
+        //
+        //TODO: finish switch 
         public void SelectTile(InputAction.CallbackContext context)
         {
-            SelectedTile = CurrentTile; 
+            SelectedTile = CurrentTile;
+            switch (ReceivedAction)
+            {
+                
+            }
         }
 
-        public void CancelSelection(InputAction.CallbackContext context)
+        public void FinishSelection()
         { 
            ResetCurrentTile();
-           selectionCancelled?.Invoke(); 
+           //effectively tells the combatuicontroller to reset the player turn 
+           battlePhaseChanged?.Invoke(currentState);
         }
 
         public UnitController GetCurrentUnit()

@@ -1,6 +1,7 @@
 using System;
 using Consystently.Essentials;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatUIController : MonoBehaviour
 {
@@ -9,17 +10,17 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] private GameObject firstButton;
     [SerializeField] private GameObject cursor;
 
-    public static event Action<PlayerActions> PlayerAction;
+    public static event Action<CombatActions> PlayerAction;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable()
     {
-        CombatManager.selectionCancelled += ResetActions;
+        CombatManager.battlePhaseChanged += ToggleUserActions;
     }
 
     void OnDisable()
     {
-        CombatManager.selectionCancelled -= ResetActions;
+        CombatManager.battlePhaseChanged -= ToggleUserActions;
     }
 
     // Update is called once per frame
@@ -28,6 +29,15 @@ public class CombatUIController : MonoBehaviour
         
     }
 
+    public void ToggleUserActions(BattleState bs)
+    {
+        if (bs is PlayerState)
+            playerActionsContainer.SetActive(true);
+        else 
+            playerActionsContainer.SetActive(false); 
+    }
+    
+
     public void TrySelection()
     {
         playerActionsContainer.SetActive(false);
@@ -35,16 +45,11 @@ public class CombatUIController : MonoBehaviour
 //        playerActionsContainer.SetActive(bp is PlayerPhase);
     }
 
-    public void ResetActions()
-    {
-        playerActionsContainer.SetActive(true);
-    }
-
-    //TODO: add way of resetting actions panel 
+    //buttons on the combat panel will use this function
     public void SendAction(int action)
     {
-        PlayerActions pAction = (PlayerActions)action; 
-        if(pAction != PlayerActions.Defend)
+        CombatActions pAction = (CombatActions)action; 
+        if(pAction != CombatActions.Defend)
             TrySelection();
         PlayerAction?.Invoke(pAction);
     }

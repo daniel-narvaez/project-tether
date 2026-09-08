@@ -1,6 +1,6 @@
 namespace Consystently.Essentials
 {
-    public enum PlayerActions
+    public enum CombatActions
     {
        Attack,
        Defend,

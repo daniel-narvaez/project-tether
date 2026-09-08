@@ -1,27 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Consystently.Essentials
 {
     public class PlayerState : BattleState
     {
-        private Stack<BattleState>  stateStack = new Stack<BattleState>();
+        private Stack<ActionState>  stateStack = new Stack<ActionState>();
         
         //TODO: possibly add new state class for individual unit selection
-        private List<BattleState> states  = new List<BattleState>();
-        private int stateToPush; 
+        private List<ActionState> states  = new List<ActionState>();
 
         public PlayerState(CombatManager combatManager) : base(combatManager)
         {
-           states.Add(new SelectTileState(combatManager)); 
+           states.Add(new SelectTileState(combatManager, this)); 
         }
 
         public override void Enter()
         {
            Debug.Log("player phase entered"); 
-           combatManager.ResetCurrentTile();
+           CombatManager.ResetCurrentTile();
            stateStack.Clear();
-           stateToPush = 0;
         }
 
         public override void Update()
@@ -32,19 +31,20 @@ namespace Consystently.Essentials
         public override void Exit()
         {
             stateStack.Clear();
-            stateToPush = 0;
         }
 
-        public void PopState()
+        public void PopState(InputAction.CallbackContext context)
         {
-           stateStack.Pop(); 
-           stateToPush = stateStack.Count;
+           stateStack.Pop().Exit();
+           if (states.Count == 0)
+           {
+               CombatManager.FinishSelection(); 
+           }
         }
 
-        public void PushState()
+        public override void PushState()
         {
-           stateStack.Push(states[stateToPush]);
-           stateToPush= stateStack.Count;
+           stateStack.Push(states[stateStack.Count]);
         }
         
     }
