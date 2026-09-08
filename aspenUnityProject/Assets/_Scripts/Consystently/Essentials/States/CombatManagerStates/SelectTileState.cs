@@ -1,10 +1,12 @@
 using UnityEngine;
+using System; 
 
 namespace Consystently.Essentials
 {
-    public class SelectTileState : BattleState 
+    //the state when the player is selecting a tile for an action (e.g., attacking, viewing, etc.)
+    public class SelectTileState : BattleState
     {
-        SelectTileState(CombatManager combatManager) : base(combatManager) {}
+        public SelectTileState(CombatManager combatManager) : base(combatManager) {}
 
         public override void Enter()
         {

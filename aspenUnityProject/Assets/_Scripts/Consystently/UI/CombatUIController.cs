@@ -14,13 +14,11 @@ public class CombatUIController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable()
     {
-        CombatManager.battlePhaseChanged += TrySelection;
         CombatManager.selectionCancelled += ResetActions;
     }
 
     void OnDisable()
     {
-        CombatManager.battlePhaseChanged -= TrySelection;
         CombatManager.selectionCancelled -= ResetActions;
     }
 
@@ -30,13 +28,10 @@ public class CombatUIController : MonoBehaviour
         
     }
 
-    public void TrySelection(BattleState bp)
+    public void TrySelection()
     {
         playerActionsContainer.SetActive(false);
-        if (bp is PlayerState)
-        {
-            cursor.SetActive(true);
-        }
+        cursor.SetActive(true);
 //        playerActionsContainer.SetActive(bp is PlayerPhase);
     }
 
@@ -45,10 +40,13 @@ public class CombatUIController : MonoBehaviour
         playerActionsContainer.SetActive(true);
     }
 
-    public void SendPlayerAction(PlayerActions action)
+    //TODO: add way of resetting actions panel 
+    public void SendAction(int action)
     {
-        PlayerAction?.Invoke(action);
+        PlayerActions pAction = (PlayerActions)action; 
+        if(pAction != PlayerActions.Defend)
+            TrySelection();
+        PlayerAction?.Invoke(pAction);
     }
-    
 
 }

@@ -6,6 +6,7 @@ using Tether.CharacterSystems;
 using TileSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.VirtualTexturing;
 using Debug = UnityEngine.Debug;
 
 namespace Consystently.Essentials
@@ -25,7 +26,7 @@ namespace Consystently.Essentials
         
         private Encounter encounter; 
         [SerializeField] private Transform tilesParent;
-        public InputSystem_Actions Input { get; private set; } = new InputSystem_Actions();
+        public InputSystem_Actions Input { get; private set; }
         private readonly TileController[] tileControllers = new TileController[19];
 
         #region directions
@@ -68,7 +69,11 @@ namespace Consystently.Essentials
         public static event Action<BattleState> battlePhaseChanged;
         public static event Action selectionCancelled;
 
-        
+        private void Awake()
+        {
+            Input = new InputSystem_Actions();
+        }
+
         void OnEnable()
         {
             encounter = EncounterManager.Instance.GetEncounter();
@@ -79,12 +84,14 @@ namespace Consystently.Essentials
             TurnOrder.Sort((a,b) => b.GetData().Speed.CompareTo(a.GetData().Speed));
             phases[0] = new PlayerState(this);
             phases[1] = new EnemyState(this);
+            CombatUIController.PlayerAction += HandlePlayerAction;
             ChangeTurn(); 
             ValidateData();
         }
 
         private void OnDisable()
         {
+            CombatUIController.PlayerAction -= HandlePlayerAction;
             Input.Disable();
         }
 
@@ -256,6 +263,12 @@ namespace Consystently.Essentials
                 CurrentTile = projectedTile;
             }
         }
+
+        private void HandlePlayerAction(PlayerActions pAction)
+        {
+            
+        }
+        
 
         public TileController GetSelectedTileController()
         {
