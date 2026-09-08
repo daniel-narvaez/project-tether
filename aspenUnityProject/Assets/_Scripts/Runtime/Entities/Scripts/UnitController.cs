@@ -14,11 +14,11 @@ namespace Tether.CharacterSystems
         public abstract void TakeDamage(int damage);
 
         //convert later to deal with tiles
-        public abstract void Move(int tile);
+        public abstract void Move(Vector3Int tileCubeCoord);
         public abstract void Move(Vector3 position);
         public abstract Unit GetData();
 
-        public abstract int GetTile();
-        public abstract void SetTile(int tile);
+        public abstract Vector3Int GetTileCoords();
+        public abstract void SetTile(Vector3Int tileCubeCoord);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 //this script must be dragged to an object before making it a prefab and dragging the prefab to a unit SO.
 public class AllyUnitController : UnitController {
    private AllyUnit stats;
-   public int Tile {get; private set;}
+   public Vector3Int TileCoords {get; private set;}
 
    //to be called by the combat maanager 
    public override void Initialize(UnitDataSO baseStats)
@@ -28,7 +28,7 @@ public class AllyUnitController : UnitController {
    }
 
    //will differ from SetTile in that it will consider game logic with conditionals 
-   public override void Move(int tile)
+   public override void Move(Vector3Int newTileCoords)
    {
    }
 
@@ -42,13 +42,13 @@ public class AllyUnitController : UnitController {
       return stats; 
    }
 
-   public override int GetTile()
+   public override Vector3Int GetTileCoords()
    {
-      return Tile;
+      return TileCoords;
    }
 
-   public override void SetTile(int newTile)
+   public override void SetTile(Vector3Int newTileCoords)
    {
-      this.Tile = newTile;
+      this.TileCoords = newTileCoords;
    }
 }

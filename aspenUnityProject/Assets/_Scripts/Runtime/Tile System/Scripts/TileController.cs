@@ -8,10 +8,12 @@ namespace TileSystem
 {
     public class TileController : MonoBehaviour
     {
-       private Tile tileData;
+        private Tile tileData;
 
         [SerializeField, Range(0,18)]
-        private int tileNum; 
+        private int tileNum;
+
+        public Vector3Int tileCoordinate;
         
         //change to array if positions ever matter. Everything else so far has been an array because
         //I assumed early on that specific positions within the tile mattered (they don't currently) 
@@ -76,6 +78,6 @@ namespace TileSystem
         {
             return unitControllers.Count;
         }
-            
+
     }
 }

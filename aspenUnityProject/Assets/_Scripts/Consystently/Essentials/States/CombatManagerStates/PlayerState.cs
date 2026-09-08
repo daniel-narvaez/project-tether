@@ -2,13 +2,14 @@ using UnityEngine;
 
 namespace Consystently.Essentials
 {
-    public class PlayerPhase : BattlePhase
+    public class PlayerState : BattleState
     {
-        public PlayerPhase(CombatManager combatManager) : base(combatManager) { }
+        public PlayerState(CombatManager combatManager) : base(combatManager) { }
 
         public override void Enter()
         {
            Debug.Log("player phase entered"); 
+           combatManager.ResetCurrentTile();
         }
 
         public override void Update()

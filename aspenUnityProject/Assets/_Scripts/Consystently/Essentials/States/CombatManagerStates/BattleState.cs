@@ -1,10 +1,10 @@
 namespace Consystently.Essentials
 {
-    public abstract class BattlePhase : State
+    public abstract class BattleState : State
     {
         protected CombatManager combatManager { get; private set; }
 
-        protected BattlePhase(CombatManager combatManager)
+        protected BattleState(CombatManager combatManager)
         {
             this.combatManager = combatManager; 
         }
