@@ -38,6 +38,7 @@ namespace Consystently.Essentials
         };
         #endregion
         
+        //forgot why I made this an int 
         public Dictionary<Vector3Int, int> TileCubeCoords { get; private set; }= new Dictionary<Vector3Int, int>();
         
         //make sure it has references and not copies of the objects, so changes are reflected
@@ -54,9 +55,10 @@ namespace Consystently.Essentials
         public int TotalAllies { get; private set; }
         public int TotalEnemies { get; private set; }
         public int CurrentUnitTurn { get; private set; }
-        public Vector3Int SelectedTile { get; private set; }
+        private Vector3Int SelectedTile { get; set; }
         public Vector3Int CurrentTile { get; private set; } = new Vector3Int(0, 0, 0);
         public CombatActions ReceivedAction { get; private set; }
+        public int ActionSelection { get; private set; }
         
         #endregion
          
@@ -69,9 +71,8 @@ namespace Consystently.Essentials
         public static event Action<UnitController> unitMoved;
         
         //we may want sounds when the cursor moves around 
-        public static event Action<Vector3Int> hoverTileChanged;  
-        public static event Action<BattleState> battlePhaseChanged;
-        public static event Action selectionFinished;
+        public static event Action<Vector3> hoverTileChanged;  
+        public static event Action<BattleState, UnitController> battlePhaseChanged;
 
         private void Awake()
         {
@@ -88,20 +89,22 @@ namespace Consystently.Essentials
             TurnOrder.Sort((a,b) => b.GetData().Speed.CompareTo(a.GetData().Speed));
             phases[0] = new PlayerState(this);
             phases[1] = new EnemyState(this);
-            CombatUIController.PlayerAction += HandleAction;
+            CombatUI.PlayerAction += HandleAction;
+            CombatUI.PlayerSelectiveAction += HandleAction;
             ChangeTurn(); 
             ValidateData();
         }
 
         private void OnDisable()
         {
-            CombatUIController.PlayerAction -= HandleAction;
+            CombatUI.PlayerAction -= HandleAction;
+            CombatUI.PlayerSelectiveAction -= HandleAction;
             Input.Disable();
         }
 
         void Update()
         {
-//           currentState.Update(); 
+           currentState?.Update(); 
         }
 
         //Correct order is not guaranteed by GetComponentsInChildren
@@ -168,14 +171,14 @@ namespace Consystently.Essentials
             {
                currentPos += directions[(int)CubeCoordDirections.NE];
                tile++;
-//               Debug.Log($"tile: {tile}, {currentPos}");
+               Debug.Log($"tile: {tile}, {currentPos}");
                TileCubeCoords.Add(currentPos, tile);
                tileControllers[tile].tileCoordinate = currentPos;
                for (int southEasts = ring - 1; southEasts > 0; southEasts--)
                {
                    currentPos += directions[(int)CubeCoordDirections.SE];
                    tile++;
-//                   Debug.Log($"tile: {tile}, {currentPos}");
+                   Debug.Log($"tile: {tile}, {currentPos}");
                    TileCubeCoords.Add(currentPos, tile);
                    tileControllers[tile].tileCoordinate = currentPos;
                }
@@ -185,8 +188,9 @@ namespace Consystently.Essentials
                    {
                        currentPos += directions[direction];
                        tile++;
- //                      Debug.Log($"tile: {tile}, {currentPos}");
+                       Debug.Log($"tile: {tile}, {currentPos}");
                        TileCubeCoords.Add(currentPos, tile);
+                       Debug.Log($"tilecontrollers size: {tileControllers.Length}");
                        tileControllers[tile].tileCoordinate = currentPos;
                    }
                }
@@ -215,7 +219,7 @@ namespace Consystently.Essentials
         
         //dead are kept because lazy deletion. Also, there may or may not be a revive feature, so their order being kept is good.
         //I am also not sure if deletion is better because deletion would require searching and result in the entire list shifting. 
-        public void ChangeTurn()
+        private void ChangeTurn()
         {
             if (DeadUnits.Count >= (TotalAllies + TotalEnemies))
             {
@@ -242,19 +246,18 @@ namespace Consystently.Essentials
             }
             else
             {
-                battlePhaseChanged?.Invoke(currentState);
+                battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
                 return;
             }
             CurrentUnitTurn++;
             currentState.Enter();
-            battlePhaseChanged?.Invoke(currentState);
+            battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         } 
         
         //refactor to take a runtime attack class if we need to modify attacks in-game for whatever reason
         //all attacks target tiles, not individual units 
-        public void DoBattle(Vector3Int attackerPos, UnitController attacker, int move, Vector3Int targetPos)
+        public void DoBattle(Vector3Int attackerPos, UnitController attacker, Vector3Int targetPos)
         {
-            MoveSO usedMove = attacker.GetData().Moves[move];
             
         }
 
@@ -265,6 +268,7 @@ namespace Consystently.Essentials
             if(TileCubeCoords.TryGetValue(projectedTile, out _))
             {
                 CurrentTile = projectedTile;
+                hoverTileChanged?.Invoke(tileControllers[TileCubeCoords[CurrentTile]].Position());
             }
         }
 
@@ -279,6 +283,7 @@ namespace Consystently.Essentials
         private void HandleAction(CombatActions action)
         {
             ReceivedAction = action;
+            Debug.Log("hello 2");
             switch(action)
             {
                case CombatActions.Attack:
@@ -290,18 +295,28 @@ namespace Consystently.Essentials
                case CombatActions.Move:
                    currentState.PushState();
                    break;
+              case CombatActions.View:
+                    currentState.PushState();                   
+                   break;
+                default:
+                    Debug.Log($"Unknown action: {action}");
+                    break;
+            }
+        }
+
+        //action requires selection like for ability/item
+        private void HandleAction(CombatActions action, int selection)
+        {
+            ReceivedAction = action;
+            ActionSelection = selection;
+            switch (action)
+            {
                case CombatActions.Ability:
                    currentState.PushState();
                    break;
                case CombatActions.Item:
-                   Debug.Log("items are not implemented in mvp");
+                   Debug.Log($"unknown action: {action}" );
                    break;
-               case CombatActions.View:
-                    currentState.PushState();                   
-                   break;
-                default:
-                    Debug.Log("Unknown action");
-                    break;
             }
         }
         
@@ -319,20 +334,36 @@ namespace Consystently.Essentials
 
         //
         //TODO: finish switch 
+        //attack is basic attack with no ability selection. Add new doBattle function with no ability 
         public void SelectTile(InputAction.CallbackContext context)
         {
             SelectedTile = CurrentTile;
             switch (ReceivedAction)
             {
-                
+               case CombatActions.Attack:
+                   break;
+               case CombatActions.Move:
+                   break;
+               case CombatActions.Ability:
+                   break;
+               case CombatActions.Item:
+                   Debug.Log("items are not implemented in mvp");
+                   break;
+               case CombatActions.View:
+                   break;
+               default:
+                   Debug.Log("Unknown action");
+                   break;
             }
         }
+        
+        
 
         public void FinishSelection()
         { 
            ResetCurrentTile();
-           //effectively tells the combatuicontroller to reset the player turn 
-           battlePhaseChanged?.Invoke(currentState);
+           //effectively tells the combat UI to reset the player turn 
+           battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         }
 
         public UnitController GetCurrentUnit()

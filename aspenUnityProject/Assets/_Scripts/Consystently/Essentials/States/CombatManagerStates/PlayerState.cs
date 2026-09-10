@@ -25,7 +25,8 @@ namespace Consystently.Essentials
 
         public override void Update()
         {
-            //wrapper function in loop for stuff that does the actual state changing 
+            if(stateStack.Count > 0)
+                stateStack.Peek().Update();
         }
 
         public override void Exit()
@@ -45,6 +46,7 @@ namespace Consystently.Essentials
         public override void PushState()
         {
            stateStack.Push(states[stateStack.Count]);
+           stateStack.Peek().Enter();
         }
         
     }
