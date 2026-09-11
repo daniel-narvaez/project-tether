@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Move", menuName = "Scriptable Objects/Misc/Move")]
-public class MoveSO : ScriptableObject
+[CreateAssetMenu(fileName = "Ability", menuName = "Scriptable Objects/Misc/Ability")]
+public class AbilitySO : ScriptableObject
 {
    [SerializeField] private string name;
    public string Name => name;
@@ -13,8 +13,8 @@ public class MoveSO : ScriptableObject
    [SerializeField] private int damage;
    public int Damage => damage;
 
-   [SerializeField] private Element element; 
-   public Element Element => element;
+   [SerializeField] private Element[] element; 
+   public Element[] Element => element;
   
    [SerializeField] private AbilityType abilityType;
    public AbilityType AbilityType => abilityType;

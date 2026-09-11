@@ -5,7 +5,7 @@ using System;
 //Entity but pure c# class. Abstract class -> split into ally and enemy 
 //Missing Energy/Health system
 public abstract class Unit {
-    
+//TODO: add buff feature (MAKE scriptable objects for buffs/debuffs) then store array in unit
 
     public Sprite Portrait { get; private set; }
     public string Name { get; set; }
@@ -14,10 +14,10 @@ public abstract class Unit {
     public int XpToNextLevel { get; protected set; }
     public int TotalXp { get; protected set; }
     
-    protected Dictionary<Stat, Tier> StatGrowths { get; set; }
-    protected Dictionary<Element, Affinity> Affinities { get; set; }
+    public Dictionary<Stat, Tier> StatGrowths { get; protected set; }
+    public Dictionary<Element, Affinity> Affinities { get; protected set; }
     
-    //stats
+    //statMs
     public int Health { get; protected set; }
     public int Energy { get; protected set; }
     public int Strength { get; protected set; }
@@ -32,7 +32,12 @@ public abstract class Unit {
     public float HealthRemaining { get; protected set; } 
     public float EnergyRemaining { get; protected set; }
     
-    public List<MoveSO> Moves { get; protected set; } 
+    public bool IsBlocking { get; protected set; } 
+    public bool IsDead {get; protected set;}
+    public List<AbilitySO> Moves { get; protected set; }
+
+    public event Action<Unit> OnDeath;
+    public event Action<Unit> OnDefend; 
 
 
 //   public event Action HasDied;
@@ -69,7 +74,17 @@ public abstract class Unit {
   
    protected void SetFaction(Faction value) { Faction = value; }
 
+   protected void Defend()
+   {
+      IsBlocking = true; 
+      OnDefend?.Invoke(this);
+   }
 
+   protected void Kill()
+   {
+       IsDead = true;
+       OnDeath?.Invoke(this);
+   }
    
 
    public abstract void ChangeHealthRemaining(int value);

@@ -19,7 +19,6 @@ namespace Consystently.Essentials
         public override void Enter()
         {
            Debug.Log("player phase entered"); 
-           CombatManager.ResetCurrentTile();
            stateStack.Clear();
         }
 
@@ -31,22 +30,34 @@ namespace Consystently.Essentials
 
         public override void Exit()
         {
+            foreach (ActionState state in stateStack)
+               state.Exit();
             stateStack.Clear();
         }
 
         public void PopState(InputAction.CallbackContext context)
         {
+           if (stateStack.Count == 0)
+                return;
            stateStack.Pop().Exit();
-           if (states.Count == 0)
-           {
+           if (stateStack.Count == 0)
                CombatManager.FinishSelection(); 
-           }
+           else
+               stateStack.Peek().Enter();
         }
 
         public override void PushState()
         {
-           stateStack.Push(states[stateStack.Count]);
-           stateStack.Peek().Enter();
+            if (stateStack.Count > states.Count - 1)
+            {
+                Debug.Log("playerstate stack bug; how is this possible");
+                return;
+            }
+
+            if (stateStack.Count > 0)
+                stateStack.Peek().Exit(); 
+            stateStack.Push(states[stateStack.Count]);
+            stateStack.Peek().Enter();
         }
         
     }

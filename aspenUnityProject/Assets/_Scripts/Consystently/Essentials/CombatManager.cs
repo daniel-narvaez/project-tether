@@ -39,9 +39,10 @@ namespace Consystently.Essentials
         #endregion
         
         //forgot why I made this an int 
-        public Dictionary<Vector3Int, int> TileCubeCoords { get; private set; }= new Dictionary<Vector3Int, int>();
+        private Dictionary<Vector3Int, int> TileCubeCoords { get; set; }= new Dictionary<Vector3Int, int>();
         
         //make sure it has references and not copies of the objects, so changes are reflected
+        //TODO: update to match the feature mentioned in the doc 
         public List<UnitController> TurnOrder { get; private set; }= new List<UnitController>();
         public List<UnitController> DeadUnits {get; private set;}= new List<UnitController>();
         
@@ -66,10 +67,8 @@ namespace Consystently.Essentials
         //use arrays for unitsDead because damage is dealt to entire tiles at a time. have whatever handles animations process unit deaths by iterating
         //TODO: implement the proper response to unit death. For each unit that dies, add them to an array. 
         public static event Action<Unit[]> unitsDead;
-        
         //animation/tile update handled per unit at the instant they move. Perhaps also camera class  
         public static event Action<UnitController> unitMoved;
-        
         //we may want sounds when the cursor moves around 
         public static event Action<Vector3> hoverTileChanged;  
         public static event Action<BattleState, UnitController> battlePhaseChanged;
@@ -79,7 +78,8 @@ namespace Consystently.Essentials
             Input = new InputSystem_Actions();
         }
 
-        void OnEnable()
+        //must occur after OnEnable
+        void Start()
         {
             encounter = EncounterManager.Instance.GetEncounter();
             initializerData = EncounterManager.Instance.GetInitializerData();
@@ -190,7 +190,7 @@ namespace Consystently.Essentials
                        tile++;
                        Debug.Log($"tile: {tile}, {currentPos}");
                        TileCubeCoords.Add(currentPos, tile);
-                       Debug.Log($"tilecontrollers size: {tileControllers.Length}");
+                       Debug.Log($"tileControllers size: {tileControllers.Length}");
                        tileControllers[tile].tileCoordinate = currentPos;
                    }
                }
@@ -219,6 +219,7 @@ namespace Consystently.Essentials
         
         //dead are kept because lazy deletion. Also, there may or may not be a revive feature, so their order being kept is good.
         //I am also not sure if deletion is better because deletion would require searching and result in the entire list shifting. 
+        //TODO: this is currently different from the gcc doc. Change this to match the gcc later 
         private void ChangeTurn()
         {
             if (DeadUnits.Count >= (TotalAllies + TotalEnemies))
@@ -226,40 +227,24 @@ namespace Consystently.Essentials
                 Debug.Log("All units dead.");
                 return;
             }
-            if (CurrentUnitTurn > TurnOrder.Count - 1)
-                CurrentUnitTurn = 0;
-            while (TurnOrder[CurrentUnitTurn].IsDead)
+            while (TurnOrder[CurrentUnitTurn].GetData().IsDead)
+                CurrentUnitTurn = (CurrentUnitTurn + 1)%TurnOrder.Count;
+            if (currentState != null)
             {
-                CurrentUnitTurn++;
-                if (CurrentUnitTurn > TurnOrder.Count - 1)
-                    CurrentUnitTurn = 0;
+                currentState.Exit();
+                CurrentUnitTurn = (CurrentUnitTurn + 1)%TurnOrder.Count;
             }
-            if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally && currentState != phases[0])
-            {
-                currentState?.Exit();
-                currentState = phases[0];
-            }
-            else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy && currentState != phases[1])
-            {
-                currentState?.Exit();
-                currentState = phases[1];
-            }
+            if (TurnOrder[CurrentUnitTurn].GetData().Faction == Faction.Ally)
+               currentState = phases[0];
+            else if (TurnOrder[CurrentUnitTurn].GetData().Faction==Faction.Enemy)
+               currentState = phases[1];
             else
-            {
-                battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
                 return;
-            }
-            CurrentUnitTurn++;
             currentState.Enter();
             battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         } 
         
-        //refactor to take a runtime attack class if we need to modify attacks in-game for whatever reason
-        //all attacks target tiles, not individual units 
-        public void DoBattle(Vector3Int attackerPos, UnitController attacker, Vector3Int targetPos)
-        {
-            
-        }
+      
 
         //functions for camera/ui movement/whatever 
         public void MoveTileSelector(CubeCoordDirections direction)
@@ -273,7 +258,7 @@ namespace Consystently.Essentials
         }
 
         /*
-        pushes the inner states of the player/enemy turn states 
+        
         the player's selectTileState will tell this manager when to 
         execute the SelectTile function. 
         I opted for states because the player may undo actions.
@@ -321,7 +306,7 @@ namespace Consystently.Essentials
         }
         
 
-        public TileController GetSelectedTileController()
+        public TileController GetCurrTileController()
         {
             return tileControllers[TileCubeCoords[TurnOrder[CurrentUnitTurn].GetTileCoords()]];
         }
@@ -330,6 +315,8 @@ namespace Consystently.Essentials
         {
             SelectedTile = TurnOrder[CurrentUnitTurn].GetTileCoords();
             CurrentTile = SelectedTile;
+            Debug.Log($"current unit: {CurrentUnitTurn} currentTile: {CurrentTile}");
+            hoverTileChanged?.Invoke(tileControllers[TileCubeCoords[CurrentTile]].Position());
         }
 
         //
@@ -338,9 +325,13 @@ namespace Consystently.Essentials
         public void SelectTile(InputAction.CallbackContext context)
         {
             SelectedTile = CurrentTile;
+            Debug.Log("enter works");
+            if (ReceivedAction == CombatActions.View || tileControllers[TileCubeCoords[SelectedTile]].UnitCount() == 0)
+                return;
             switch (ReceivedAction)
             {
                case CombatActions.Attack:
+                   FinishSelection();
                    break;
                case CombatActions.Move:
                    break;
@@ -349,21 +340,24 @@ namespace Consystently.Essentials
                case CombatActions.Item:
                    Debug.Log("items are not implemented in mvp");
                    break;
-               case CombatActions.View:
-                   break;
                default:
                    Debug.Log("Unknown action");
                    break;
             }
         }
-        
-        
 
         public void FinishSelection()
         { 
+           ChangeTurn();
            ResetCurrentTile();
-           //effectively tells the combat UI to reset the player turn 
            battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
+        }
+        
+        //refactor to take a runtime attack class if we need to modify attacks in-game for whatever reason
+        //per the design doc, all attacks target tiles, not individual units 
+        public void DoBattle(Vector3Int attackerPos, UnitController attacker, Vector3Int targetPos)
+        {
+            
         }
 
         public UnitController GetCurrentUnit()

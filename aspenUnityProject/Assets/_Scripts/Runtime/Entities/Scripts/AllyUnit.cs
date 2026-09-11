@@ -4,7 +4,6 @@ public class AllyUnit : Unit
 {
     public event Action<AllyUnit> HasLeveled;
     public event Action<AllyUnit> HasDied;
-    public event Action<AllyUnit> HasMoved;
     
     //private CombatClass combatClass; 
     public AllyUnit(UnitDataSO unit) : base(unit)
@@ -16,6 +15,8 @@ public class AllyUnit : Unit
     public override void ChangeHealthRemaining(int value)
     {
         HealthRemaining -= value; 
+        if(HealthRemaining <= 0)
+            HasDied?.Invoke(this);
     }
 
      public override void ChangeEnergyRemaining(int value)

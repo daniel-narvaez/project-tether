@@ -18,6 +18,7 @@ public class CombatUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnEnable()
     {
+        playerActionsContainer.SetActive(false);
         abilitiesPanel.SetActive(false);
         CombatManager.battlePhaseChanged += HandleUserActions;
         if (abilityButtons == null || abilityButtons.Length == 0)
@@ -86,7 +87,6 @@ public class CombatUI : MonoBehaviour
         if(pAction != CombatActions.Defend)
             TrySelection();
         PlayerAction?.Invoke(pAction);
-        Debug.Log("hello");
     }
 
     public void OpenAbilitiesMenu()

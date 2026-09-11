@@ -1,6 +1,7 @@
 using UnityEngine;
 
 //old code
+/*
 public class UnitStats : MonoBehaviour
 {
   public bool isBlocking;
@@ -37,3 +38,4 @@ public class UnitStats : MonoBehaviour
   public damageType[] activeVulnerabilties;
   public damageType[] activeTolerances;
 }
+*/

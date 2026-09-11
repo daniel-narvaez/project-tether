@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,12 +11,11 @@ namespace Consystently.Essentials
         public override void Enter()
         {
             Debug.Log("enemy phase entered");
-            CombatManager.ResetCurrentTile();
         }
 
         public override void Update()
         {
-            
+           Debug.Log("enemy update"); 
         }
 
         public override void Exit()
@@ -25,7 +25,7 @@ namespace Consystently.Essentials
 
         public override void PushState()
         {
-            
+            Debug.Log("hello3"); 
         }
 
         public void PopState()
