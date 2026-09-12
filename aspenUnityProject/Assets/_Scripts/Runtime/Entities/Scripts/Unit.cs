@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 //Entity but pure c# class. Abstract class -> split into ally and enemy 
 //Missing Energy/Health system
@@ -35,9 +34,10 @@ public abstract class Unit {
     public bool IsBlocking { get; protected set; } 
     public bool IsDead {get; protected set;}
     public List<AbilitySO> Moves { get; protected set; }
+    
+    public CombatClassSO CombatClass { get; protected set; }
 
-    public event Action<Unit> OnDeath;
-    public event Action<Unit> OnDefend; 
+
 
 
 //   public event Action HasDied;
@@ -68,28 +68,23 @@ public abstract class Unit {
        Precision = Formulae.CalculateStat(Stat.PRC, StatGrowths[Stat.PRC], Level);
 
        Moves = unit.Moves;
+       CombatClass = unit.CombatClass;
    }
 
    //placeholder
   
    protected void SetFaction(Faction value) { Faction = value; }
 
-   protected void Defend()
-   {
-      IsBlocking = true; 
-      OnDefend?.Invoke(this);
-   }
-
-   protected void Kill()
-   {
-       IsDead = true;
-       OnDeath?.Invoke(this);
-   }
-   
 
    public abstract void ChangeHealthRemaining(int value);
    public abstract void ChangeEnergyRemaining(int value);
 
+   public abstract void Defend();
+
+   public Element[] DefaultAttackTypes()
+   {
+       return CombatClass.DefaultAttackElements; 
+   }
 
 
 }

@@ -4,6 +4,7 @@ using Tether.CharacterSystems;
 using UnityEngine;
 using UnityEngine.UI;
 
+//TODO: disable move button by listening to unit movement
 public class CombatUI : MonoBehaviour
 {
     [SerializeField] private GameObject playerActionsContainer;

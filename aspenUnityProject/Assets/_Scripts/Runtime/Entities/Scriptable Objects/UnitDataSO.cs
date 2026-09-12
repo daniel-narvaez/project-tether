@@ -247,4 +247,8 @@ public abstract class UnitDataSO : ScriptableObject
   
   [SerializeField] private List<AbilitySO> moves = new List<AbilitySO>();
   public List<AbilitySO> Moves => moves;
+
+  [SerializeField] private CombatClassSO combatClass;
+  public CombatClassSO CombatClass => combatClass;
+
 }

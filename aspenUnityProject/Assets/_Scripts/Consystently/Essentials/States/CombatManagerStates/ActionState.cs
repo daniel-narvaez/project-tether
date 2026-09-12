@@ -1,6 +1,6 @@
 namespace Consystently.Essentials
 {
-    public abstract class ActionState : State
+    public abstract class ActionState : IState
     {
         protected CombatManager CombatManager { get; private set; }
         protected BattleState BattleState { get; private set; }

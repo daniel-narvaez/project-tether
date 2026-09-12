@@ -20,9 +20,13 @@ public static class CombatFormulas
       return;
     }
     //Actual Damage
-    //Physical
+    //currently picks the highest stat between strength/technical (classes should generally have a focus on either str/tech)
+    if(attackerStats.Strength > attackerStats.Tech) 
       damage = MathF.Round(attackerStats.Strength*(166f / (166f + defenderStats.Defense)) * Random.Range(0.9f, 1.1f)); //Round up
-   //Dodge Chance
+    else
+      damage = MathF.Round(attackerStats.Tech*(166f / (166f + defenderStats.Defense)) * Random.Range(0.9f, 1.1f)); //Round up
+    
+    //Dodge Chance
     if(miss)
     {
       Debug.Log($"{attacker.name} missed!");

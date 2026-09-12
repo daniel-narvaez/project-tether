@@ -8,7 +8,7 @@ namespace Consystently.Essentials
     {
         private Stack<ActionState>  stateStack = new Stack<ActionState>();
         
-        //TODO: possibly add new state class for individual unit selection
+        //TODO: add new state class for individual unit selection
         private List<ActionState> states  = new List<ActionState>();
 
         public PlayerState(CombatManager combatManager) : base(combatManager)
@@ -22,6 +22,7 @@ namespace Consystently.Essentials
            stateStack.Clear();
         }
 
+        //TODO: get rid of update from all states later? 
         public override void Update()
         {
             if(stateStack.Count > 0)
@@ -41,7 +42,7 @@ namespace Consystently.Essentials
                 return;
            stateStack.Pop().Exit();
            if (stateStack.Count == 0)
-               CombatManager.FinishSelection(); 
+               CombatManager.RedoSelection(); 
            else
                stateStack.Peek().Enter();
         }
@@ -50,10 +51,9 @@ namespace Consystently.Essentials
         {
             if (stateStack.Count > states.Count - 1)
             {
-                Debug.Log("playerstate stack bug; how is this possible");
+                Debug.Log("playerState stack bug. how is this possible");
                 return;
             }
-
             if (stateStack.Count > 0)
                 stateStack.Peek().Exit(); 
             stateStack.Push(states[stateStack.Count]);

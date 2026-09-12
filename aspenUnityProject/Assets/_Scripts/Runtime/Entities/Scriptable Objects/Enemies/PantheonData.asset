@@ -38,3 +38,5 @@ MonoBehaviour:
   _earth: 0
   _wind: 0
   _fire: 0
+  moves: []
+  combatClass: {fileID: 11400000, guid: ae5348d884e198b30bd6c06ddc58cfe2, type: 2}

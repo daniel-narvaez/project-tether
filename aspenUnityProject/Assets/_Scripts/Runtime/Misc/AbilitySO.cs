@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Ability", menuName = "Scriptable Objects/Misc/Ability")]
 public class AbilitySO : ScriptableObject
 {
-   [SerializeField] private string name;
+   [SerializeField] private string abilityName;
    public string Name => name;
    
    [SerializeField] private string description;

@@ -1,6 +1,7 @@
 namespace Consystently.Essentials
 {
-    public interface State
+    //TODO: get rid of update later?
+    public interface IState
     {
         public void Enter();
         public void Update();

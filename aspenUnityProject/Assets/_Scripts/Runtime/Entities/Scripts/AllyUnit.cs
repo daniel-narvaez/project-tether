@@ -3,7 +3,9 @@ using System;
 public class AllyUnit : Unit
 {
     public event Action<AllyUnit> HasLeveled;
-    public event Action<AllyUnit> HasDied;
+    
+    public event Action<AllyUnit> OnDeath;
+    public event Action<AllyUnit> OnDefend;
     
     //private CombatClass combatClass; 
     public AllyUnit(UnitDataSO unit) : base(unit)
@@ -16,7 +18,7 @@ public class AllyUnit : Unit
     {
         HealthRemaining -= value; 
         if(HealthRemaining <= 0)
-            HasDied?.Invoke(this);
+            OnDeath?.Invoke(this);
     }
 
      public override void ChangeEnergyRemaining(int value)
@@ -36,6 +38,12 @@ public class AllyUnit : Unit
            HasLeveled?.Invoke(this);
        }
 
+    }
+
+    public override void Defend()
+    {
+        IsBlocking = true;
+        OnDefend?.Invoke(this);
     }
 
     //TODO: 

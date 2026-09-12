@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Consystently.Essentials.Math;
 using Tether.CharacterSystems;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +10,8 @@ namespace TileSystem
     public class TileController : MonoBehaviour
     {
         private Tile tileData;
+        private const int MaxUnits = 4;
+        private const float ArbitraryOffset = 10;
 
         [SerializeField, Range(0,18)]
         private int tileNum;
@@ -17,7 +20,7 @@ namespace TileSystem
         
         //change to array if positions ever matter. Everything else so far has been an array because
         //I assumed early on that specific positions within the tile mattered (they don't currently) 
-        private List<UnitController> unitControllers = new List<UnitController>();
+        public List<UnitController> UnitControllers { get; private set; }= new List<UnitController>();
 
 
         public void Initialize(TileSO baseData)
@@ -28,18 +31,19 @@ namespace TileSystem
 
         public bool AddUnit(UnitController unitController)
         {
-            if (unitControllers.Contains(unitController) || unitControllers.Count >= 4)
+            if (UnitControllers.Contains(unitController) || UnitControllers.Count >= MaxUnits)
                 return false;
-            unitControllers.Add(unitController);
+            UnitControllers.Add(unitController);
+//            RepositionUnits(ArbitraryOffset);
             return true;
         }
 
         public UnitController GetUnitAt(int position)
         {
-            if (unitControllers.Count == 0 ||  position > unitControllers.Count - 1)
+            if (UnitControllers.Count == 0 ||  position > UnitControllers.Count - 1)
                 return null;
             
-            return  unitControllers[position];
+            return  UnitControllers[position];
         }
         
         //returns deleted controller so the controller can be moved to a different TileController
@@ -47,7 +51,8 @@ namespace TileSystem
         public UnitController RemoveUnit(UnitController unitController)
         {
             UnitController removed = unitController;
-            unitControllers.Remove(unitController);
+            UnitControllers.Remove(unitController);
+            RepositionUnits(ArbitraryOffset);
             return removed;
         }
 
@@ -59,15 +64,16 @@ namespace TileSystem
         //. . . triangle box 
         public void RepositionUnits(float offset)
         {
-            int count = unitControllers.Count;
+            int count = UnitControllers.Count;
             if (count <= 1)
                 return;
             for (int unit = 0; unit < count; unit++)
             {
                 float angle = (2f * Mathf.PI * unit) / count;
-               unitControllers[unit].Move(transform.position + new Vector3(offset * -Mathf.Cos(angle), 0, offset * Mathf.Sin(angle)));
+                UnitControllers[unit].Move(transform.position + new Vector3(offset * -Mathf.Cos(angle), 0, offset * Mathf.Sin(angle)));
             }
         }
+        
 
         public int Num()
         {
@@ -76,7 +82,20 @@ namespace TileSystem
 
         public int UnitCount()
         {
-            return unitControllers.Count;
+            return UnitControllers.Count;
+        }
+
+        //currently, units can only move to adjacent tiles 
+        public bool IsMoveable(Vector3Int from)
+        {
+            if (tileCoordinate == from || UnitControllers.Count >= MaxUnits || from.HexGridDistance(tileCoordinate) > 1)
+                return false;
+            foreach (UnitController unit in UnitControllers)
+            {
+                if (unit.GetData().Faction == Faction.Enemy)
+                    return false;
+            }
+            return true; 
         }
 
     }

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 
+//TODO: break some functionalities into separate classes (e.g., determining turn order)
 namespace Consystently.Essentials
 {
     /*will not be a traditional manager because it does not 
@@ -16,12 +17,11 @@ namespace Consystently.Essentials
     */
     public class CombatManager : MonoBehaviour
     {
-        //need to input data into the empty husk gameObjects 
+        private const float ArbitraryOffset = 10;
         private UnitDataSO[,] initializerData;
         
         //no use in mvp
         //private TileSO[] tiles;
-        
         private Encounter encounter; 
         [SerializeField] private Transform tilesParent;
         public InputSystem_Actions Input { get; private set; }
@@ -78,7 +78,7 @@ namespace Consystently.Essentials
             Input = new InputSystem_Actions();
         }
 
-        //must occur after OnEnable
+        //must occur after OnEnable bc other classes will subscribe OnEnable
         void Start()
         {
             encounter = EncounterManager.Instance.GetEncounter();
@@ -102,9 +102,10 @@ namespace Consystently.Essentials
             Input.Disable();
         }
 
+        //TODO: possibly remove updates from state interfaces
         void Update()
         {
-           currentState?.Update(); 
+ //          currentState?.Update(); 
         }
 
         //Correct order is not guaranteed by GetComponentsInChildren
@@ -151,7 +152,7 @@ namespace Consystently.Essentials
                     tileControllers[tile].GetUnitAt(unit).SetTile(tileControllers[tile].tileCoordinate);
                     TurnOrder.Add(tileControllers[tile].GetUnitAt(unit));
                 }
-                tileControllers[tile].RepositionUnits(10f);
+                tileControllers[tile].RepositionUnits(ArbitraryOffset);
             }
         }
 
@@ -159,26 +160,26 @@ namespace Consystently.Essentials
         //coords are for determining proper tile selection when the user moves across the field 
         //3r(r+1)+1=tiles formula for generic implementation if additional rings are added
         //for reference, tile 18 should be (2,0,-2) 
-        //We could possibly merge the createObjects with this function 
+        //We could possibly merge the createObjects with this function, but it may be unreadable
         void GenerateCoords()
         {
             int tile = 0;
             Vector3Int currentPos = new Vector3Int(0, 0, 0);
-            Debug.Log($"tile: {tile}, {currentPos}");
+ //           Debug.Log($"tile: {tile}, {currentPos}");
             TileCubeCoords.Add(currentPos, tile);
             tileControllers[tile].tileCoordinate = currentPos;
             for (int ring = 1; ring <= 2; ring++)
             {
                currentPos += directions[(int)CubeCoordDirections.NE];
                tile++;
-               Debug.Log($"tile: {tile}, {currentPos}");
+//               Debug.Log($"tile: {tile}, {currentPos}");
                TileCubeCoords.Add(currentPos, tile);
                tileControllers[tile].tileCoordinate = currentPos;
                for (int southEasts = ring - 1; southEasts > 0; southEasts--)
                {
                    currentPos += directions[(int)CubeCoordDirections.SE];
                    tile++;
-                   Debug.Log($"tile: {tile}, {currentPos}");
+  //                 Debug.Log($"tile: {tile}, {currentPos}");
                    TileCubeCoords.Add(currentPos, tile);
                    tileControllers[tile].tileCoordinate = currentPos;
                }
@@ -188,9 +189,9 @@ namespace Consystently.Essentials
                    {
                        currentPos += directions[direction];
                        tile++;
-                       Debug.Log($"tile: {tile}, {currentPos}");
+   //                    Debug.Log($"tile: {tile}, {currentPos}");
                        TileCubeCoords.Add(currentPos, tile);
-                       Debug.Log($"tileControllers size: {tileControllers.Length}");
+    //                   Debug.Log($"tileControllers size: {tileControllers.Length}");
                        tileControllers[tile].tileCoordinate = currentPos;
                    }
                }
@@ -198,8 +199,6 @@ namespace Consystently.Essentials
         } 
 
         //debug tool
-        //TODO:
-        //FINISH STAT SYSTEM; health will be at zero when printed
         void ValidateData()
         {
             for (int tile = 0; tile < encounter.TotalTiles(); tile++)
@@ -219,7 +218,7 @@ namespace Consystently.Essentials
         
         //dead are kept because lazy deletion. Also, there may or may not be a revive feature, so their order being kept is good.
         //I am also not sure if deletion is better because deletion would require searching and result in the entire list shifting. 
-        //TODO: this is currently different from the gcc doc. Change this to match the gcc later 
+        //TODO: this is currently different from the gcc doc's initiative proposal. Change this to match the gcc later 
         private void ChangeTurn()
         {
             if (DeadUnits.Count >= (TotalAllies + TotalEnemies))
@@ -240,12 +239,11 @@ namespace Consystently.Essentials
                currentState = phases[1];
             else
                 return;
+            TurnOrder[CurrentUnitTurn].ResetValues();
             currentState.Enter();
             battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         } 
         
-      
-
         //functions for camera/ui movement/whatever 
         public void MoveTileSelector(CubeCoordDirections direction)
         {
@@ -256,13 +254,12 @@ namespace Consystently.Essentials
                 hoverTileChanged?.Invoke(tileControllers[TileCubeCoords[CurrentTile]].Position());
             }
         }
-
-        /*
         
-        the player's selectTileState will tell this manager when to 
+        /*
+        the player's selectTileState (pushed by this function) will tell this manager when to 
         execute the SelectTile function. 
         I opted for states because the player may undo actions.
-        Usually, the first requirement after selecting a combat action
+        Usually, the first requirement after selecting an action
         is selecting a tile. 
         */
         private void HandleAction(CombatActions action)
@@ -276,6 +273,7 @@ namespace Consystently.Essentials
                    break;
                case CombatActions.Defend:
                    //unit defend function 
+                   FinishSelection();
                    break;
                case CombatActions.Move:
                    currentState.PushState();
@@ -289,7 +287,7 @@ namespace Consystently.Essentials
             }
         }
 
-        //action requires selection like for ability/item
+        //for when action requires selection like with abilities/items
         private void HandleAction(CombatActions action, int selection)
         {
             ReceivedAction = action;
@@ -306,34 +304,61 @@ namespace Consystently.Essentials
         }
         
 
-        public TileController GetCurrTileController()
+        private TileController GetCurrTileController()
         {
-            return tileControllers[TileCubeCoords[TurnOrder[CurrentUnitTurn].GetTileCoords()]];
+            return tileControllers[TileCubeCoords[TurnOrder[CurrentUnitTurn].TileCoords]];
         }
+        
 
         public void ResetCurrentTile()
         {
-            SelectedTile = TurnOrder[CurrentUnitTurn].GetTileCoords();
+            SelectedTile = TurnOrder[CurrentUnitTurn].TileCoords;
             CurrentTile = SelectedTile;
-            Debug.Log($"current unit: {CurrentUnitTurn} currentTile: {CurrentTile}");
             hoverTileChanged?.Invoke(tileControllers[TileCubeCoords[CurrentTile]].Position());
         }
+        
+        public void MoveAction()
+        {
+             
+        }
 
-        //
-        //TODO: finish switch 
-        //attack is basic attack with no ability selection. Add new doBattle function with no ability 
+        public void AttackAction()
+        {
+            
+        }
+
+
+        //attack is basic attack with no ability selection. 
+        //attacks do not target individual enemies and hit every enemy in a tile
+        //TODO: for abilities, we may need a new function when we want added functionality
+        //TODO: fix redoSelection, fix unitControllers not changing the tile 
+        //TODO: break into functions
         public void SelectTile(InputAction.CallbackContext context)
         {
             SelectedTile = CurrentTile;
-            Debug.Log("enter works");
-            if (ReceivedAction == CombatActions.View || tileControllers[TileCubeCoords[SelectedTile]].UnitCount() == 0)
+            TileController selectedTileController = tileControllers[TileCubeCoords[SelectedTile]];
+            if (ReceivedAction == CombatActions.View) 
                 return;
+            UnitController currentUnit = TurnOrder[CurrentUnitTurn];
             switch (ReceivedAction)
             {
                case CombatActions.Attack:
-                   FinishSelection();
+                   if (SelectedTile != currentUnit.TileCoords)
+                   {
+                        foreach (UnitController enemy in GetCurrTileController().UnitControllers) 
+                            CombatFormulas.Damage(currentUnit, currentUnit.GetData().DefaultAttackTypes(), enemy);  
+                        FinishSelection();
+                   } 
                    break;
                case CombatActions.Move:
+                   if (selectedTileController.IsMoveable(currentUnit.TileCoords) && !currentUnit.HasMoved)
+                   {
+                       selectedTileController.AddUnit(GetCurrTileController().RemoveUnit(currentUnit));
+                       currentUnit.TryMove(selectedTileController.Position());
+                       selectedTileController.RepositionUnits(ArbitraryOffset); //maybe more efficient to call here than in AddUnit bc of the CreateObjects function 
+                       RedoSelection();
+                       return;
+                   }
                    break;
                case CombatActions.Ability:
                    break;
@@ -344,6 +369,7 @@ namespace Consystently.Essentials
                    Debug.Log("Unknown action");
                    break;
             }
+            FinishSelection();
         }
 
         public void FinishSelection()
@@ -352,18 +378,16 @@ namespace Consystently.Essentials
            ResetCurrentTile();
            battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         }
-        
-        //refactor to take a runtime attack class if we need to modify attacks in-game for whatever reason
-        //per the design doc, all attacks target tiles, not individual units 
-        public void DoBattle(Vector3Int attackerPos, UnitController attacker, Vector3Int targetPos)
+
+        public void RedoSelection()
         {
-            
+            Debug.Log("WHERE IS THE UI");
+            ResetCurrentTile();
+            currentState.Exit();
+            currentState.Enter();
+            battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         }
 
-        public UnitController GetCurrentUnit()
-        {
-            return TurnOrder[CurrentUnitTurn];
-        }
 
 
     }

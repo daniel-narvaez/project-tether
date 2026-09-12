@@ -18,7 +18,6 @@ namespace Consystently.Essentials
             CombatManager.Input.TileSelect.Confirm.performed += CombatManager.SelectTile;
             CombatManager.Input.TileSelect.Exit.performed += ((PlayerState)BattleState).PopState;
             CombatManager.Input.TileSelect.Move.started += OnMove;
-
         }
 
         public override void Update()

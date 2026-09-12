@@ -5,7 +5,8 @@ using UnityEngine;
 //this script must be dragged to an object before making it a prefab and dragging the prefab to a unit SO.
 public class AllyUnitController : UnitController {
    private AllyUnit stats;
-   public Vector3Int TileCoords {get; private set;}
+   
+   public event Action<AllyUnitController> OnUnitMove; 
 
    //to be called by the combat maanager 
    public override void Initialize(UnitDataSO baseStats)
@@ -17,10 +18,6 @@ public class AllyUnitController : UnitController {
     TODO:
     add movement that is disabled on combat game state  
    */
-   private void Update()
-   {
-      
-   }
 
    public override void TakeDamage(int damage)
    {
@@ -28,10 +25,19 @@ public class AllyUnitController : UnitController {
    }
 
    //will differ from SetTile in that it will consider game logic with conditionals 
-   public override void Move(Vector3Int newTileCoords)
+   public override void TryMove(Vector3 position)
    {
+      HasMoved = true;
+      MoveInvoke(position);
    }
 
+   public override void MoveInvoke(Vector3 position)
+   {
+      OnUnitMove?.Invoke(this);
+      Move(position);
+   }
+
+   //used by managers to move the unit without triggering events
    public override void Move(Vector3 position)
    {
      transform.position = position; 
@@ -42,13 +48,8 @@ public class AllyUnitController : UnitController {
       return stats; 
    }
 
-   public override Vector3Int GetTileCoords()
+   public override void ResetValues()
    {
-      return TileCoords;
-   }
-
-   public override void SetTile(Vector3Int newTileCoords)
-   {
-      this.TileCoords = newTileCoords;
+      HasMoved = false; 
    }
 }

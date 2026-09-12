@@ -8,8 +8,8 @@ namespace Tether.CharacterSystems
     public class EnemyUnitController : UnitController
     {
         private EnemyUnit stats;
-        public Vector3Int TileCoords {get; private set;}
         
+        public event Action<EnemyUnitController> OnUnitMove; 
         //encounters to be passed upon player collision 
         [SerializeField] private EncounterSO[] encounters; 
         
@@ -25,9 +25,16 @@ namespace Tether.CharacterSystems
             
         }
 
-        public override void Move(Vector3Int newTile)
+        public override void TryMove(Vector3 position)
         {
-            TileCoords = newTile; 
+            MoveInvoke(position);
+            HasMoved = true;
+        }
+
+        public override void MoveInvoke(Vector3 position)
+        {
+            Move(position);
+            OnUnitMove?.Invoke(this);
         }
 
         public override void Move(Vector3 position)
@@ -40,16 +47,12 @@ namespace Tether.CharacterSystems
             return stats; 
         }
 
-        public override Vector3Int GetTileCoords()
+        public override void ResetValues()
         {
-            return TileCoords;
+            HasMoved = false;
         }
 
-        public override void SetTile(Vector3Int newTileCoords)
-        {
-            this.TileCoords = newTileCoords;
-        }
-    
+ 
         /*TODO:
             Add collision function wherein the enemy unit 
             calls EncounterManager.Instance.StartEncounter, passing a random encounter from encounters 
