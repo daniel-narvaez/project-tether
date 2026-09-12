@@ -6,7 +6,6 @@ using UnityEngine;
 public class AllyUnitController : UnitController {
    private AllyUnit stats;
    
-   public event Action<AllyUnitController> OnUnitMove; 
 
    //to be called by the combat maanager 
    public override void Initialize(UnitDataSO baseStats)
@@ -25,16 +24,17 @@ public class AllyUnitController : UnitController {
    }
 
    //will differ from SetTile in that it will consider game logic with conditionals 
-   public override void TryMove(Vector3 position)
+   public override void TryMove(Vector3 position, Vector3Int coords)
    {
-      HasMoved = true;
+      SetTile(coords);
       MoveInvoke(position);
+      HasMoved = true;
    }
 
    public override void MoveInvoke(Vector3 position)
    {
-      OnUnitMove?.Invoke(this);
       Move(position);
+      OnMove(this);
    }
 
    //used by managers to move the unit without triggering events

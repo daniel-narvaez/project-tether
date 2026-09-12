@@ -5529,7 +5529,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatUIManager
   playerActionsContainer: {fileID: 1579157449}
   abilitiesPanel: {fileID: 685116420}
+  firstButton: {fileID: 1850922626}
   cursor: {fileID: 1409074498}
+  inputSystemUIInput: {fileID: 1336516555}
 --- !u!1 &2036255276
 GameObject:
   m_ObjectHideFlags: 0

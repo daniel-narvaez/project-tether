@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 
-//TODO: break some functionalities into separate classes (e.g., determining turn order)
 namespace Consystently.Essentials
 {
     /*will not be a traditional manager because it does not 
@@ -100,6 +99,13 @@ namespace Consystently.Essentials
             CombatUI.PlayerAction -= HandleAction;
             CombatUI.PlayerSelectiveAction -= HandleAction;
             Input.Disable();
+            foreach (TileController tc in tileControllers)
+            {
+                foreach (UnitController uc in tc.UnitControllers)
+                {
+                    uc.OnUnitMove -= UnitHasMoved;
+                }
+            }
         }
 
         //TODO: possibly remove updates from state interfaces
@@ -151,6 +157,8 @@ namespace Consystently.Essentials
                     tileControllers[tile].GetUnitAt(unit).Initialize(initializerData[tile,unit]);
                     tileControllers[tile].GetUnitAt(unit).SetTile(tileControllers[tile].tileCoordinate);
                     TurnOrder.Add(tileControllers[tile].GetUnitAt(unit));
+                    tileControllers[tile].GetUnitAt(unit).SetTile(tileControllers[tile].tileCoordinate);
+                    tileControllers[tile].GetUnitAt(unit).OnUnitMove += UnitHasMoved;
                 }
                 tileControllers[tile].RepositionUnits(ArbitraryOffset);
             }
@@ -317,16 +325,6 @@ namespace Consystently.Essentials
             hoverTileChanged?.Invoke(tileControllers[TileCubeCoords[CurrentTile]].Position());
         }
         
-        public void MoveAction()
-        {
-             
-        }
-
-        public void AttackAction()
-        {
-            
-        }
-
 
         //attack is basic attack with no ability selection. 
         //attacks do not target individual enemies and hit every enemy in a tile
@@ -343,23 +341,12 @@ namespace Consystently.Essentials
             switch (ReceivedAction)
             {
                case CombatActions.Attack:
-                   if (SelectedTile != currentUnit.TileCoords)
-                   {
-                        foreach (UnitController enemy in GetCurrTileController().UnitControllers) 
-                            CombatFormulas.Damage(currentUnit, currentUnit.GetData().DefaultAttackTypes(), enemy);  
-                        FinishSelection();
-                   } 
-                   break;
+                   HandleSelectAttack(currentUnit);
+                  break;
                case CombatActions.Move:
                    if (selectedTileController.IsMoveable(currentUnit.TileCoords) && !currentUnit.HasMoved)
-                   {
-                       selectedTileController.AddUnit(GetCurrTileController().RemoveUnit(currentUnit));
-                       currentUnit.TryMove(selectedTileController.Position());
-                       selectedTileController.RepositionUnits(ArbitraryOffset); //maybe more efficient to call here than in AddUnit bc of the CreateObjects function 
-                       RedoSelection();
-                       return;
-                   }
-                   break;
+                      HandleSelectMove(selectedTileController, currentUnit); 
+                   return;
                case CombatActions.Ability:
                    break;
                case CombatActions.Item:
@@ -371,6 +358,31 @@ namespace Consystently.Essentials
             }
             FinishSelection();
         }
+        
+        private void HandleSelectAttack(UnitController currentUnit)
+        {
+            if (SelectedTile != currentUnit.TileCoords)
+            {
+                foreach (UnitController enemy in GetCurrTileController().UnitControllers) 
+                    CombatFormulas.Damage(currentUnit, currentUnit.GetData().DefaultAttackTypes(), enemy);  
+                FinishSelection();
+            } 
+        }
+        
+        private void HandleSelectMove(TileController selectedTileController, UnitController currentUnit)
+        {
+            selectedTileController.AddUnit(GetCurrTileController().RemoveUnit(currentUnit));
+            currentUnit.TryMove(selectedTileController.Position(),selectedTileController.tileCoordinate);
+            selectedTileController.RepositionUnits(ArbitraryOffset); //maybe more efficient to call here than in AddUnit bc of the CreateObjects function 
+            RedoSelection();
+        }
+
+        private void UnitHasMoved(UnitController unitController)
+        {
+            Debug.Log("unit has moved");
+            unitMoved?.Invoke(unitController);
+        }
+
 
         public void FinishSelection()
         { 
@@ -381,10 +393,8 @@ namespace Consystently.Essentials
 
         public void RedoSelection()
         {
-            Debug.Log("WHERE IS THE UI");
             ResetCurrentTile();
             currentState.Exit();
-            currentState.Enter();
             battlePhaseChanged?.Invoke(currentState, TurnOrder[CurrentUnitTurn]);
         }
 

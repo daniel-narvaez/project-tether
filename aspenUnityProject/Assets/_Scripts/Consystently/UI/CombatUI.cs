@@ -3,13 +3,17 @@ using Consystently.Essentials;
 using Tether.CharacterSystems;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 //TODO: disable move button by listening to unit movement
 public class CombatUI : MonoBehaviour
 {
     [SerializeField] private GameObject playerActionsContainer;
     [SerializeField] private GameObject abilitiesPanel;
+    [SerializeField] private Button firstButton; 
     [SerializeField] private GameObject cursor;
+    [SerializeField] private InputSystemUIInputModule inputSystemUIInput;
     
     private Button[] abilityButtons;
 
@@ -21,6 +25,7 @@ public class CombatUI : MonoBehaviour
     {
         playerActionsContainer.SetActive(false);
         abilitiesPanel.SetActive(false);
+        cursor.SetActive(false); 
         CombatManager.battlePhaseChanged += HandleUserActions;
         if (abilityButtons == null || abilityButtons.Length == 0)
         {
@@ -52,11 +57,19 @@ public class CombatUI : MonoBehaviour
 
     private void HandleUserActions(BattleState bs, UnitController unitController)
     {
+        Debug.Log("yo where is the ui");
         abilitiesPanel.SetActive(false);
+        cursor.SetActive(false);
         if (bs is PlayerState)
+        {
             playerActionsContainer.SetActive(true);
-        else 
+            Debug.Log(playerActionsContainer.activeSelf);
+        }
+        else
+        {
             playerActionsContainer.SetActive(false);
+        }
+        inputSystemUIInput.enabled = playerActionsContainer.activeSelf; //painful concurrency bug if this is removed
         int currMove = 0;
         foreach (Transform button in abilitiesPanel.transform)
         {
@@ -75,8 +88,8 @@ public class CombatUI : MonoBehaviour
     private void TrySelection()
     {
         playerActionsContainer.SetActive(false);
+        inputSystemUIInput.enabled = false;
         cursor.SetActive(true);
-//        playerActionsContainer.SetActive(bp is PlayerPhase);
     }
 
     //buttons on the combat panel will use this function
@@ -88,6 +101,7 @@ public class CombatUI : MonoBehaviour
         if(pAction != CombatActions.Defend)
             TrySelection();
         PlayerAction?.Invoke(pAction);
+        Debug.Log(pAction);
     }
 
     public void OpenAbilitiesMenu()

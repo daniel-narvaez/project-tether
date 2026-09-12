@@ -9,7 +9,6 @@ namespace Tether.CharacterSystems
     {
         private EnemyUnit stats;
         
-        public event Action<EnemyUnitController> OnUnitMove; 
         //encounters to be passed upon player collision 
         [SerializeField] private EncounterSO[] encounters; 
         
@@ -25,8 +24,9 @@ namespace Tether.CharacterSystems
             
         }
 
-        public override void TryMove(Vector3 position)
+        public override void TryMove(Vector3 position, Vector3Int coords)
         {
+            SetTile(coords);
             MoveInvoke(position);
             HasMoved = true;
         }
@@ -34,7 +34,7 @@ namespace Tether.CharacterSystems
         public override void MoveInvoke(Vector3 position)
         {
             Move(position);
-            OnUnitMove?.Invoke(this);
+            OnMove(this);
         }
 
         public override void Move(Vector3 position)
